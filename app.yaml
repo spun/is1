@@ -10,7 +10,10 @@ handlers:
 
 - url: /css
   static_dir: css
-
+  
+- url: /salas
+  script: salas.app
+  
 - url: /.*
   script: main.app
   
