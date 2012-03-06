@@ -11,6 +11,12 @@ handlers:
 - url: /css
   static_dir: css
 
+- url: /juego
+  script: juego.app
+    
+- url: /bdtesting
+  script: main.app
+  
 - url: /.*
   script: main.app
   

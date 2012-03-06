@@ -5,7 +5,9 @@ from google.appengine.ext.webapp import template
 		
 class GamePage(webapp2.RequestHandler):
 	def get(self):
-		self.response.out.write("Pagina de juego");
+		template_values = {}
+		path = os.path.join(os.path.dirname(__file__), 'juego.html')
+		self.response.out.write(template.render(path, template_values))
 			
 
 
