@@ -1,0 +1,13 @@
+{% extends "templates/pattern.html" %}
+
+{% block title %}Salas{% endblock %}
+
+{% block content %}
+        <form action="/salas" method="post">
+            <input type="text" name="autor">
+            <input type="submit" value="Crear sala">
+        </form>
+	{% for sala in salas_list %}
+            <p>{{sala.autor}}</p>
+        {% endfor %}
+{% endblock %}

@@ -17,6 +17,9 @@ handlers:
 - url: /bdtesting
   script: main.app
   
+- url: /salas
+  script: salas.app
+  
 - url: /.*
   script: main.app
   

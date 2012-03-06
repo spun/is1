@@ -1,4 +1,5 @@
 from google.appengine.ext import db
+import datetime
 
 ########### "TABLAS" ##############
 
@@ -8,7 +9,9 @@ class User(db.Model):
 	email = db.EmailProperty()
 
 class Sala(db.Model):
-	autor = db.ReferenceProperty(User)
+	#autor = db.ReferenceProperty(User)
+	autor = db.StringProperty()
+	fechaCrea = db.DateProperty()
 	
 
 ########### METODOS ################
@@ -40,5 +43,16 @@ class UserDB:
         
 
 class SalasDB:
-	def __init__(self):
-		print "Sala"
+	
+	def AddSala(self, usuario):
+		nuevaSala = Sala()
+		#nuevaSala.autor = usuario
+		nuevaSala.autor = usuario
+		nuevaSala.fechaCrea = datetime.datetime.now().date()
+		nuevaSala.put()
+	
+	def ListarSalas(self):
+		sala=Sala.all()
+		res=sala.fetch(100)
+		return res
+		
