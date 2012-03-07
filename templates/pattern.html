@@ -11,6 +11,24 @@
 	</head>
 
 	<body>
-		{% block content %}{% endblock %}
+
+		<div id="container">
+			<div id="header">
+				<a href="/" id="logo">Inicio</a>
+				<a id="login-button" href="#" >Iniciar sesion</a>
+				<form id="login-menu">
+					<p><label for="nombre">Nombre de usuario</label></p>
+					<p><input type="text" name="nombre" id="nombre" /></p>
+					<p><label for="pass">Contraseña</label></p>
+					<p><input type="password" name="pass" id="pass" /></p>
+					<p><input type="submit" value="Iniciar sesión" class="menu-button"/></p>
+				</form>
+			</div>
+			<div id="main-content" class="wrap_center">
+
+			{% block content %}{% endblock %}
+
+			</div>
+		</div>
 	</body>
 </html>

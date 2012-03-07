@@ -1,81 +1,118 @@
-<html>
-	<head>
-		<title>Juego</title>
-		<style>
+{% extends "templates/pattern.html" %}
+
+{% block title %}Juego{% endblock %}
+
+{% block head %}
+<style>
 			* {
 				margin: 0;
 				padding: 0;
 			}
-			
+
 			canvas {
-				border: 1px solid black;
+				border: 1px solid #FF5100;
 				/*	background-color: #333333;*/
+				border-radius: 5px;
 			}
-		</style>
-		<script type="text/javascript" src='js/jquery-1.7.1.min.js'></script>
-		<script type="text/javascript">
-			$(document).ready(function(){
 			
+			canvas:focus, canvas:active {
+				cursor: pointer;
+			}
+
+			#chatZone-history {
+				position: relative;
+				border: 1px solid gray;
+				float: right;
+				height: 500px;
+				width: 145px;
+			}
+
+			#chatZone-history ul{
+				position: absolute;
+				bottom: 20px;
+				font-size: 0.75em;
+				overflow: auto;
+				height: 460px;
+				width: 125px;
+				padding: 10px;
+			}
+
+			#chatZone-history li {
+				margin: 5px 0;
+				color: #333333;
+			}
+
+			#chatZone-history li span {
+				font-weight: bold;
+				color: black;
+			}
+
+
+		</style>
+<script type="text/javascript">
+			$(document).ready(function(){
+
 				var BlackBoard = {
 					init: function( config ) {
 						this.config = config;
 						this.context = this.config.board[0].getContext('2d');
-						
+
 						this.isPenDown = false;
 						this.penDownPos = {};
-						this.penColor = "#888";
-						this.penThickness = 1;
-						
+						this.penColor = "red";
+						this.penThickness = 2;
+
 						if (!this.context)
 							alert('Error: failed to getContext!');
 						else
 							this.bindEvents();
-						
+
 					},
-					
+
 					bindEvents: function() {
 						this.config.board.on('mousedown', this.mouseDown);
+						this.config.board.on('mouseleave', this.mouseUp);
 						$(document).on('mouseup', this.mouseUp);
 						this.config.board.on('mousemove', this.mouseMove);
 					},
-					
+
 					mouseDown: function (e) {
 						var self = BlackBoard;
-						
+
 						self.isPenDown = true;
 						self.penDownPos.x = e.offsetX;
 						self.penDownPos.y = e.offsetY;
 
 						console.log("Mouse down");
 					},
-					
+
 					mouseUp: function() {
 						console.log("Mouse up");
 						var self = BlackBoard;
-						
+
 						self.isPenDown = false;
 					},
-					
+
 					mouseMove: function(e) {
-						
+
 						var self = BlackBoard;
 						if(self.isPenDown)
 						{
 							var self = BlackBoard;
-							
+
 							var mouseX = e.offsetX;
 							var mouseY = e.offsetY;
-							
+
 							console.log("Mouse move");
-							self.drawLine(self.penColor, self.penThickness, self.penDownPos.x, self.penDownPos.y, mouseX, mouseY)						
+							self.drawLine(self.penColor, self.penThickness, self.penDownPos.x, self.penDownPos.y, mouseX, mouseY)
 							self.penDownPos.x = e.offsetX;
 							self.penDownPos.y = e.offsetY;
 						}
-						
+
 					},
-										
+
 					drawLine: function(color, thickness, x1, y1, x2, y2) {
-						
+
 						this.context.strokeStyle = color;
 						this.context.lineWidth   = thickness;
 					  this.context.lineCap = 'round';
@@ -83,23 +120,57 @@
 						this.context.moveTo(x1, y1)
 						this.context.lineTo(x2, y2);
 						this.context.stroke();
-					}			
-					
+					}
+
 				};
-				
+
+
 				BlackBoard.init({
 					board: $("#myCanvas")
 				});
-				
+
+
+				ChatZone.init({
+
+
+				});
+
+
+
 			});
-			
-			
-			
-			
+
 		</script>
-	</head>
-	
-	<body>
-		<canvas id="myCanvas" width="500" height="500"></canvas>
-	</body>
-</html>
+
+{% endblock %}
+
+{% block content %}
+<canvas id="myCanvas" width="800" height="500"></canvas>
+<div id="chatZone-history">
+	<ul>
+		<li><span>Neo: </span> Mensaje 1</li>
+		<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
+		<li><span>Neo: </span> Mensaje 1</li>
+		<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
+		<li><span>Neo: </span> Mensaje 1</li>
+		<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
+		<li><span>Neo: </span> Mensaje 1</li>
+		<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
+		<li><span>Neo: </span> Mensaje 1</li>
+		<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
+		<li><span>Neo: </span> Mensaje 1</li>
+		<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
+		<li><span>Neo: </span> Mensaje 1</li>
+		<li><span>Sephi: </span> Mensaje 2</li>
+		<li><span>Neo: </span> Mensaje 1</li>
+		<li><span>Sephi: </span> Mensaje 2</li>
+		<li><span>Neo: </span> Mensaje 1</li>
+		<li><span>Sephi: </span> Mensaje 2</li>
+		<li><span>Neo: </span> Mensaje 1</li>
+		<li><span>Sephi: </span> Mensaje 2</li>
+		<li><span>Neo: </span> Mensaje 1</li>
+		<li><span>Sephi: </span> Mensaje 2</li>
+		<li><span>Neo: </span> Mensaje 1</li>
+		<li><span>Sephi: </span> Mensaje 2</li>
+	</ul>
+</div>
+{% endblock %}

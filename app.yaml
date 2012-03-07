@@ -13,13 +13,13 @@ handlers:
 
 - url: /juego
   script: juego.app
-    
+
 - url: /bdtesting
   script: main.app
-  
+
 - url: /salas
   script: salas.app
-  
+
 - url: /.*
   script: main.app
-  
+
