@@ -11,6 +11,9 @@ handlers:
 - url: /css
   static_dir: css
 
+- url: /img
+  static_dir: img
+
 - url: /juego
   script: juego.app
 

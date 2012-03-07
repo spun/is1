@@ -3,11 +3,32 @@
 {% block title %}Salas{% endblock %}
 
 {% block content %}
-        <form action="/salas" method="post">
-            <input type="text" name="autor">
-            <input type="submit" value="Crear sala">
-        </form>
-	{% for sala in salas_list %}
-            <p>{{sala.autor}}</p>
-        {% endfor %}
+        <div id="ListaSalasBody">
+            <div id="formSalas">
+                <form action="/salas" method="post">
+                    <div id="buttons">
+                        <button type="submit" class="positive" name="save">
+                            <img src="/img/ListadoPartidas/master.png" alt=""/>
+                            Crear Sala
+                        </button>
+                    </div>
+                    <input type="text" name="nombre">
+                </form>
+            </div>
+            <div id="ListaSalas">
+                {% for sala in salas_list %}
+                    <div class="Sala">
+                        <div class="rowNomb">{{sala.nombre}}<img src="/img/ListadoPartidas/unlock.png" alt="Estado" /></div>
+                        <div class="bodyRow">
+                            <div class="rowImage"><img src="/img/ListadoPartidas/prueba.png" alt="Prueba" /></div>
+                            <div class="rowAutor"><img src="/img/ListadoPartidas/master.png" alt="Master" /> {{sala.autor}}</div>
+                            <div class="rowFecha"><img src="/img/ListadoPartidas/fecha.png" alt="Fecha de creacion" /> {{sala.fechaCrea}}</div>
+                            <div class="rowTipo"><img src="/img/ListadoPartidas/tipo.png" alt="Tipo" />Pictionary</div>
+                            <div class="rowPlayers"><img src="/img/ListadoPartidas/players.png" alt="Jugadores" />5/10</div>
+                            <div class="rowEnter"><a href=#><img src="/img/ListadoPartidas/enter.png" alt="Jugar" /></a></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
 {% endblock %}

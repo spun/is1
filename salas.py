@@ -14,9 +14,14 @@ class Salas(webapp2.RequestHandler):
 		self.response.out.write(template.render(path, template_values))
 		
 	def post(self):
-		salas=SalasDB()
-		autor=self.request.get('autor')
-		salas.AddSala(autor)
+		if self.request.get('nombre') !="":
+			salas=SalasDB()
+			autor=self.request.get('nombre')
+			salas.AddSala(autor)
+			self.redirect("/salas")
+		else:
+			self.redirect("/salas")
+	
 
 app = webapp2.WSGIApplication([('/salas', Salas)],
                               debug=True)

@@ -10,8 +10,10 @@ class User(db.Model):
 
 class Sala(db.Model):
 	#autor = db.ReferenceProperty(User)
+	nombre = db.StringProperty()
 	autor = db.StringProperty()
-	fechaCrea = db.DateProperty()
+	fechaCrea = db.DateTimeProperty()
+	estado = db.StringProperty()
 
 
 ########### METODOS ################
@@ -44,11 +46,13 @@ class UserDB:
 
 class SalasDB:
 
-	def AddSala(self, usuario):
+	def AddSala(self, nombreSala):
 		nuevaSala = Sala()
 		#nuevaSala.autor = usuario
-		nuevaSala.autor = usuario
-		nuevaSala.fechaCrea = datetime.datetime.now().date()
+		nuevaSala.nombre = nombreSala
+		nuevaSala.autor = "ShadowLink"
+		nuevaSala.fechaCrea = datetime.datetime.now()
+		nuevaSala.estado = "Privado"
 		nuevaSala.put()
 
 	def ListarSalas(self):
