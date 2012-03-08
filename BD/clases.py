@@ -1,5 +1,6 @@
 from google.appengine.ext import db
 import datetime
+import uuid
 
 ########### "TABLAS" ##############
 
@@ -7,6 +8,7 @@ class User(db.Model):
 	nick = db.StringProperty()
 	password = db.StringProperty()
 	email = db.EmailProperty()
+	idSala = db.StringProperty()
 
 class Sala(db.Model):
 	#autor = db.ReferenceProperty(User)
@@ -14,7 +16,7 @@ class Sala(db.Model):
 	autor = db.StringProperty()
 	fechaCrea = db.DateTimeProperty()
 	estado = db.StringProperty()
-
+	idSala = db.StringProperty()
 
 ########### METODOS ################
 
@@ -56,17 +58,30 @@ class UserDB:
 
 class SalasDB:
 
-	def AddSala(self, nombreSala):
+	def AddSala(self, nombreSala, autor):
+		u = uuid.uuid4()
 		nuevaSala = Sala()
 		#nuevaSala.autor = usuario
 		nuevaSala.nombre = nombreSala
-		nuevaSala.autor = "ShadowLink"
+		nuevaSala.autor = autor
 		nuevaSala.fechaCrea = datetime.datetime.now()
 		nuevaSala.estado = "Privado"
+		nuevaSala.idSala = u.hex
 		nuevaSala.put()
 
 	def ListarSalas(self):
 		sala=Sala.all()
 		res=sala.fetch(100)
+		return res
+		
+	def getSalaByAutor(self, autor):
+		sala = Sala.all()
+		sala.filter("autor =", autor)
+		res = sala.fetch(1)
+		return res
+		
+	def getNumSalas(self):
+		sala = Sala.all()
+		res = sala.count()
 		return res
 
