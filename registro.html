@@ -1,0 +1,186 @@
+{% extends "templates/pattern.html" %}
+
+{% block title %}Registro{% endblock %}
+
+{% block head %}
+	<script>
+		function validaregistro(r)
+		{
+			//Nombre usuario
+			var m = document.getElementById("user").value;
+			var expuser = new RegExp("^([A-N]|[O-Z]|[a-n]|[o-z]|[0-9]){3,15}$");
+			var msg = "Error:\n";
+			var ok = true;
+			if(!expuser.test(m))
+			{
+				msg += "Nombre de usuario incorrecto\n";
+				ok = false;
+			}
+			
+			// Contraseña
+			
+			var exppass = /^(?=.*\d)(?=.*[a-no-z])(?=.*[A-NO-Z]).{6,15}$/;
+			m = document.getElementById("contra").value;
+			if(!exppass.test(m))
+			{
+				msg += "Contraseña incorrecta\n";
+				ok = false;
+			}
+			
+			// Repetir contraseña
+			if(r.contra.value != r.contra2.value)
+			{
+				msg += "Las contraseñas no coinciden\n";
+				ok = false;
+			}
+			// Email
+			
+			var expmail = /^(^[0-9a-zA-Z]+(?:[._][0-9a-zA-Z]+)*)@([0-9a-zA-Z]+(?:[._-][0-9a-zA-Z]+)*\.[0-9a-zA-Z]{2,3})$/;
+			m = document.getElementById("dir").value;
+			
+			if(!expmail.test(m))
+			{
+				msg += "Dirección e-mail incorrecta\n";
+				ok = false;
+			}
+			if(ok == false)	
+				alert(msg);
+		
+			return ok;
+		}
+	</script>
+
+{% endblock %}
+{% block content %}
+	<form id="f1" action="/registro" method="post" onsubmit="validaregistro(this)">
+		<fieldset>
+		<legend>Datos personales	</legend>
+		<label for="user">Nombre Usuario: </label>
+		<input type="text" id="user" name="user" size="10" maxlength="20"/>
+		<br />  
+		<label for="contra">Contraseña: </label>
+		<input type="password" id="contra" name="contra" size="10" maxlength="20"/>
+		<br /> 		
+		<label for="contra2">Repetir contraseña: </label>
+		<input type="password" id="contra2" name="contra2" size="10"/>
+		<br /> 
+		
+		<label for="dir">Dirección de e-mail: </label>
+		<input type="text" id="dir" name="mail" size="30" maxlength="40"/>
+		<br /> 		
+		<input type="submit" value="Enviar"/>
+		<input type="reset" value="Borrar" />
+		</fieldset>
+	</form>
+{% endblock %}
+
+
+
+
+<!--
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+
+<head>
+<title> Registrarse </title>
+<link href="style.css" rel="stylesheet" media="all" title="Estilo" type="text/css" />
+	<link href="alternativo.css" rel="alternate stylesheet" media="all" title="Estilo2" type="text/css" />
+	<link rel="print stylesheet" type="text/css" href="impresion.css" media="screen" title="Estilo para impresión" />
+	
+	<script type="text/javascript">
+	function valida(f){
+		var ok = true;
+		var msg = "Debes escribir algo en los campos:\n";
+		if(f.usuario.value[0] == ' ' || f.usuario.value == "")
+		{
+			msg += "Nombre\n";
+			ok = false;
+		}
+		if(f.contraseña.value[0] == ' ' || f.contraseña.value == "")
+		{
+			msg += "Contraseña\n";
+			ok = false;
+		}
+		if(ok == false)
+			alert(msg);
+		return ok;
+	}
+	</script>
+</head>
+
+<body onLoad="estilo(getCookie('estilo'));">
+
+<h2>Formulario de registro</h2>
+<script type="text/javascript">
+
+	function validaregistro(r)
+	{
+		//Nombre usuario
+		var m = document.getElementById("user").value;
+		var expuser = new RegExp("^([A-N]|[O-Z]|[a-n]|[o-z]|[0-9]){3,15}$");
+		var msg = "Error:\n";
+		var ok = true;
+		if(!expuser.test(m))
+		{
+			msg += "Nombre de usuario incorrecto\n";
+			ok = false;
+		}
+		
+		// Contraseña
+		
+		var exppass = /^(?=.*\d)(?=.*[a-no-z])(?=.*[A-NO-Z]).{6,15}$/;
+		m = document.getElementById("contra").value;
+		if(!exppass.test(m))
+		{
+			msg += "Contraseña incorrecta\n";
+			ok = false;
+		}
+		
+		// Repetir contraseña
+		if(r.contra.value != r.contra2.value)
+		{
+			msg += "Las contraseñas no coinciden\n";
+			ok = false;
+		}
+		// Email
+		
+		var expmail = /^(^[0-9a-zA-Z]+(?:[._][0-9a-zA-Z]+)*)@([0-9a-zA-Z]+(?:[._-][0-9a-zA-Z]+)*\.[0-9a-zA-Z]{2,3})$/;
+		m = document.getElementById("dir").value;
+		
+		if(!expmail.test(m))
+		{
+			msg += "Dirección e-mail incorrecta\n";
+			ok = false;
+		}
+		if(ok == false)	
+			alert(msg);
+	
+		return ok;
+	}
+</script>
+<div>
+	<form id="f1" action="" method="post" onsubmit="return validaregistro(this)">
+		<fieldset>
+		<legend>Datos personales	</legend>
+		<label for="user">Nombre Usuario: </label>
+		<input type="text" id="user" name="user" size="10" maxlength="20"/>
+		<br />  
+		<label for="contra">Contraseña: </label>
+		<input type="password" id="contra" name="contra" size="10" maxlength="20"/>
+		<br /> 		
+		<label for="contra2">Repetir contraseña: </label>
+		<input type="password" id="contra2" name="contra2" size="10"/>
+		<br /> 
+		
+		<label for="dir">Dirección de e-mail: </label>
+		<input type="text" id="dir" name="dir" size="30" maxlength="40"/>
+		<br /> 		
+		<input type="submit" value="Enviar"/>
+		<input type="reset" value="Borrar" />
+		</fieldset>
+	</form>
+</div>
+</body>
+
+</html>
+-->

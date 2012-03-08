@@ -80,10 +80,11 @@
 						var self = BlackBoard;
 
 						self.isPenDown = true;
-						self.penDownPos.x = e.offsetX;
-						self.penDownPos.y = e.offsetY;
+						self.penDownPos.x = e.pageX - this.offsetLeft;
+						self.penDownPos.y = e.pageY - this.offsetTop;
 
 						console.log("Mouse down");
+						return false;
 					},
 
 					mouseUp: function() {
@@ -100,13 +101,14 @@
 						{
 							var self = BlackBoard;
 
-							var mouseX = e.offsetX;
-							var mouseY = e.offsetY;
+							var mouseX = e.pageX - this.offsetLeft;
+							var mouseY = e.pageY - this.offsetTop;
 
 							console.log("Mouse move");
 							self.drawLine(self.penColor, self.penThickness, self.penDownPos.x, self.penDownPos.y, mouseX, mouseY)
-							self.penDownPos.x = e.offsetX;
-							self.penDownPos.y = e.offsetY;
+							
+							self.penDownPos.x = e.pageX - this.offsetLeft;
+							self.penDownPos.y = e.pageY - this.offsetTop;
 						}
 
 					},
@@ -115,7 +117,7 @@
 
 						this.context.strokeStyle = color;
 						this.context.lineWidth   = thickness;
-					  this.context.lineCap = 'round';
+						this.context.lineCap = 'round';
 						this.context.beginPath();
 						this.context.moveTo(x1, y1)
 						this.context.lineTo(x2, y2);
@@ -130,10 +132,10 @@
 				});
 
 
-				ChatZone.init({
+				/*ChatZone.init({
 
 
-				});
+				});*/
 
 
 

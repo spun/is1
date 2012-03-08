@@ -3,12 +3,18 @@ import webapp2
 
 from google.appengine.ext.webapp import template
 
+import session
 from BD.clases import UserDB
 
 
 class MainPage(webapp2.RequestHandler):
 	def get(self):
-		template_values = {}
+		template_values={}
+		self.sess = session.Session('enginesession')
+		if self.sess.load():
+			user = UserDB().getUserByKey(self.sess.user)
+			template_values['user'] = user
+			
 		path = os.path.join(os.path.dirname(__file__), 'index.html')
 		self.response.out.write(template.render(path, template_values))
 

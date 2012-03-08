@@ -20,6 +20,18 @@ handlers:
 - url: /bdtesting
   script: main.app
 
+- url: /registro
+  script: usuarios.app
+  
+- url: /login
+  script: usuarios.app
+  
+- url: /logout
+  script: usuarios.app
+    
+- url: /isonline
+  script: usuarios.app
+
 - url: /salas
   script: salas.app
 

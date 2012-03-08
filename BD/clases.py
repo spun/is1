@@ -42,6 +42,16 @@ class UserDB:
 
 		results = q.fetch(5)
 		return results
+		
+	def getUsersQuery(self, nickName, passw):
+		q = User.all()
+		q.filter("nick =", nickName)
+		q.filter("password =", passw)
+		
+		return q
+		
+	def getUserByKey(self, key):
+		return User.get(key)
 
 
 class SalasDB:

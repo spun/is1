@@ -15,14 +15,20 @@
 		<div id="container">
 			<div id="header">
 				<a href="/" id="logo">Inicio</a>
-				<a id="login-button" href="#" >Iniciar sesion</a>
-				<form id="login-menu">
+			{% ifequal user None %}
+				<a id="login-button" href="/login" >Iniciar sesion</a>
+				<form id="login-menu" action="/login" method="post">
 					<p><label for="nombre">Nombre de usuario</label></p>
-					<p><input type="text" name="nombre" id="nombre" /></p>
+					<p><input type="text" name="user" id="nombre" /></p>
 					<p><label for="pass">Contraseña</label></p>
 					<p><input type="password" name="pass" id="pass" /></p>
 					<p><input type="submit" value="Iniciar sesión" class="menu-button"/></p>
 				</form>
+			{% else %}
+				<a id="login-button" href="#" ><img src="img/user_img_default.png" />{{ user.nick }}</a>
+			{% endifequal %}
+							
+				
 			</div>
 			<div id="main-content" class="wrap_center">
 
