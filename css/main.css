@@ -139,9 +139,8 @@ ul {
 
 #ListaSalas {
 	float:left;
-	padding: 0px 0px 0px 2px;
-	position: relative;
-	width: 80%;
+	padding: 0px 0px 0px 80px;
+	width: 65%;
 }
 
 #listaPaginas {
@@ -153,6 +152,7 @@ ul {
 	position: relative;
 	width: 10%;
 	padding: 80px 0px 0px 0px;
+	margin: 0 0 0 0;
 }
 
 #numPags {
@@ -168,10 +168,10 @@ ul {
 .Sala {
 	float:left;
 	background-color: #D0F5A9;
-	width: 120px;
+	width: 100px;
 	height: 140px;
-	padding: 10 1 10 1;
-	margin: 10 10 10 10;
+	padding: 10 10 10 10;
+	margin: 10 5 10 10;
 	box-shadow: 0px 0px 10px #636363;
 	border-radius: 1px;
 }
@@ -179,10 +179,10 @@ ul {
 .Sala:hover {
 	float:left;
 	background-color: #D0F5A9;
-	width: 120px;
+	width: 100px;
 	height: 140px;
-	padding: 10 1 10 1;
-	margin: 10 10 10 10;
+	padding: 10 10 10 10;
+	margin: 10 5 10 10;
 	box-shadow: 0px 0px 25px #0B3B0B;
 	border-radius: 1px;
 }
