@@ -9,32 +9,42 @@ from BD.clases import UserDB
 
 class Salas(webapp2.RequestHandler):
 	def get(self):
-		salas=SalasDB()		
-		res=salas.ListarSalas()
-		
-		i=0
-		res2 =[]
-		for sala in res:
-			if i>=(int(self.request.get('p'))-1)*8 and i<(int(self.request.get('p')))*8:
-				res2.append(sala)
-			i+=1
+		miPag = self.request.get('p', default_value='0')
+		if miPag == '0':
+			self.redirect("/salas?p=1")	
+		else:	
+			salas=SalasDB()		
+			res=salas.ListarSalas()
 			
-		
-		template_values = {'salas_list':res2}
-		
-		# Extraemos el usuario de la sesion 
-		self.sess = session.Session('enginesession')
-		if self.sess.load():
-			user = UserDB().getUserByKey(self.sess.user)
-			template_values['user'] = user
-		
-		
-		template_values['pags']=(SalasDB().getNumSalas()/8)+1
-		template_values['pag']=self.request.get('p')
-		template_values['nextPage']=int(self.request.get('p'))+1
-		template_values['prevPage']=int(self.request.get('p'))-1
-		path = os.path.join(os.path.dirname(__file__), 'salas.html')
-		self.response.out.write(template.render(path, template_values))
+			i=0
+			res2 =[]
+			for sala in res:
+				if i>=(int(self.request.get('p'))-1)*12 and i<(int(self.request.get('p')))*12:
+					res2.append(sala)
+				i+=1
+				
+			
+			template_values = {'salas_list':res2}
+			
+			# Extraemos el usuario de la sesion 
+			self.sess = session.Session('enginesession')
+			if self.sess.load():
+				user = UserDB().getUserByKey(self.sess.user)
+				template_values['user'] = user
+			
+			numPags=0
+			if SalasDB().getNumSalas()/12==0:
+				numPags=1
+			else:
+				numPags=(SalasDB().getNumSalas()/12)+1
+			
+			template_values['numSalas']=SalasDB().getNumSalas()
+			template_values['pags']= numPags
+			template_values['pag']=self.request.get('p')
+			template_values['nextPage']=int(self.request.get('p'))+1
+			template_values['prevPage']=int(self.request.get('p'))-1
+			path = os.path.join(os.path.dirname(__file__), 'salas.html')
+			self.response.out.write(template.render(path, template_values))
 		
 	def post(self):
 		self.sess = session.Session('enginesession')
