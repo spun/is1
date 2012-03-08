@@ -82,6 +82,10 @@ a#login-button:active {
 	border: 1px solid #09f;
 }
 
+a#login-button img {
+	float: left;
+}
+
 #login-menu {
 	padding: 20px;
 	background-color: white;

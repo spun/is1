@@ -1,0 +1,86 @@
+{% extends "templates/pattern.html" %}
+
+{% block title %}Registro{% endblock %}
+
+{% block head %}
+	<script>
+		function validaregistro(r)
+		{
+			var msg = "Error:\n";
+			var todook = true;
+			
+			/*********** NOMBRE ***********/
+
+			var name = document.getElementById("user").value;
+
+			var expuser = /^([A-NO-Za-no-z0-9])+$/;
+
+			if(!expuser.test(name))
+			{
+				msg += "El nombre de usuario sólo admite caracteres alfanuméricos\n";
+				todook = false;
+			}
+
+			/*********** CONTRASEÑA ***********/
+
+			var password = document.getElementById("contra").value;
+
+			var exppass = /^[A-NO-Za-no-z0-9]{6,15}$/;
+			
+			if(!exppass.test(password))
+			{
+				msg += "La contraseña sólo puede tener letras y números. Con una longitud entre 6 y 15 caracteres\n";
+				todook = false;
+			}
+			/*********** CONTRASEÑA2 ***********/
+			var password2 = document.getElementById("contra2");
+			
+			if(password2.value != password)
+			{
+				msg += "Las contraseñas no coinciden\n";
+				todook = false;
+			}
+			
+			/*********** DIRECCIÓN DE EMAIL ***********/
+			
+			var mail = document.getElementById("dir").value;
+			
+			var expmail = /^[a-z0-9-_]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+
+			if(!expmail.test(mail))
+			{
+				todook=false;
+				msg += "La dirección de e-mail no es correcta\n";
+			}
+			
+			if (!todook) {
+				alert(msg);
+				return false;
+			}
+		}
+	</script>
+
+{% endblock %}
+
+{% block content %}
+	<form id="f1" action="/registro" method="post" onsubmit="validaregistro(this)">
+		<fieldset>
+		<legend>Datos personales	</legend>
+		<label for="user">Nombre Usuario: </label>
+		<input type="text" id="user" name="user" size="10" maxlength="20"/>
+		<br />  
+		<label for="contra">Contraseña: </label>
+		<input type="password" id="contra" name="contra" size="10" maxlength="20"/>
+		<br /> 		
+		<label for="contra2">Repetir contraseña: </label>
+		<input type="password" id="contra2" name="contra2" size="10"/>
+		<br /> 
+		
+		<label for="dir">Dirección de e-mail: </label>
+		<input type="text" id="dir" name="mail" size="30" maxlength="40"/>
+		<br /> 		
+		<input type="submit" value="Enviar"/>
+		<input type="reset" value="Borrar" />
+		</fieldset>
+	</form>
+{% endblock %}

@@ -40,8 +40,25 @@ class UserDB:
 		# Modo 2
 		# q = db.GqlQuery("SELECT * FROM User WHERE nick = :1 ", nickName)
 
-		results = q.fetch(5)
+		results = q.get()
 		return results
+	
+	def getUserByMail(self, email):
+		q = User.all()
+		q.filter("email =", email)
+
+		results = q.get()		
+		return results
+	
+	def getUsersQuery(self, nickName, passw):
+		q = User.all()
+		q.filter("nick =", nickName)
+		q.filter("password =", passw)
+		
+		return q
+		
+	def getUserByKey(self, key):
+		return User.get(key)
 
 
 class SalasDB:
