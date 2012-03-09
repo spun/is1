@@ -128,6 +128,7 @@ ul {
 
 #ListaSalasBody {
 	height: 100%;
+	position: relative;
 }
 
 #formSalas {
@@ -138,18 +139,58 @@ ul {
 
 #ListaSalas {
 	float:left;
-	
+	padding: 0px 0px 0px 80px;
+	width: auto;
+}
+
+#listaPaginas {
+	padding: 0 0 0 100;
+}
+
+#prevArrow {
+	float: left;
+	position: relative;
+	width: 40%;
+	padding: 0px 0px 0px 0px;
+	margin: 0 0 0 0;
+}
+
+#numPags {
+	float:left;
+	position: relative;
+	width: 10%;
+	text-align: center;
+	padding: 0 60 0 0;
+}
+
+#nextArrow {
+	text-align: right;
+	float: left;
+	position: relative;
+	width: 33%;
+	padding: 0px 0px 0px 0px;
 }
 
 .Sala {
 	float:left;
 	background-color: #D0F5A9;
-	width: 200px;
-	height: 220px;
-	padding: 10 5 10 5;
-	margin: 10 10 10 10;
-	box-shadow: 0px 0px 15px #636363;
-	border-radius: 5px;
+	width: 100px;
+	height: 125px;
+	padding: 10 10 10 10;
+	margin: 10 5 10 10;
+	box-shadow: 0px 0px 10px #636363;
+	border-radius: 1px;
+}
+
+.Sala:hover {
+	float:left;
+	background-color: #D0F5A9;
+	width: 100px;
+	height: 125px;
+	padding: 10 10 10 10;
+	margin: 10 5 10 10;
+	box-shadow: 0px 0px 25px #0B3B0B;
+	border-radius: 1px;
 }
 
 .rowEstado {
@@ -168,8 +209,9 @@ ul {
 }
 
 .rowNomb {
-	font-size: larger;
+	font-size: small;
 	text-align: center;
+	font-weight: bold;
 	background-color: #92FF0B;
 	border-radius: 5px;
 	border: dashed 1px;

@@ -5,7 +5,7 @@
 {% block content %}
         <div id="ListaSalasBody">
             <div id="formSalas">
-                <form action="/salas" method="post">
+                <form action="/salas?p=1" method="post">
                     <div id="buttons">
                         <button type="submit" class="positive" name="save">
                             <img src="/img/ListadoPartidas/master.png" alt=""/>
@@ -15,20 +15,47 @@
                     <input type="text" name="nombre">
                 </form>
             </div>
+	    
+            {% if numSalas > 0 %}	
+	    <div id="listaPaginas">
+                <div id="prevArrow">
+                {% if prevPage != 0 %}
+                <a href=/salas?p={{prevPage}}><img src="/img/ListadoPartidas/prev.png" alt="Anterior" /></a>
+                {% endif %}
+                {% if prevPage == 0 %}
+                <a href=/salas?p={{prevPage}}><img src="/img/ListadoPartidas/blank.png" alt="Anterior" /></a>
+                {% endif %}
+                </div>
+            
+		<div id="numPags">{{pag}}/<b>{{pags}}</b></div>
+                
+                <div id="nextArrow">
+                {% if nextPage <= pags %}
+		<a href=/salas?p={{nextPage}}><img src="/img/ListadoPartidas/next.png" alt="Siguiente" /></a>
+                {% endif %}
+                {% if nextPage > pags %}
+                <a href=/salas?p={{nextPage}}><img src="/img/ListadoPartidas/blank.png" alt="Siguiente" /></a>
+                {% endif %}
+                </div>
+	    </div>    
             <div id="ListaSalas">
                 {% for sala in salas_list %}
                     <div class="Sala">
                         <div class="rowNomb">{{sala.nombre}}<img src="/img/ListadoPartidas/unlock.png" alt="Estado" /></div>
                         <div class="bodyRow">
-                            <div class="rowImage"><img src="/img/ListadoPartidas/prueba.png" alt="Prueba" /></div>
                             <div class="rowAutor"><img src="/img/ListadoPartidas/master.png" alt="Master" /> {{sala.autor}}</div>
-                            <div class="rowFecha"><img src="/img/ListadoPartidas/fecha.png" alt="Fecha de creacion" /> {{sala.fechaCrea}}</div>
+                            <div class="rowFecha"><img src="/img/ListadoPartidas/fecha.png" alt="Fecha de creacion" /> {{sala.fechaCrea.hour}}:{{sala.fechaCrea.minute}}</div>
                             <div class="rowTipo"><img src="/img/ListadoPartidas/tipo.png" alt="Tipo" />Pictionary</div>
                             <div class="rowPlayers"><img src="/img/ListadoPartidas/players.png" alt="Jugadores" />5/10</div>
                             <div class="rowEnter"><a href=#><img src="/img/ListadoPartidas/enter.png" alt="Jugar" /></a></div>
                         </div>
                     </div>
                 {% endfor %}
-            </div>
+            </div>    
+            {% endif %}
+            {% if numSalas == 0%}
+                No hay ninguna sala creada
+            {% endif %}
+                
         </div>
 {% endblock %}

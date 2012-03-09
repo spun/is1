@@ -87,6 +87,7 @@ class Login(webapp2.RequestHandler):
 			# self.redirect('/')
 			path = os.path.join(os.path.dirname(__file__), 'index.html')
 			self.response.out.write(template.render(path, template_values))
+			self.response.out.write("login OK")	
 			
 		else:
 			self.response.out.write("no existe el usuario")		
