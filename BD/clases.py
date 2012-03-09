@@ -54,6 +54,11 @@ class UserDB:
 		
 	def getUserByKey(self, key):
 		return User.get(key)
+	
+	def getUsersBySala(self, idSala):
+		q = User.all()
+		q.filter("idSala =", idSala)
+		return q
 
 
 class SalasDB:

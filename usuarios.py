@@ -68,6 +68,9 @@ class Logout(webapp2.RequestHandler):
 	def get(self):
 		self.sess = session.Session('enginesession')
 		if self.sess.load():
+			user = UserDB().getUserByKey(self.sess.user)
+			user.idSala=""
+			user.put()
 			self.sess.store('', 0)
 		self.redirect('/')
 		
