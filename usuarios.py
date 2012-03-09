@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 import webapp2
 import cgi
@@ -29,25 +31,49 @@ class Registro(webapp2.RequestHandler):
 				
 		userCtrl = UserDB()
 		user = userCtrl.getUserByNick(cgi.escape(self.request.get('user')))
-		if(user):
-			self.response.out.write("<br/>* Error:* El usuario "+ cgi.escape(self.request.get('user')+" ya existe"))
-		else:
-			userCtrl.AddUser(cgi.escape(self.request.get('user')), cgi.escape(self.request.get('contra')), cgi.escape(self.request.get('mail')))
-			self.response.out.write("<br/>Registro completado")
+		
+		if(self.request.get('user') == ""):
+			self.response.out.write("<br/>* Error:* El campo usuario no puede estar vacio")
+		else:	
+			if(user):
+				self.response.out.write("<br/>* Error:* El usuario "+ cgi.escape(self.request.get('user')+" ya existe"))
+			else:
+				contra = self.request.get('contra')
+				contra2 = self.request.get('contra2')
+				if(contra == "" or contra2 == ""):
+					self.response.out.write("<br/>* Los password no pueden estar vacios")
+				else:
+					if(contra != contra2):
+						self.response.out.write("<br/>* Los passwords no coinciden")
+					else:
+						mail = self.request.get('mail')
+						if(mail == ""):
+							self.response.out.write("<br/>* Error:* El campo mail no puede estar vacio")
+						else:
+							mail = userCtrl.getUserByMail(cgi.escape(self.request.get('mail')))
+							
+							if(mail):
+								self.response.out.write("<br/>* Error:* La direccion de correo ya esta siendo utilizada por otro usuario")
+							else:
+								userCtrl.AddUser(cgi.escape(self.request.get('user')), cgi.escape(self.request.get('contra')), cgi.escape(self.request.get('mail')))
+								self.response.out.write("<br/>Registro completado")
 			
 class Login(webapp2.RequestHandler):
 	def get(self):
-		self.response.out.write("""
-          <form action="/login" method="post">
-            <input type="text" name="user">
-            <input type="password" name="pass">
-            <input type="submit" value="Login">
-          </form>
-        </body>
-      </html>""")
+			template_values = {}
+			
+			# Extraemos el usuario de la sesion 
+			self.sess = session.Session('enginesession')
+			if self.sess.load():
+				user = UserDB().getUserByKey(self.sess.user)
+				template_values['user'] = user
+			
+			path = os.path.join(os.path.dirname(__file__), 'login.html')
+			self.response.out.write(template.render(path, template_values))
 		
 	def post(self):
-		self.response.out.write("Aqui el formulario de login<br/>");
+	
+		template_values = {}
 		self.sess = session.Session('enginesession')
 
 		userCtrl = UserDB()
@@ -59,6 +85,8 @@ class Login(webapp2.RequestHandler):
 				self.sess.store('', 0)
 			self.sess.store(str(users.get().key()), expires)
 			# self.redirect('/')
+			path = os.path.join(os.path.dirname(__file__), 'index.html')
+			self.response.out.write(template.render(path, template_values))
 			self.response.out.write("login OK")	
 			
 		else:
@@ -79,7 +107,9 @@ class IsOnline(webapp2.RequestHandler):
 		self.sess = session.Session('enginesession')
 		if self.sess.load():
 			user = UserDB().getUserByKey(self.sess.user)
-			self.response.out.write(user.nick)
+			self.response.out.write("Nombre de usuario: " + user.nick)
+			self.response.out.write("<br/> E-mail: " + user.email)
+			
 		else:
 			self.response.out.write("No login")
 
