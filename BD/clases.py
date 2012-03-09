@@ -92,3 +92,17 @@ class SalasDB:
 		res = sala.count()
 		return res
 
+class PalabrasDB:
+
+	def AddPalabra(self, nomPalabra, temaPalabra):
+		nuevapalabra = Palabra()
+		nuevapalabra.palabra = nomPalabra
+		nuevapalabra.tema = temaPalabra
+	
+	def AddPalabra(self, nomPalabra):
+		nuevapalabra = Palabra()
+		nuevapalabra.palabra = nomPalabra
+	
+	def AddTema(self, tema):
+		nuevotema = Palabra()
+		nuevotema.tema = tema
