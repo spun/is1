@@ -1,0 +1,18 @@
+{% extends "templates/pattern.html" %}
+
+{% block title %}Salas{% endblock %}
+
+{% block content %}
+    <div id="salaJuegoContent">
+        <div id="salaJuegoBody">Esto es un chat</div>
+        
+        <div id="salaJuegoUsers">
+            {% for user in user_list %}
+                <p>{{user.nick}}</p>
+            {% endfor %}
+        </div>
+    
+        <div id="salaJuegoChat">Chat</div>
+        <div id="salaPlay"><a href="/juego">PLAY!</a></div>
+    </div>
+{% endblock %}

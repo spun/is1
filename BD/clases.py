@@ -42,7 +42,14 @@ class UserDB:
 		# Modo 2
 		# q = db.GqlQuery("SELECT * FROM User WHERE nick = :1 ", nickName)
 
-		results = q.fetch(5)
+		results = q.get()
+		return results
+
+	def getUserByMail(self, email):
+		q = User.all()
+		q.filter("email =", email)
+
+		results = q.get()		
 		return results
 		
 	def getUsersQuery(self, nickName, passw):
@@ -54,6 +61,11 @@ class UserDB:
 		
 	def getUserByKey(self, key):
 		return User.get(key)
+	
+	def getUsersBySala(self, idSala):
+		q = User.all()
+		q.filter("idSala =", idSala)
+		return q
 
 
 class SalasDB:
@@ -85,3 +97,17 @@ class SalasDB:
 		res = sala.count()
 		return res
 
+class PalabrasDB:
+
+	def AddPalabra(self, nomPalabra, temaPalabra):
+		nuevapalabra = Palabra()
+		nuevapalabra.palabra = nomPalabra
+		nuevapalabra.tema = temaPalabra
+	
+	def AddPalabra(self, nomPalabra):
+		nuevapalabra = Palabra()
+		nuevapalabra.palabra = nomPalabra
+	
+	def AddTema(self, tema):
+		nuevotema = Palabra()
+		nuevotema.tema = tema
