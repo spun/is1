@@ -96,7 +96,13 @@ class SalasDB:
 		sala = Sala.all()
 		res = sala.count()
 		return res
-
+	
+	def deleteSala(self, idSala):
+		sala = Sala.all()
+		sala.filter("idSala =", idSala)
+		res = sala.get()
+		Sala.delete(res)
+		
 class PalabrasDB:
 
 	def AddPalabra(self, nomPalabra, temaPalabra):

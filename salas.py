@@ -12,10 +12,21 @@ class Salas(webapp2.RequestHandler):
 		miPag = self.request.get('p', default_value='0')
 		if miPag == '0':
 			self.redirect("/salas?p=1")	
-		else:	
+		else:
+			template_values = {}
+			# Extraemos el usuario de la sesion 
+			self.sess = session.Session('enginesession')
+			if self.sess.load():
+				user = UserDB().getUserByKey(self.sess.user)
+				template_values['user'] = user
+				#Si el usuario ya estaba en una sala lo redirigimos a ella
+				if user.idSala!="":
+					self.redirect("/salajuego?id="+str(user.idSala))
+					
 			salas=SalasDB()		
 			res=salas.ListarSalas()
 			
+			#Listamos las salas que hay por acada pagina
 			i=0
 			res2 =[]
 			for sala in res:
@@ -23,15 +34,9 @@ class Salas(webapp2.RequestHandler):
 					res2.append(sala)
 				i+=1
 				
+			template_values['salas_list'] = res2
 			
-			template_values = {'salas_list':res2}
-			
-			# Extraemos el usuario de la sesion 
-			self.sess = session.Session('enginesession')
-			if self.sess.load():
-				user = UserDB().getUserByKey(self.sess.user)
-				template_values['user'] = user
-			
+			#Extraemos el numero de paginas que tiene el listado de salas
 			numPags=0
 			if SalasDB().getNumSalas()/12==0:
 				numPags=1
