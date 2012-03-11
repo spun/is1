@@ -7,6 +7,7 @@ import cgi
 from google.appengine.ext.webapp import template
 
 from BD.clases import UserDB
+from BD.clases import SalasDB
 import session
 
 class Registro(webapp2.RequestHandler):
@@ -97,6 +98,11 @@ class Logout(webapp2.RequestHandler):
 		self.sess = session.Session('enginesession')
 		if self.sess.load():
 			user = UserDB().getUserByKey(self.sess.user)
+			numUsers = UserDB().getUsersBySala(user.idSala)
+			res = numUsers.count()
+			#Si no queda nadie en la sala la eliminamos
+			if res == 1:
+				SalasDB().deleteSala(user.idSala)
 			user.idSala=""
 			user.put()
 			self.sess.store('', 0)

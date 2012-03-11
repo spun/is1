@@ -1,21 +1,80 @@
 {% extends "templates/pattern.html" %}
 
+{% block head %}
+
+<script>
+ 
+$(document).ready(function() {  
+ 
+    //select all the a tag with name equal to modal
+    $('a[name=modal]').click(function(e) {
+        //Cancel the link behavior
+        e.preventDefault();
+        //Get the A tag
+        var id = $(this).attr('href');
+     
+        //Get the screen height and width
+        var maskHeight = $(document).height();
+        var maskWidth = $(window).width();
+     
+        //Set height and width to mask to fill up the whole screen
+        $('#mask').css({'width':maskWidth,'height':maskHeight});
+         
+        //transition effect     
+        $('#mask').fadeIn(500);    
+        $('#mask').fadeTo("fast",0.8);  
+     
+        //Get the window height and width
+        var winH = $(window).height();
+        var winW = $(window).width();
+               
+        //Set the popup window to center
+        $(id).css('top',  winH/2-$(id).height()/2);
+        $(id).css('left', winW/2-$(id).width()/2);
+     
+        //transition effect
+        $(id).fadeIn(2000); 
+     
+    });
+     
+    //if close button is clicked
+    $('.window .close').click(function (e) {
+        //Cancel the link behavior
+        e.preventDefault();
+        $('#mask, .window').hide();
+    });     
+     
+    //if mask is clicked
+    $('#mask').click(function () {
+        $(this).hide();
+        $('.window').hide();
+    });         
+     
+});
+ 
+</script>
+
+{% endblock %}
+
 {% block title %}Salas{% endblock %}
 
 {% block content %}
         <div id="ListaSalasBody">
-            <div id="formSalas">
+            <a href="#formSalas" name="modal">Crear sala</a>
+            <div id="formSalas" class="window">
                 <form action="/salas?p=1" method="post">
+                    <p><b>Nombre: </b><input type="text" name="nombre"></p>
+                    <p><b>Password: </b><input type="text" name="password" disabled="disabled"></p>
+                    <p><b>Tipo: </b><input type="text" name="password" disabled="disabled"></p>
                     <div id="buttons">
                         <button type="submit" class="positive" name="save">
                             <img src="/img/ListadoPartidas/master.png" alt=""/>
                             Crear Sala
                         </button>
                     </div>
-                    <input type="text" name="nombre">
                 </form>
             </div>
-	    
+	    <div id="mask"></div>
             {% if numSalas > 0 %}	
 	    <div id="listaPaginas">
                 <div id="prevArrow">

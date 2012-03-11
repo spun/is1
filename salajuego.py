@@ -14,9 +14,11 @@ class SalaJuego(webapp2.RequestHandler):
 			template_values = {}
 			users=UserDB()
 			user = users.getUserByKey(self.sess.user)
+			template_values['user'] = user
 			if self.request.get('e', default_value='0')!='0':
 				numUsers = UserDB().getUsersBySala(user.idSala)
 				res = numUsers.count()
+				#Si no queda nadie en la sala la eliminamos
 				if res == 1:
 					SalasDB().deleteSala(user.idSala)
 				user.idSala="None"
