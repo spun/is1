@@ -4,15 +4,17 @@
 
 {% block content %}
     <div id="salaJuegoContent">
-        <div id="salaJuegoBody">Esto es un chat</div>
-        
-        <div id="salaJuegoUsers">
+        <div id="salaJuegoBody">
             {% for user in user_list %}
                 <p>{{user.nick}}</p>
             {% endfor %}
         </div>
+        
+        <div id="salaJuegoUsers">
+            Esto es un chat
+        </div>
     
         <div id="salaJuegoChat">Chat</div>
-        <div id="salaPlay"><a href="/juego">PLAY!</a></div>
+        <div id="salaPlay"><p><a href="/juego">PLAY!</a></p><p><a href="/salajuego?e=1">Salir</a></p></div>
     </div>
 {% endblock %}
