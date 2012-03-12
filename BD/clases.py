@@ -17,6 +17,13 @@ class Sala(db.Model):
 	fechaCrea = db.DateTimeProperty()
 	estado = db.StringProperty()
 	idSala = db.StringProperty()
+	
+class Juego(db.Model):
+	fechaCrea = db.DateTimeProperty()
+	
+class UsersInGame(db.Model):
+	game = db.ReferenceProperty(Juego)
+	user = db.ReferenceProperty(User)
 
 ########### METODOS ################
 

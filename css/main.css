@@ -114,6 +114,7 @@ a#login-button img {
 	border-top: 4px solid #92FF0B;
 	min-height: 400px;
 	margin-top: 20px;
+	overflow: hidden;
 }
 
 h2 {

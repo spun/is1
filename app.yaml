@@ -17,6 +17,9 @@ handlers:
 - url: /juego
   script: juego.app
 
+- url: /gamebroadcast
+  script: juego.app
+
 - url: /bdtesting
   script: main.app
 
