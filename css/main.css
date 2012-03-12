@@ -349,3 +349,24 @@ ul {
 	font-weight: bold;
 	padding: 20px 0px 0px 0px;
 }
+
+#playerContainer {
+	float: left;
+	position: relative;
+	margin: 8px 2px 0px 8px;
+	font-size: small;
+	box-shadow: 0px 0px 10px #636363;
+	
+}
+
+#playerAvatar {
+	padding: 2px 2px 2px 2px;
+	float: left;
+	position: relative;
+}
+
+#playerDatos {
+	padding: 2px 2px 2px 2px;
+	float: left;
+	position: relative;
+}
