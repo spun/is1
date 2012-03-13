@@ -35,7 +35,10 @@ class SalaJuego(webapp2.RequestHandler):
 				game = GameDB().getGameBySala(idSala)
 				inGame = UsersInGameDB()
 				inGame.AddUserInGame(user, game)
-
+				
+			idSala = self.request.get('id')
+			game = GameDB().getGameBySala(idSala)
+			template_values['gamekey']=game.key()
 			#Listamos los usuarios en la sala
 			user_list=users.getUsersBySala(self.request.get('id'))
 			template_values['user_list']=user_list
