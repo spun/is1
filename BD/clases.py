@@ -18,11 +18,12 @@ class Sala(db.Model):
 	estado = db.StringProperty()
 	idSala = db.StringProperty()
 	
-class Juego(db.Model):
+class Game(db.Model):
 	fechaCrea = db.DateTimeProperty()
+	idSala = db.StringProperty()
 	
 class UsersInGame(db.Model):
-	game = db.ReferenceProperty(Juego)
+	game = db.ReferenceProperty(Game)
 	user = db.ReferenceProperty(User)
 
 ########### METODOS ################
@@ -110,17 +111,53 @@ class SalasDB:
 		res = sala.get()
 		Sala.delete(res)
 		
+class GameDB:
+	
+	def AddGame(self, idSala):
+		newGame = Game()
+		newGame.fechaCrea = datetime.datetime.now()
+		newGame.idSala = idSala
+		newGame.put()
+		return newGame
+
+	def getGameBySala(self, idSala):
+		game = Game.all()
+		game.filter("idSala =", idSala)
+		res = game.get()
+		return res
+
+class UsersInGameDB:
+	
+	def AddUserInGame(self, user, game):
+		inGame = UsersInGame()
+		inGame.game = game
+		inGame.user = user
+		inGame.put()
+	
+	def UserExist(self, user):
+		inGame = UsersInGame.all()
+		inGame.filter("user =", user)
+		res = inGame.count()
+		if res>0:
+			return True
+		else:
+			return False
+		
+
 class PalabrasDB:
 
 	def AddPalabra(self, nomPalabra, temaPalabra):
 		nuevapalabra = Palabra()
 		nuevapalabra.palabra = nomPalabra
 		nuevapalabra.tema = temaPalabra
+		nuevapalabra.put()
 	
 	def AddPalabra(self, nomPalabra):
 		nuevapalabra = Palabra()
 		nuevapalabra.palabra = nomPalabra
+		nuevapalabra.put()
 	
 	def AddTema(self, tema):
 		nuevotema = Palabra()
 		nuevotema.tema = tema
+		nuevotema.put()

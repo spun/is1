@@ -7,35 +7,19 @@
 $(document).ready(function() {  
  
     //select all the a tag with name equal to modal
-    $('a[name=modal]').click(function(e) {
-        //Cancel the link behavior
-        e.preventDefault();
-        //Get the A tag
-        var id = $(this).attr('href');
-     
-        //Get the screen height and width
-        var maskHeight = $(document).height();
-        var maskWidth = $(window).width();
-     
-        //Set height and width to mask to fill up the whole screen
-        $('#mask').css({'width':maskWidth,'height':maskHeight});
-         
-        //transition effect     
-        $('#mask').fadeIn(500);    
-        $('#mask').fadeTo("fast",0.8);  
-     
-        //Get the window height and width
-        var winH = $(window).height();
-        var winW = $(window).width();
-               
-        //Set the popup window to center
-        $(id).css('top',  winH/2-$(id).height()/2);
-        $(id).css('left', winW/2-$(id).width()/2);
-     
-        //transition effect
-        $(id).fadeIn(2000); 
-     
-    });
+	$('a#modal').on("click", function(e) {
+		e.preventDefault();
+		$("#formSalas").fadeIn("normal", function() {
+			$("#formSalasBox").fadeIn();
+		}).on("click", function() {
+			$("#formSalas").fadeOut("normal", function() {
+				$("#formSalasBox").hide();
+			});
+		}).children().click(function(e) {
+			return false;
+		});
+	});
+
      
     //if close button is clicked
     $('.window .close').click(function (e) {
@@ -60,21 +44,9 @@ $(document).ready(function() {
 
 {% block content %}
         <div id="ListaSalasBody">
-            <a href="#formSalas" name="modal">Crear sala</a>
-            <div id="formSalas" class="window">
-                <form action="/salas?p=1" method="post">
-                    <p><b>Nombre: </b><input type="text" name="nombre"></p>
-                    <p><b>Password: </b><input type="text" name="password" disabled="disabled"></p>
-                    <p><b>Tipo: </b><input type="text" name="password" disabled="disabled"></p>
-                    <div id="buttons">
-                        <button type="submit" class="positive" name="save">
-                            <img src="/img/ListadoPartidas/master.png" alt=""/>
-                            Crear Sala
-                        </button>
-                    </div>
-                </form>
-            </div>
-	    <div id="mask"></div>
+            <a href="#formSalas" id="modal">Crear sala</a>
+            
+
             {% if numSalas > 0 %}	
 	    <div id="listaPaginas">
                 <div id="prevArrow">
@@ -117,4 +89,20 @@ $(document).ready(function() {
             {% endif %}
                 
         </div>
+{% endblock %}
+
+{% block body %}
+	<div id="formSalas">
+        <form action="/salas?p=1" method="post" id="formSalasBox">
+            <p><b>Nombre: </b><input type="text" name="nombre"></p>
+            <p><b>Password: </b><input type="text" name="password" disabled="disabled"></p>
+            <p><b>Tipo: </b><input type="text" name="password" disabled="disabled"></p>
+            <div id="buttons">
+                <button type="submit" class="positive" name="save">
+                    <img src="/img/ListadoPartidas/master.png" alt=""/>
+                    Crear Sala
+                </button>
+            </div>
+        </form>
+    </div>
 {% endblock %}

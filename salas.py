@@ -6,6 +6,8 @@ from google.appengine.ext.webapp import template
 import session
 from BD.clases import SalasDB
 from BD.clases import UserDB
+from BD.clases import GameDB
+from BD.clases import UsersInGameDB
 
 class Salas(webapp2.RequestHandler):
 	def get(self):
@@ -18,10 +20,11 @@ class Salas(webapp2.RequestHandler):
 			self.sess = session.Session('enginesession')
 			if self.sess.load():
 				user = UserDB().getUserByKey(self.sess.user)
-				template_values['user'] = user
-				#Si el usuario ya estaba en una sala lo redirigimos a ella
-				if user.idSala!="":
-					self.redirect("/salajuego?id="+str(user.idSala))
+				if user:
+					template_values['user'] = user
+					#Si el usuario ya estaba en una sala lo redirigimos a ella
+					if user.idSala!=None:
+						self.redirect("/salajuego?id="+str(user.idSala))
 					
 			salas=SalasDB()		
 			res=salas.ListarSalas()
@@ -55,14 +58,23 @@ class Salas(webapp2.RequestHandler):
 		self.sess = session.Session('enginesession')
 		if self.sess.load():
 			user = UserDB().getUserByKey(self.sess.user)
-			if self.request.get('nombre'): #!="" and SalasDB().getSalaByAutor(user.nick)=="":	
+			if self.request.get('nombre'): #!="" and SalasDB().getSalaByAutor(user.nick)=="":
+				#Creamos una nueva sala	
 				salas=SalasDB()			
 				nombre=self.request.get('nombre')
 				autor=user.nick
 				salas.AddSala(nombre, autor)
+				#Insertamos al usuario que creo la sala en esta
 				miSala=SalasDB().getSalaByAutor(user.nick)
 				user.idSala=miSala[0].idSala
 				user.put()
+				#Creamos el juego
+				game = GameDB()
+				miJuego = game.AddGame(user.idSala)
+				#Metemos al usuario en el juego
+				userGame = UsersInGameDB()
+				userGame.AddUserInGame(user, miJuego)
+				#Redireccionamos al usuario
 				self.redirect("/salas?p=1")
 			else:
 				self.redirect("/salas?p=1")

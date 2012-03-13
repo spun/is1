@@ -134,11 +134,27 @@ ul {
 	position: relative;
 }
 
-/*#formSalas {
-	float:left;
+#formSalas {
 	width: 100%;
-	text-align: center;
-}*/
+	height: 100%;
+	background-color: black;
+	position: fixed;
+	top: 0;
+	left: 0;
+	opacity: 0.6;
+	display: none;
+}
+
+
+#formSalasBox {
+	background-color: white;
+	width: 300px;
+	margin: 20% auto;
+	padding: 30px;
+	border-top: 4px solid red;
+	display: none;
+
+}
 
 #ListaSalas {
 	float:left;
@@ -292,23 +308,14 @@ ul {
   top: -23%;
 }
    
-#ListaSalasBody .window {
-  position:fixed;
+#ListaSalasBody {
+
   width:440px;
   height:200px;
-  display:none;
-  z-index:9999;
+
   padding:20px;
 }
  
-#ListaSalasBody #formSalas {
-	border: solid 1px;
-	width:375px; 
-	height:203px;
-	background-color: #EDFFDF;
-	box-shadow: 0px 0px 25px #636363;
-	text-align: center;
-}
 
 
 /*##################Sala de juego#############*/
