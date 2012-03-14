@@ -43,12 +43,17 @@ $(document).ready(function() {
 
 {% block content %}
         <div id="ListaSalasBody">
-            <div id="buttons" class="modal">
-                <button name="save">
-                    <img src="/img/ListadoPartidas/master.png" alt=""/>
-                    Crear Sala
-                </button>
+            
+            {% if user %}
+            <div id="nuevaSala">
+                <div id="buttons" class="modal">
+                    <button name="save">
+                        <img src="/img/ListadoPartidas/master.png" alt=""/>
+                        Crear Sala
+                    </button>
+                </div>
             </div>
+            {% endif %}
 
             {% if numSalas > 0 %}	
 	    <div id="listaPaginas">
@@ -96,16 +101,16 @@ $(document).ready(function() {
 
 {% block body %}
 	<div id="formSalas">
-        <form action="/salas?p=1" method="post" id="formSalasBox">
-            <p><b>Nombre: </b><input type="text" name="nombre"></p>
-            <p><b>Password: </b><input type="text" name="password" disabled="disabled"></p>
-            <p><b>Tipo: </b><input type="text" name="password" disabled="disabled"></p>
-            <div id="buttons">
-                <button type="submit" class="positive" name="save">
-                    <img src="/img/ListadoPartidas/master.png" alt=""/>
-                    Crear Sala
-                </button>
-            </div>
-        </form>
-    </div>
+            <form action="/salas?p=1" method="post" id="formSalasBox">
+                <p><b>Nombre: </b><input type="text" name="nombre"></p>
+                <p><b>Password: </b><input type="text" name="password" disabled="disabled"></p>
+                <p><b>Tipo: </b><input type="text" name="password" disabled="disabled"></p>
+                <div id="buttons">
+                    <button type="submit" class="positive" name="save">
+                        <img src="/img/ListadoPartidas/master.png" alt=""/>
+                        Crear Sala
+                    </button>
+                </div>
+            </form>
+        </div>
 {% endblock %}

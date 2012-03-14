@@ -130,8 +130,7 @@ ul {
 /*################Listar Salas###################*/
 
 #ListaSalasBody {
-	height: 100%;
-	position: relative;
+	padding:20px;
 }
 
 #formSalas {
@@ -159,7 +158,14 @@ ul {
 #ListaSalas {
 	float:left;
 	padding: 0px 0px 0px 80px;
-	width: auto;
+	width: 100%;
+}
+
+#nuevaSala {
+	float: left;
+	width: 100%;
+	text-align: center;
+	margin: 20px 0px 20px 0px;
 }
 
 #listaPaginas {
@@ -305,14 +311,6 @@ ul {
   display:none;
   left:-25%;
   top: -23%;
-}
-   
-#ListaSalasBody {
-
-  width:440px;
-  height:200px;
-
-  padding:20px;
 }
  
 
