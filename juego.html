@@ -45,6 +45,14 @@
 				width: 117px;
 			}
 			
+			#usersZone li {
+				border: 1px solid #E5E5E5;
+				border-radius: 4px;
+				padding: 5px 5px 25px 5px;;
+				margin-bottom: 8px;
+				font-size: 0.9em;
+			}
+			
 			canvas {
 				border: 1px solid #FF5100;
 				/*	background-color: #333333;*/
@@ -88,31 +96,89 @@
 				font-weight: bold;
 				color: black;
 			}
-#chatZone-history ::-webkit-scrollbar {
-    width: 6px;
-}
-/* Track */
-#chatZone-history ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-}
+			
+			#chatZone-history ::-webkit-scrollbar {
+				width: 6px;
+			}
+			/* Track */
+			#chatZone-history ::-webkit-scrollbar-track {
+				-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+				-webkit-border-radius: 10px;
+				border-radius: 10px;
+			}
 
-/* Handle */
-#chatZone-history ::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    background: #EBEBEB;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-}
+			/* Handle */
+			#chatZone-history ::-webkit-scrollbar-thumb {
+				-webkit-border-radius: 10px;
+				border-radius: 10px;
+				background: #EBEBEB;
+				-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+			}
 
-#chatZone-history ::-webkit-scrollbar-thumb:hover {
-    background: #F5F5F5;
-}
+			#chatZone-history ::-webkit-scrollbar-thumb:hover {
+				background: #F5F5F5;
+			}
 
 		</style>
+		<script type="text/javascript" src='/_ah/channel/jsapi'></script>
 <script type="text/javascript">
+			var state = {
+				token: '{{ token }}',
+				game_key: '{{ game_key }}'
+			};
+
+
+
+
 			$(document).ready(function(){
+
+				channel = new goog.appengine.Channel('{{ token }}');
+				socket = channel.open();
+				socket.onopen = function() {
+					console.log("onopen");
+				};
+				socket.onmessage = function(m) {
+					dat = JSON.parse(m.data)
+					if(dat.type == "chat")
+					{
+						ChatZone.receiveMessage(dat.content);
+					}
+					else if(dat.type == "draw")
+					{
+						BlackBoard.drawFromCoord(dat.content)
+					}
+										
+
+
+
+				
+					
+					/*if(m)
+					{
+						var dat = eval(m.data);
+						alert(dat)
+					}*/
+
+
+				};
+				socket.onerror = function() {
+					console.log("onerror");
+				};
+				socket.onclose = function() {
+					console.log("onclose");
+				};
+
+				sendMessage = function(path, opt_param) {
+					path += '?g=' + state.game_key;
+					if (opt_param) {
+						path += '&d=' + opt_param;
+					}
+					var xhr = new XMLHttpRequest();
+					xhr.open('POST', path, true);
+					xhr.send();
+				};
+
+
 
 				var BlackBoard = {
 					init: function( config ) {
@@ -227,6 +293,26 @@
 						var self = BlackBoard;
 						console.log("## Envio")
 						console.log(self.bufferedPath)
+						sendMessage("http://localhost:8080/gamebroadcast/draw", self.bufferedPath);
+
+					},
+					
+					drawFromCoord: function(m) {
+						var self = BlackBoard;
+						console.log(m.coord);
+						var path = m.coord.split(",");
+
+						// For each point, push a "lineTo" command onto the drawing-command stack 
+						// for the sender
+						var positionBase = {x:parseInt(path[i]), y:parseInt(path[i+1])};
+						for (var i = 2; i < path.length; i+=2) {
+							position = {x:parseInt(path[i]), y:parseInt(path[i+1])};
+							console.log(position)
+							//addDrawingCommand(fromClientID, DrawingCommands.LINE_TO, position);
+							self.drawLine(self.penColor, self.penThickness, position.x, position.y, positionBase.x, positionBase.y)
+							positionBase = position;
+
+						}
 					}
 
 				};
@@ -235,10 +321,6 @@
 				BlackBoard.init({
 					board: $("#myCanvas")
 				});
-				
-//$("#youChatDiv").attr({ scrollTop: $("#youChatDiv").attr("scrollHeight") });
-
-
 
 
 				var ChatZone = {
@@ -255,14 +337,28 @@
 					
 					formSubmit: function(e) {
 						var self = ChatZone;
-						$("<li></li>", {
-							text: self.config.form.find("input").val()
+						e.preventDefault();
+
+						if(self.config.form.find("input").val() != "")
+						{	
+							sendMessage("http://localhost:8080/gamebroadcast/chat", self.config.form.find("input").val());
+							self.config.form.find("input").val("")
+						}
+					},
+					
+					receiveMessage: function(m) {
+						var self = ChatZone;
+						var li = $("<li></li>", {
+							text: m.messaje
 							
 						}).appendTo(self.config.history.find("ul"));
-						e.preventDefault();
-						self.config.history.find("ul").prop({ scrollTop:self.config.history.find("ul").prop("scrollHeight") });
 						
-					}					
+						$("<span></span>", {
+							text: m.user+": "							
+						}).prependTo(li);
+						
+						self.config.history.find("ul").prop({ scrollTop:self.config.history.find("ul").prop("scrollHeight") });
+					}
 				};
 
 				ChatZone.init({
@@ -280,42 +376,25 @@
 
 {% block content %}
 <div id="game-content">
-	<div id="usersZone">as</div>
+	<div id="usersZone">
+		<ul>
+		{% for userBlock in users_playing %}
+			<li>{{ userBlock.user.nick }}</li>
+		{% endfor %}
+		</ul>
+	</div>
 	<div id="drawZone">
 		<canvas id="myCanvas" width="600" height="500"></canvas>
 	</div>
 	<div id="chatZone">
 		<div id="chatZone-history">
-			<ul>
-				<li><span>Neo: </span> Mensaje 1</li>
-				<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
-				<li><span>Neo: </span> Mensaje 1</li>
-				<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
-				<li><span>Neo: </span> Mensaje 1</li>
-				<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
-				<li><span>Neo: </span> Mensaje 1</li>
-				<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
-				<li><span>Neo: </span> Mensaje 1</li>
-				<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
-				<li><span>Neo: </span> Mensaje 1</li>
-				<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
-				<li><span>Neo: </span> Mensaje 1</li>
-				<li><span>Sephi: </span> Mensaje 2</li>
-				<li><span>Neo: </span> Mensaje 1</li>
-				<li><span>Sephi: </span> Mensaje 2</li>
-				<li><span>Neo: </span> Mensaje 1</li>
-				<li><span>Sephi: </span> Mensaje 2</li>
-				<li><span>Neo: </span> Mensaje 1</li>
-				<li><span>Sephi: </span> Mensaje 2</li>
-				<li><span>Neo: </span> Mensaje 1</li>
-				<li><span>Sephi: </span> Mensaje 2</li>
-				<li><span>Neo: </span> Mensaje 1</li>
-				<li><span>Sephi: </span> Mensaje 2</li>
+			<ul>				
 			</ul>
 		</div>
 		<form id="chatZone-form">
 			<input type="text" />
 		</form>
+
 	</div>
 </div>
 

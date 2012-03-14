@@ -1,0 +1,38 @@
+<html>
+	<head>
+		<link rev="stylesheet" href="css/main.css" type="text/css" rel="stylesheet" />
+		<!--
+		<script type="text/javascript" src='/_ah/channel/jsapi'></script>
+		-->
+		<script type="text/javascript" src='js/jquery-1.7.1.min.js'></script>
+		<script type="text/javascript" src='js/main.js'></script>
+		{% block head %}{% endblock %}
+		<title>{% block title %}Title{% endblock %} - isi12-pi</title>
+	</head>
+
+	<body>
+
+		<div id="container">
+			<div id="header">
+				<a href="/" id="logo">Inicio</a>
+			{% ifequal user None %}
+				<a id="login-button" href="/login" >Iniciar sesion</a>
+				<form id="login-menu" action="/login" method="post">
+					<p><label for="nombre">Nombre de usuario</label></p>
+					<p><input type="text" name="user" id="nombre" /></p>
+					<p><label for="pass">Contraseña</label></p>
+					<p><input type="password" name="pass" id="pass" /></p>
+					<p><input type="submit" value="Iniciar sesión" class="menu-button"/></p>
+				</form>
+			{% else %}
+				<a id="login-button" href="#" ><img src="img/user_img_default.png" />{{ user.nick }}</a>
+			{% endifequal %}
+							
+				
+			</div>
+
+			{% block content %}{% endblock %}
+
+		</div>
+	</body>
+</html>
