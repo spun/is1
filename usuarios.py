@@ -98,13 +98,14 @@ class Logout(webapp2.RequestHandler):
 		self.sess = session.Session('enginesession')
 		if self.sess.load():
 			user = UserDB().getUserByKey(self.sess.user)
-			numUsers = UserDB().getUsersBySala(user.idSala)
-			res = numUsers.count()
-			#Si no queda nadie en la sala la eliminamos
-			if res == 1:
-				SalasDB().deleteSala(user.idSala)
-			user.idSala="None"
-			user.put()
+			if user.idSala!="None":
+				numUsers = UserDB().getUsersBySala(user.idSala)
+				res = numUsers.count()
+				#Si no queda nadie en la sala la eliminamos
+				if res == 1:
+					SalasDB().deleteSala(user.idSala)
+				user.idSala="None"
+				user.put()
 			self.sess.store('', 0)
 		self.redirect('/')
 		

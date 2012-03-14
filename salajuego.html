@@ -4,7 +4,7 @@
 
 {% block content %}
     <div id="salaJuegoContent">
-        <div id="salaJuegoBody">
+        <div id="salaJuegoUsers">
             {% for user in user_list %}
                 <div id="playerContainer">
                     <div id="playerAvatar"><img src="/img/Salas/triforce.jpg" alt="Anterior" /></div>
@@ -16,11 +16,12 @@
             {% endfor %}
         </div>
         
-        <div id="salaJuegoUsers">
-            Esto es un chat
+        <div id="salaJuegoChat">
+            <p>Esto es un chat</p>
+            <p><b>Coming Soon!</b></p>
         </div>
     
-        <div id="salaJuegoChat">Chat</div>
+        <div id="salaJuegoChatIn"></div>
         <div id="salaPlay"><p><a href="/juego?gamekey={{gamekey}}">PLAY!</a></p><p><a href="/salajuego?e=1">Salir</a></p></div>
     </div>
 {% endblock %}
