@@ -103,7 +103,7 @@ class Logout(webapp2.RequestHandler):
 			#Si no queda nadie en la sala la eliminamos
 			if res == 1:
 				SalasDB().deleteSala(user.idSala)
-			user.idSala=""
+			user.idSala="None"
 			user.put()
 			self.sess.store('', 0)
 		self.redirect('/')

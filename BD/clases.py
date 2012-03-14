@@ -17,6 +17,7 @@ class Sala(db.Model):
 	fechaCrea = db.DateTimeProperty()
 	estado = db.StringProperty()
 	idSala = db.StringProperty()
+	players = db.StringProperty()
 	
 class Game(db.Model):
 	fechaCrea = db.DateTimeProperty()
@@ -38,6 +39,7 @@ class UserDB:
 		nuevoUsuario.nick = nickName;
 		nuevoUsuario.password = passwrd;
 		nuevoUsuario.email = correo;
+		nuevoUsuario.idSala = "None"
 		nuevoUsuario.put()
 
 		return 0;
@@ -125,6 +127,12 @@ class GameDB:
 		game.filter("idSala =", idSala)
 		res = game.get()
 		return res
+	
+	def deleteGame(self, idSala):
+		game = Game.all()
+		game.filter("idSala =", idSala)
+		res = game.get()
+		Game.delete(res)
 
 class UsersInGameDB:
 	
@@ -142,6 +150,12 @@ class UsersInGameDB:
 			return True
 		else:
 			return False
+		
+	def deleteUserInGame(self, user):
+		inGame = UsersInGame.all()
+		inGame.filter("user =", user)
+		res = inGame.get()
+		UsersInGame.delete(res)
 		
 
 class PalabrasDB:

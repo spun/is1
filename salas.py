@@ -23,7 +23,7 @@ class Salas(webapp2.RequestHandler):
 				if user:
 					template_values['user'] = user
 					#Si el usuario ya estaba en una sala lo redirigimos a ella
-					if user.idSala!=None:
+					if user.idSala!="None":
 						self.redirect("/salajuego?id="+str(user.idSala))
 					
 			salas=SalasDB()		
@@ -34,7 +34,10 @@ class Salas(webapp2.RequestHandler):
 			res2 =[]
 			for sala in res:
 				if i>=(int(self.request.get('p'))-1)*12 and i<(int(self.request.get('p')))*12:
+					res = UserDB().getUsersBySala(sala.idSala)
+					sala.players = str(res.count())
 					res2.append(sala)
+					sala.put()
 				i+=1
 				
 			template_values['salas_list'] = res2
