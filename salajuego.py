@@ -18,23 +18,6 @@ class SalaJuego(webapp2.RequestHandler):
 			user = users.getUserByKey(self.sess.user)
 			template_values['user'] = user
 			
-			if user and user.idSala=="None" and UsersInGameDB().UserExist(user)==False:
-				user.idSala=self.request.get('id')
-				user.put()
-				idSala = self.request.get('id')
-				game = GameDB().getGameBySala(idSala)
-				inGame = UsersInGameDB()
-				inGame.AddUserInGame(user, game)
-				
-			idSala = self.request.get('id')
-			
-			if idSala:
-				game = GameDB().getGameBySala(idSala)
-				template_values['gamekey']=game.key()
-				#Listamos los usuarios en la sala
-				user_list=users.getUsersBySala(self.request.get('id'))
-				template_values['user_list']=user_list
-				
 			#Si el usuario le da al boton de salir, eliminamos su asociacion con la sala
 			if self.request.get('e', default_value='0')!='0':
 				user2 = UserDB().getUserByNick(user.nick)
@@ -49,6 +32,27 @@ class SalaJuego(webapp2.RequestHandler):
 				user.idSala="None"
 				user.put()
 				#Redirigimos al inicio
+				self.redirect('/')
+			
+			
+			#Comprobamos si la sala existe
+			if SalasDB().getSalaById(self.request.get('id')):
+				#Si el usuario aun no esta asociado a las sala lo asociamos
+				if user and user.idSala=="None" and UsersInGameDB().UserExist(user)==False:
+					user.idSala=self.request.get('id')
+					user.put()
+					idSala = self.request.get('id')
+					game = GameDB().getGameBySala(idSala)
+					inGame = UsersInGameDB()
+					inGame.AddUserInGame(user, game)
+				
+				#Obtenemos el id del juego asociado a la sala
+				game = GameDB().getGameBySala(self.request.get('id'))
+				template_values['gamekey']=game.key()
+				#Listamos los usuarios en la sala
+				user_list=users.getUsersBySala(self.request.get('id'))
+				template_values['user_list']=user_list
+			else:
 				self.redirect('/')
 				
 			path = os.path.join(os.path.dirname(__file__), 'salajuego.html')

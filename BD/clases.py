@@ -115,6 +115,12 @@ class SalasDB:
 		sala.filter("idSala =", idSala)
 		res = sala.get()
 		Sala.delete(res)
+	
+	def getSalaById(self, idSala):
+		sala = Sala.all()
+		sala.filter("idSala =", idSala)
+		res = sala.get()
+		return res
 		
 class GameDB:
 	

@@ -8,6 +8,8 @@ from google.appengine.ext.webapp import template
 
 from BD.clases import UserDB
 from BD.clases import SalasDB
+from BD.clases import UsersInGameDB
+from BD.clases import GameDB
 import session
 
 class Registro(webapp2.RequestHandler):
@@ -61,19 +63,18 @@ class Registro(webapp2.RequestHandler):
 			
 class Login(webapp2.RequestHandler):
 	def get(self):
-			template_values = {}
-			
-			# Extraemos el usuario de la sesion 
-			self.sess = session.Session('enginesession')
-			if self.sess.load():
-				user = UserDB().getUserByKey(self.sess.user)
-				template_values['user'] = user
-			
-			path = os.path.join(os.path.dirname(__file__), 'login.html')
-			self.response.out.write(template.render(path, template_values))
+		template_values = {}
+		
+		# Extraemos el usuario de la sesion 
+		self.sess = session.Session('enginesession')
+		if self.sess.load():
+			user = UserDB().getUserByKey(self.sess.user)
+			template_values['user'] = user
+		
+		path = os.path.join(os.path.dirname(__file__), 'login.html')
+		self.response.out.write(template.render(path, template_values))
 		
 	def post(self):
-	
 		template_values = {}
 		self.sess = session.Session('enginesession')
 
@@ -85,11 +86,8 @@ class Login(webapp2.RequestHandler):
 			if self.sess.load():
 				self.sess.store('', 0)
 			self.sess.store(str(users.get().key()), expires)
-			# self.redirect('/')
 			path = os.path.join(os.path.dirname(__file__), 'index.html')
 			self.response.out.write(template.render(path, template_values))
-			self.response.out.write("login OK")	
-			
 		else:
 			self.response.out.write("no existe el usuario")		
 		
@@ -104,6 +102,9 @@ class Logout(webapp2.RequestHandler):
 				#Si no queda nadie en la sala la eliminamos
 				if res == 1:
 					SalasDB().deleteSala(user.idSala)
+					GameDB().deleteGame(user.idSala)
+				user2 = UserDB().getUserByNick(user.nick)
+				UsersInGameDB().deleteUserInGame(user2)
 				user.idSala="None"
 				user.put()
 			self.sess.store('', 0)
