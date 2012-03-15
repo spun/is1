@@ -1,4 +1,4 @@
-{% extends "templates/pattern.html" %}
+{% extends "templates/pattern_game.html" %}
 
 {% block title %}Juego{% endblock %}
 
@@ -8,7 +8,51 @@
 				margin: 0;
 				padding: 0;
 			}
+			
+			#game-content {
+				width: 1006px;
+				margin: auto;
+				overflow: hidden;
+				padding: 5px;
+			}
 
+			#drawZone {
+				background-color: #fff;
+				padding: 20px;
+				box-shadow: 0px 0px 15px #636363;
+				border-top: 4px solid #92FF0B;
+				min-height: 500px;
+				float: left;margin: 0 10px;
+			}
+
+			#chatZone {
+				background-color: #fff;
+				padding: 10px 10px 0px 10px;
+				box-shadow: 0px 0px 15px #636363;
+				border-top: 4px solid #D60094;
+				min-height: 486px;
+				float: left;
+
+			}
+
+			#usersZone {
+				background-color: #fff;
+				padding: 20px;
+				box-shadow: 0px 0px 15px #636363;
+				border-top: 4px solid #67FFF0;
+				min-height: 300px;
+				float: left;
+				width: 117px;
+			}
+			
+			#usersZone li {
+				border: 1px solid #E5E5E5;
+				border-radius: 4px;
+				padding: 5px 5px 25px 5px;;
+				margin-bottom: 8px;
+				font-size: 0.9em;
+			}
+			
 			canvas {
 				border: 1px solid #FF5100;
 				/*	background-color: #333333;*/
@@ -21,19 +65,25 @@
 
 			#chatZone-history {
 				position: relative;
-				border: 1px solid gray;
+				border: 1px solid silver;
+				border-radius: 3px;
 				float: right;
-				height: 500px;
-				width: 145px;
+				height: 486px;
+				width: 165px;
+			}
+			
+			#chatZone-form input {
+				margin-top: 10px;
+				width: 165px;
 			}
 
 			#chatZone-history ul{
 				position: absolute;
-				bottom: 20px;
+				bottom: 0px;
 				font-size: 0.75em;
 				overflow: auto;
-				height: 460px;
-				width: 125px;
+				height: 466px;
+				width: 145px;
 				padding: 10px;
 			}
 
@@ -46,11 +96,89 @@
 				font-weight: bold;
 				color: black;
 			}
+			
+			#chatZone-history ::-webkit-scrollbar {
+				width: 6px;
+			}
+			/* Track */
+			#chatZone-history ::-webkit-scrollbar-track {
+				-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+				-webkit-border-radius: 10px;
+				border-radius: 10px;
+			}
 
+			/* Handle */
+			#chatZone-history ::-webkit-scrollbar-thumb {
+				-webkit-border-radius: 10px;
+				border-radius: 10px;
+				background: #EBEBEB;
+				-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+			}
+
+			#chatZone-history ::-webkit-scrollbar-thumb:hover {
+				background: #F5F5F5;
+			}
 
 		</style>
+		<script type="text/javascript" src='/_ah/channel/jsapi'></script>
 <script type="text/javascript">
+			var state = {
+				token: '{{ token }}',
+				game_key: '{{ game_key }}'
+			};
+
+
+
+
 			$(document).ready(function(){
+
+				channel = new goog.appengine.Channel('{{ token }}');
+				socket = channel.open();
+				socket.onopen = function() {
+					console.log("onopen");
+				};
+				socket.onmessage = function(m) {
+					dat = JSON.parse(m.data)
+					if(dat.type == "chat")
+					{
+						ChatZone.receiveMessage(dat.content);
+					}
+					else if(dat.type == "draw")
+					{
+						BlackBoard.drawFromCoord(dat.content)
+					}
+										
+
+
+
+				
+					
+					/*if(m)
+					{
+						var dat = eval(m.data);
+						alert(dat)
+					}*/
+
+
+				};
+				socket.onerror = function() {
+					console.log("onerror");
+				};
+				socket.onclose = function() {
+					console.log("onclose");
+				};
+
+				sendMessage = function(path, opt_param) {
+					path += '?g=' + state.game_key;
+					if (opt_param) {
+						path += '&d=' + opt_param;
+					}
+					var xhr = new XMLHttpRequest();
+					xhr.open('POST', path, true);
+					xhr.send();
+				};
+
+
 
 				var BlackBoard = {
 					init: function( config ) {
@@ -59,8 +187,13 @@
 
 						this.isPenDown = false;
 						this.penDownPos = {};
-						this.penColor = "red";
-						this.penThickness = 2;
+						this.penColor = "gray";
+						this.penThickness = 3;
+				
+
+						this.bufferedPath = [];
+						this.lastBufferTime = new Date().getTime();
+						this.broadcastPathIntervalID;
 
 						if (!this.context)
 							alert('Error: failed to getContext!');
@@ -83,15 +216,19 @@
 						self.penDownPos.x = e.pageX - this.offsetLeft;
 						self.penDownPos.y = e.pageY - this.offsetTop;
 
+						clearInterval(self.broadcastPathIntervalID);
+						self.broadcastPathIntervalID = setInterval(self.broadcastPath, 1000);
+
 						console.log("Mouse down");
 						return false;
 					},
 
 					mouseUp: function() {
-						console.log("Mouse up");
 						var self = BlackBoard;
-
-						self.isPenDown = false;
+						if (self.isPenDown) {
+							console.log("Mouse up");
+							self.isPenDown = false;
+						}						
 					},
 
 					mouseMove: function(e) {
@@ -99,12 +236,16 @@
 						var self = BlackBoard;
 						if(self.isPenDown)
 						{
-							var self = BlackBoard;
-
 							var mouseX = e.pageX - this.offsetLeft;
 							var mouseY = e.pageY - this.offsetTop;
 
-							console.log("Mouse move");
+							if ((new Date().getTime() - self.lastBufferTime) > 10) {
+								self.bufferedPath.push(mouseX + "," + mouseY);
+								self.lastBufferTime = new Date().getTime();
+
+							}
+
+							//console.log("Mouse move");
 							self.drawLine(self.penColor, self.penThickness, self.penDownPos.x, self.penDownPos.y, mouseX, mouseY)
 							
 							self.penDownPos.x = e.pageX - this.offsetLeft;
@@ -122,6 +263,56 @@
 						this.context.moveTo(x1, y1)
 						this.context.lineTo(x2, y2);
 						this.context.stroke();
+					},
+
+					
+					broadcastPath: function() {
+						var self = BlackBoard;
+						
+
+						if (self.bufferedPath.length == 0) {
+							console.log("no hay nada que enviar");
+							if (!self.isPenDown) {
+								
+								clearInterval(self.broadcastPathIntervalID);
+							}
+							return;
+						}
+
+						/* ENVIO DEL MENSAJE */						
+						self.sendBuffer();
+
+						self.bufferedPath = [];
+						if (!self.isPenDown) {
+							clearInterval(self.broadcastPathIntervalID);
+						}
+					},
+					
+					sendBuffer: function() {
+						
+						var self = BlackBoard;
+						console.log("## Envio")
+						console.log(self.bufferedPath)
+						sendMessage("http://localhost:8080/gamebroadcast/draw", self.bufferedPath);
+
+					},
+					
+					drawFromCoord: function(m) {
+						var self = BlackBoard;
+						console.log(m.coord);
+						var path = m.coord.split(",");
+
+						// For each point, push a "lineTo" command onto the drawing-command stack 
+						// for the sender
+						var positionBase = {x:parseInt(path[i]), y:parseInt(path[i+1])};
+						for (var i = 2; i < path.length; i+=2) {
+							position = {x:parseInt(path[i]), y:parseInt(path[i+1])};
+							console.log(position)
+							//addDrawingCommand(fromClientID, DrawingCommands.LINE_TO, position);
+							self.drawLine(self.penColor, self.penThickness, position.x, position.y, positionBase.x, positionBase.y)
+							positionBase = position;
+
+						}
 					}
 
 				};
@@ -132,10 +323,48 @@
 				});
 
 
-				/*ChatZone.init({
+				var ChatZone = {
+					init: function( config ) {
+						this.config = config;
 
+						this.bindEvents();
 
-				});*/
+					},
+					
+					bindEvents: function() {
+						this.config.form.on('submit', this.formSubmit);
+					},
+					
+					formSubmit: function(e) {
+						var self = ChatZone;
+						e.preventDefault();
+
+						if(self.config.form.find("input").val() != "")
+						{	
+							sendMessage("http://localhost:8080/gamebroadcast/chat", self.config.form.find("input").val());
+							self.config.form.find("input").val("")
+						}
+					},
+					
+					receiveMessage: function(m) {
+						var self = ChatZone;
+						var li = $("<li></li>", {
+							text: m.messaje
+							
+						}).appendTo(self.config.history.find("ul"));
+						
+						$("<span></span>", {
+							text: m.user+": "							
+						}).prependTo(li);
+						
+						self.config.history.find("ul").prop({ scrollTop:self.config.history.find("ul").prop("scrollHeight") });
+					}
+				};
+
+				ChatZone.init({
+					history: $("#chatZone-history"),
+					form: $("#chatZone-form")
+				});
 
 
 
@@ -146,33 +375,27 @@
 {% endblock %}
 
 {% block content %}
-<canvas id="myCanvas" width="800" height="500"></canvas>
-<div id="chatZone-history">
-	<ul>
-		<li><span>Neo: </span> Mensaje 1</li>
-		<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
-		<li><span>Neo: </span> Mensaje 1</li>
-		<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
-		<li><span>Neo: </span> Mensaje 1</li>
-		<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
-		<li><span>Neo: </span> Mensaje 1</li>
-		<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
-		<li><span>Neo: </span> Mensaje 1</li>
-		<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
-		<li><span>Neo: </span> Mensaje 1</li>
-		<li><span>Sephi: </span> Mensaje 2asdd asdasd asdasdsad asdsad</li>
-		<li><span>Neo: </span> Mensaje 1</li>
-		<li><span>Sephi: </span> Mensaje 2</li>
-		<li><span>Neo: </span> Mensaje 1</li>
-		<li><span>Sephi: </span> Mensaje 2</li>
-		<li><span>Neo: </span> Mensaje 1</li>
-		<li><span>Sephi: </span> Mensaje 2</li>
-		<li><span>Neo: </span> Mensaje 1</li>
-		<li><span>Sephi: </span> Mensaje 2</li>
-		<li><span>Neo: </span> Mensaje 1</li>
-		<li><span>Sephi: </span> Mensaje 2</li>
-		<li><span>Neo: </span> Mensaje 1</li>
-		<li><span>Sephi: </span> Mensaje 2</li>
-	</ul>
+<div id="game-content">
+	<div id="usersZone">
+		<ul>
+		{% for userBlock in users_playing %}
+			<li>{{ userBlock.user.nick }}</li>
+		{% endfor %}
+		</ul>
+	</div>
+	<div id="drawZone">
+		<canvas id="myCanvas" width="600" height="500"></canvas>
+	</div>
+	<div id="chatZone">
+		<div id="chatZone-history">
+			<ul>				
+			</ul>
+		</div>
+		<form id="chatZone-form">
+			<input type="text" />
+		</form>
+
+	</div>
 </div>
+
 {% endblock %}

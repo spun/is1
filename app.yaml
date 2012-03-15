@@ -17,6 +17,9 @@ handlers:
 - url: /juego
   script: juego.app
 
+- url: /gamebroadcast/.*
+  script: juego.app
+
 - url: /bdtesting
   script: main.app
 
@@ -34,9 +37,12 @@ handlers:
 
 - url: /salas
   script: salas.app
-  
+
 - url: /administracion
   script: administracion.app
+
+- url: /salajuego
+  script: salajuego.app
 
 - url: /.*
   script: main.app

@@ -17,6 +17,15 @@ class Sala(db.Model):
 	fechaCrea = db.DateTimeProperty()
 	estado = db.StringProperty()
 	idSala = db.StringProperty()
+	players = db.StringProperty()
+	
+class Game(db.Model):
+	fechaCrea = db.DateTimeProperty()
+	idSala = db.StringProperty()
+	
+class UsersInGame(db.Model):
+	game = db.ReferenceProperty(Game)
+	user = db.ReferenceProperty(User)
 
 class Palabras(db.Model):
 	palabra = db.StringProperty()
@@ -33,6 +42,7 @@ class UserDB:
 		nuevoUsuario.nick = nickName;
 		nuevoUsuario.password = passwrd;
 		nuevoUsuario.email = correo;
+		nuevoUsuario.idSala = "None"
 		nuevoUsuario.put()
 
 		return 0;
@@ -64,6 +74,11 @@ class UserDB:
 		
 	def getUserByKey(self, key):
 		return User.get(key)
+	
+	def getUsersBySala(self, idSala):
+		q = User.all()
+		q.filter("idSala =", idSala)
+		return q
 
 
 class SalasDB:
@@ -94,6 +109,57 @@ class SalasDB:
 		sala = Sala.all()
 		res = sala.count()
 		return res
+	
+	def deleteSala(self, idSala):
+		sala = Sala.all()
+		sala.filter("idSala =", idSala)
+		res = sala.get()
+		Sala.delete(res)
+		
+class GameDB:
+	
+	def AddGame(self, idSala):
+		newGame = Game()
+		newGame.fechaCrea = datetime.datetime.now()
+		newGame.idSala = idSala
+		newGame.put()
+		return newGame
+
+	def getGameBySala(self, idSala):
+		game = Game.all()
+		game.filter("idSala =", idSala)
+		res = game.get()
+		return res
+	
+	def deleteGame(self, idSala):
+		game = Game.all()
+		game.filter("idSala =", idSala)
+		res = game.get()
+		Game.delete(res)
+
+class UsersInGameDB:
+	
+	def AddUserInGame(self, user, game):
+		inGame = UsersInGame()
+		inGame.game = game
+		inGame.user = user
+		inGame.put()
+	
+	def UserExist(self, user):
+		inGame = UsersInGame.all()
+		inGame.filter("user =", user)
+		res = inGame.count()
+		if res>0:
+			return True
+		else:
+			return False
+		
+	def deleteUserInGame(self, user):
+		inGame = UsersInGame.all()
+		inGame.filter("user =", user)
+		res = inGame.get()
+		UsersInGame.delete(res)
+		
 
 class PalabrasDB:
 
@@ -102,7 +168,7 @@ class PalabrasDB:
 		nuevapalabra.palabra = nomPalabra
 		nuevapalabra.tema = temaPalabra
 		nuevapalabra.put()
-	
+
 	def getPalabra(self, palabra):
 		q = Palabras.all()
 		q.filter("palabra =", palabra)
@@ -122,4 +188,3 @@ class PalabrasDB:
 		results = q.get()
 		return results
 
-	
