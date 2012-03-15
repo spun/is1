@@ -411,3 +411,12 @@ ul {
 	border-radius: 5px;
 	background-color: #F2F2F2;
 }
+
+a#logout-button img{
+	float:right;
+	border-radius: 3px;
+	border: 1px solid #C6C6C6;
+	text-align: center;
+	padding: 3px 3px 3px 3px;
+	margin: 0px 0px 0px 2px;
+}
