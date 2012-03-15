@@ -55,7 +55,7 @@ body {
 }
 
 #header {
-	padding: 20px;
+	padding: 10px;
 	overflow: hidden;
 	box-shadow: 0px 0px 15px #636363;
 	border-top: 4px solid #FFCF00;
@@ -415,6 +415,8 @@ ul {
 #bodyIndex {
 	text-align: center;
 	padding: 60px 0px 0px 50px;
+	float: left;
+	position:relative;
 }
 
 #botonNewUser {
@@ -452,4 +454,3 @@ a#logout-button img{
 	padding: 3px 3px 3px 3px;
 	margin: 0px 0px 0px 2px;
 }
->>>>>>> origin/master
