@@ -1,0 +1,60 @@
+﻿{% extends "templates/pattern.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block head %}
+
+	<script>
+		function validalogin()
+		{
+			var msg = "Error:\n";
+			var todook = true;
+				
+			/*********** NOMBRE ***********/
+
+			var name = document.getElementById("log").value;
+
+			var expuser = /^([A-NO-Za-no-z0-9])+$/;
+
+			if(!expuser.test(name))
+			{
+				msg += "El nombre de usuario sólo admite caracteres alfanuméricos\n";
+				todook = false;
+			}
+
+			/*********** CONTRASEÑA ***********/
+
+			var password = document.getElementById("passlog").value;
+			var exppass = /^[A-NO-Za-no-z0-9]{6,15}$/;
+					
+			if(!exppass.test(password))
+			{
+				msg += "La contraseña sólo puede tener letras y números. Con una longitud entre 6 y 15 caracteres\n";
+				todook = false;
+			}
+
+			if (!todook) {
+				alert(msg);
+				return false;
+			}			
+		}		
+	</script>
+
+{% endblock %}
+
+{% block content %}
+
+	<form id="f1" action="/login" method="post" onsubmit="return validalogin()">
+		<fieldset>
+		<legend>Iniciar sesión</legend>
+		<label for="user">Nombre Usuario: </label>
+		<input type="text" id="log" name="user" size="10" maxlength="20"/>
+		<br />  
+		<label for="contra">Password: </label>
+		<input type="password" id="passlog" name="contra" size="10" maxlength="20"/>
+		<br /> 		
+		<input type="submit" value="Enviar"/>
+		<input type="reset" value="Borrar" />
+		</fieldset>
+	</form>
+{% endblock %}
