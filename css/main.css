@@ -377,3 +377,35 @@ ul {
 	float: left;
 	position: relative;
 }
+
+
+/*################## PERFIL #############*/
+#perfil
+{
+	width: 750px;
+	height: 275px;
+	border-style: solid;
+	border-width: 2px;
+	margin: 100px;
+}
+
+#avatar
+{
+	margin: 25px;
+	float: left;
+}
+
+#userdata label
+{
+	margin: 20px;
+	padding: 20px;
+}
+
+#userdata
+{
+	margin-top: 100px;
+	
+	float: left;
+}
+
+#userdata label

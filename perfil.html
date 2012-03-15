@@ -4,19 +4,18 @@
 
 {% block content %}
 
-	<div>
-	
-		<label> Imagen </label>
-		<br/>
-		<img src="/img/Perfil/nyan.png"/> 
-		<br /><br />    
-		<label> Nombre de Usuario: {{user.nick}}</label>
-		
-		<br/>
-		
-		<label> Correo electrónico: {{user.email}}</label>
-		
-		<br/>
+	<div id="perfil">
+		<h2> Perfil de {{user.nick}} </h2>
+		<img id="avatar" src="/img/Perfil/nyan.png" width="200" height="200" alt="nyan"/> 
+		<div id="userdata">
+			<label> Nombre de Usuario: <b>{{user.nick}}</b></label>
+			
+			<br/>
+			
+			<label> Correo electrónico: <b>{{user.email}}</b></label>
+			
+			<br/>
+		</div>
 		
 	</div>
 
