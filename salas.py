@@ -23,8 +23,8 @@ class Salas(webapp2.RequestHandler):
 				if user:
 					template_values['user'] = user
 					#Si el usuario ya estaba en una sala lo redirigimos a ella
-					#if user.idSala!="None":
-					#	self.redirect("/salajuego?id="+str(user.idSala))
+					if user.idSala!="None":
+						self.redirect("/salajuego?id="+str(user.idSala))
 					
 			salas=SalasDB()		
 			res=salas.ListarSalas()
