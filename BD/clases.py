@@ -18,6 +18,9 @@ class Sala(db.Model):
 	estado = db.StringProperty()
 	idSala = db.StringProperty()
 
+class Palabras(db.Model):
+	palabra = db.StringProperty()
+	tema = db.StringProperty()
 ########### METODOS ################
 
 class UserDB:
@@ -95,14 +98,28 @@ class SalasDB:
 class PalabrasDB:
 
 	def AddPalabra(self, nomPalabra, temaPalabra):
-		nuevapalabra = Palabra()
+		nuevapalabra = Palabras()
 		nuevapalabra.palabra = nomPalabra
 		nuevapalabra.tema = temaPalabra
+		nuevapalabra.put()
 	
-	def AddPalabra(self, nomPalabra):
-		nuevapalabra = Palabra()
-		nuevapalabra.palabra = nomPalabra
+	def getPalabra(self, palabra):
+		q = Palabras.all()
+		q.filter("palabra =", palabra)
+		results = q.get()		
+		return results
+		
+	def getTema(self, tema):
+		q = Palabras.all()
+		q.filter("tema =", tema)
+		results = q.get()		
+		return results
+		
+	def getPalabraTema(self, palabra, tema):
+		q = Palabras.all()
+		q.filter("palabra =", palabra)
+		q.filter("tema =", tema)
+		results = q.get()
+		return results
+
 	
-	def AddTema(self, tema):
-		nuevotema = Palabra()
-		nuevotema.tema = tema

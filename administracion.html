@@ -1,0 +1,70 @@
+﻿{% extends "templates/pattern.html" %}
+
+{% block title %}Administracion{% endblock %}
+
+{% block head %}
+
+<script>
+	function validapalabra()
+	{
+		var word = document.getElementById("palabra").value;
+		var tema = document.getElementById("tema").value;
+		var expreg = /^([A-NO-Za-no-z])+$/;
+		var msg = "Error: \n";
+		var todook = true;
+		
+		if(word == "" && tema == "")
+		{
+			msg += "Debe de haber un campo que no esté vacío";
+			return false;
+		}
+		else
+		{
+			if(word != "")
+			{
+				if(!expreg.test(word))
+				{
+					msg += "Las palabras sólo pueden tener letras y espaciosn\n";
+					todook = false;
+				}
+			}
+			if(tema != "")	
+			{
+				if(!expreg.test(tema))
+				{
+					msg += "El tema sólo puede tener letras y espacios\n";
+					todook = false;
+				}
+			}	
+		}
+		if(!todook)
+		{
+			alert(msg);
+			return false;
+		}
+		return todook;
+	}
+</script>
+
+{% endblock %}
+
+{% block content %}
+	<h2>Página de Administración</h2>
+	<br/><br/>
+	
+	{%if error %}
+		{{error}}
+	{% endif %}
+	<form id="insertapalabra" action="/administracion" method="post" onsubmit="return validapalabra()">	
+		<label for="palabra"> Palabra </label>
+		<br/>
+		<input type="text" id="palabra" name="palabra"/>
+		<br/>
+		<br/>
+		<label for="tema"> Tema </label>
+		<br/>
+		<input type="text" id="tema" name="tema"/>	
+		<br/>
+		<input type="submit" value="Enviar"/>
+	</form>
+{% endblock %}

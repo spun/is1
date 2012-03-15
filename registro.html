@@ -63,9 +63,8 @@
 {% endblock %}
 
 {% block content %}
-	<form id="f1" action="/registro" method="post" onsubmit="validaregistro(this)">
-		<fieldset>
-		<legend>Datos personales	</legend>
+	<form id="f1" action="/registro" method="post" onsubmit=" return validaregistro(this)">
+
 		<label for="user">Nombre Usuario: </label>
 		<input type="text" id="user" name="user" size="10" maxlength="20"/>
 		<br />  
@@ -81,7 +80,6 @@
 		<br /> 		
 		<input type="submit" value="Enviar"/>
 		<input type="reset" value="Borrar" />
-		</fieldset>
 	</form>
 {% endblock %}
 
