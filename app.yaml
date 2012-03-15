@@ -44,6 +44,9 @@ handlers:
 - url: /salajuego
   script: salajuego.app
 
+- url: /perfil
+  script: perfil.app
+  
 - url: /.*
   script: main.app
 

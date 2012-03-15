@@ -1,12 +1,24 @@
 ﻿{% extends "templates/pattern.html" %}
 
-{% block title %}Registro{% endblock %}
-
-{% block head %}
-
-{% endblock %}
+{% block title %}Perfil{% endblock %}
 
 {% block content %}
+
+	<div>
+	
+		<label> Imagen </label>
+		<br/>
+		<img src="/img/Perfil/nyan.png"/> 
+		<br /><br />    
+		<label> Nombre de Usuario: {{user.nick}}</label>
+		
+		<br/>
+		
+		<label> Correo electrónico: {{user.email}}</label>
+		
+		<br/>
+		
+	</div>
 
 {% endblock %}
 
