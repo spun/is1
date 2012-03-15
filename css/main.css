@@ -409,3 +409,47 @@ ul {
 }
 
 #userdata label
+
+/*#######################INDICE##################*/
+
+#bodyIndex {
+	text-align: center;
+	padding: 60px 0px 0px 50px;
+}
+
+#botonNewUser {
+	float: left;
+	postion:relative;
+	margin: 0px 20px 0px 20px;
+	border: solid 1px #3ADF00;
+	border-radius: 5px;
+	background-color: #F2F2F2;
+}
+
+#botonListado {
+	float: left;
+	postion:relative;
+	margin: 0px 20px 0px 20px;
+	border: solid 1px #FE9A2E;
+	border-radius: 5px;
+	background-color: #F2F2F2;
+}
+
+#botonAdmin {
+	float: left;
+	postion:relative;
+	margin: 0px 20px 0px 20px;
+	border: solid 1px #0080FF;
+	border-radius: 5px;
+	background-color: #F2F2F2;
+}
+
+a#logout-button img{
+	float:right;
+	border-radius: 3px;
+	border: 1px solid #C6C6C6;
+	text-align: center;
+	padding: 3px 3px 3px 3px;
+	margin: 0px 0px 0px 2px;
+}
+>>>>>>> origin/master

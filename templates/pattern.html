@@ -25,6 +25,7 @@
 					<p><input type="submit" value="Iniciar sesión" class="menu-button"/></p>
 				</form>
 			{% else %}
+				<a id="logout-button" href="/logout" ><img src="img/index/logout.png" /></a>
 				<a id="login-button" href="#" ><img src="img/user_img_default.png" />{{ user.nick }}</a>
 			{% endifequal %}
 							
