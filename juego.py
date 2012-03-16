@@ -10,6 +10,8 @@ import session
 from BD.clases import UserDB
 from BD.clases import Game
 from BD.clases import UsersInGame
+from BD.clases import Palabras
+
 
 class GamePage(webapp2.RequestHandler):
 	def get(self):
@@ -105,14 +107,33 @@ class GameBroadcastChat(webapp2.RequestHandler):
 				users_by_game.filter("game =", game)
 
 				results = users_by_game.fetch(30)
-
-				messageRaw = {
-				"type": "chat", 
-				"content": {
-					"messaje": cgi.escape(self.request.get('d')),
-					"user": user.nick							
-					}
-				}				
+				
+				messageRaw = None
+				if game.palabra.palabra == cgi.escape(self.request.get('d')): 
+					if user.key() != game.dibujante.key():
+						messageRaw = {
+						"type": "winner", 
+						"content": {
+							"user": user.nick,
+							"word": game.palabra.palabra							
+							}
+						}
+					else:
+						messageRaw = {
+						"type": "chat", 
+						"content": {
+							"messaje": "#########",
+							"user": user.nick							
+							}
+						}						
+				else:
+					messageRaw = {
+					"type": "chat", 
+					"content": {
+						"messaje": cgi.escape(self.request.get('d')),
+						"user": user.nick							
+						}
+					}				
 				message = json.dumps(messageRaw)
 				
 				for r in results:		
@@ -153,9 +174,52 @@ class GameBroadcastDraw(webapp2.RequestHandler):
 					channel.send_message(str(r.key()), message)
 
 
-
+class GameBroadcastLoad(webapp2.RequestHandler):
+	"""This page is responsible for showing the game UI. It may also
+	create a new game or add the currently-logged in uesr to a game."""
+	
+	def post(self):
+		
+		game_key = self.request.get('g')
+		if game_key:
+			game = Game.get(game_key)
+			
+			if game:				
+				user = None
+				self.sess = session.Session('enginesession')
+				if self.sess.load():
+					user = UserDB().getUserByKey(self.sess.user)
+					
+				if user.key() != game.dibujante.key():
+					messageRaw = {
+					"type": "infoGame", 
+					"content": {
+						"drawing": False,
+						"word": len(game.palabra.palabra),
+						"painter": str(game.dibujante.key())
+						}
+					}		
+				else:
+					messageRaw = {
+					"type": "infoGame", 
+					"content": {
+						"drawing": True,
+						"word": game.palabra.palabra,
+						"painter": str(game.dibujante.key())
+						}
+					}	
+		
+				users_by_game = UsersInGame.all()
+				users_by_game.filter("user =", user.key())
+				result = users_by_game.get()
+		
+				message = json.dumps(messageRaw)
+				
+				channel.send_message(str(result.key()), message)
+		
 
 app = webapp2.WSGIApplication([('/juego', GamePage),
 								('/gamebroadcast/chat', GameBroadcastChat),
-								('/gamebroadcast/draw', GameBroadcastDraw)],
+								('/gamebroadcast/draw', GameBroadcastDraw),
+								('/gamebroadcast/load', GameBroadcastLoad)],
                               debug=True)

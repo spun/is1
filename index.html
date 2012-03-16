@@ -6,14 +6,20 @@
 	<h2>Inicio</h2>
 	<br/><br/>
         <div id="bodyIndex">
+			<a href="/registro">
             <div id="botonNewUser" class="botonIndex">
-                <a href="/registro"><img src="/img/index/new.png" alt="Registro" /></a>
+                <img src="/img/index/new.png" alt="Registro" /><span>Nuevo usuario</span>
             </div>
+            </a>
+            <a href="/salas">
             <div id="botonListado" class="botonIndex">
-                <a href="/salas"><img src="/img/index/listaSalas.png" alt="Listado de salas" /></a>
+                <img src="/img/index/listaSalas.png" alt="Listado de salas" /><span>Listado de salas</span>
             </div>
-            <div id="botonAdmin" class="botonIndex">
-                <a href="/administracion"><img src="/img/index/administracion.png" alt="Administracion" /></a>
-            </div>
+            </a>
+            <a href="/administracion">
+				<div id="botonAdmin" class="botonIndex">
+					<img src="/img/index/administracion.png" alt="Administracion" /><span>Admin</span>
+				</div>
+            </a>
         </div>
 {% endblock %}

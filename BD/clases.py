@@ -1,6 +1,7 @@
 from google.appengine.ext import db
 import datetime
 import uuid
+import random
 
 ########### "TABLAS" ##############
 
@@ -19,17 +20,22 @@ class Sala(db.Model):
 	idSala = db.StringProperty()
 	players = db.StringProperty()
 	
-class Game(db.Model):
-	fechaCrea = db.DateTimeProperty()
-	idSala = db.StringProperty()
 	
-class UsersInGame(db.Model):
-	game = db.ReferenceProperty(Game)
-	user = db.ReferenceProperty(User)
+
 
 class Palabras(db.Model):
 	palabra = db.StringProperty()
 	tema = db.StringProperty()
+	
+class Game(db.Model):
+	fechaCrea = db.DateTimeProperty()
+	idSala = db.StringProperty()
+	palabra = db.ReferenceProperty(Palabras)
+	dibujante = db.ReferenceProperty(User)
+	
+class UsersInGame(db.Model):
+	game = db.ReferenceProperty(Game)
+	user = db.ReferenceProperty(User)
 ########### METODOS ################
 
 class UserDB:
@@ -124,10 +130,26 @@ class SalasDB:
 		
 class GameDB:
 	
-	def AddGame(self, idSala):
+	def AddGame(self, idSala, user):
 		newGame = Game()
 		newGame.fechaCrea = datetime.datetime.now()
 		newGame.idSala = idSala
+		newGame.dibujante = user.key()
+		
+		palabra = None
+		p = Palabras.all()
+		if p.count() != 0:
+			n = random.randint(0, p.count()-1)
+			listapalabra = Palabras().all()
+			palabra = listapalabra.fetch(1,n)[0]
+		else:
+			nuevapalabra = Palabras()
+			nuevapalabra.palabra = "casa"
+			nuevapalabra.tema = "casa"
+			nuevapalabra.put()
+			palabra = nuevapalabra
+		
+		newGame.palabra = palabra		
 		newGame.put()
 		return newGame
 

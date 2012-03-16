@@ -9,6 +9,7 @@
 				padding: 0;
 			}
 			
+			
 			#game-content {
 				width: 1006px;
 				margin: auto;
@@ -30,27 +31,45 @@
 				padding: 10px 10px 0px 10px;
 				box-shadow: 0px 0px 15px #636363;
 				border-top: 4px solid #D60094;
-				min-height: 486px;
+				min-height: 532px;
 				float: left;
 
 			}
 
 			#usersZone {
 				background-color: #fff;
-				padding: 20px;
+				padding:  10px 20px;
 				box-shadow: 0px 0px 15px #636363;
 				border-top: 4px solid #67FFF0;
 				min-height: 300px;
 				float: left;
 				width: 117px;
 			}
+			#usersZone h3 {
+				font-size: 0.9em;
+				border-bottom: 1px dotted silver;
+				color: gray;
+				margin-bottom: 15px;
+			}
 			
 			#usersZone li {
 				border: 1px solid #E5E5E5;
 				border-radius: 4px;
-				padding: 5px 5px 25px 5px;;
+				padding: 5px 5px 25px 5px;
 				margin-bottom: 8px;
 				font-size: 0.9em;
+			}
+			
+			#wordZone {
+				background-color: #FAFAD6;
+				border: 2px solid #F6D87D;
+				padding: 20px 10px;
+				text-align: center;
+				margin-bottom: 15px;
+				display: none;
+				border-radius: 3px;
+				font-weight: bold;
+				color: #FF8245;
 			}
 			
 			canvas {
@@ -59,7 +78,7 @@
 				border-radius: 5px;
 			}
 			
-			canvas:focus, canvas:active {
+			canvas, canvas:focus, canvas:active {
 				cursor: pointer;
 			}
 
@@ -121,14 +140,12 @@
 
 		</style>
 		<script type="text/javascript" src='/_ah/channel/jsapi'></script>
-<script type="text/javascript">
+		<script type="text/javascript">
 			var state = {
 				token: '{{ token }}',
-				game_key: '{{ game_key }}'
+				game_key: '{{ game_key }}',
+				user_key: '{{ user.key }}'
 			};
-
-
-
 
 			$(document).ready(function(){
 
@@ -136,6 +153,7 @@
 				socket = channel.open();
 				socket.onopen = function() {
 					console.log("onopen");
+					sendMessage("http://localhost:8080/gamebroadcast/load", "None");
 				};
 				socket.onmessage = function(m) {
 					dat = JSON.parse(m.data)
@@ -147,18 +165,39 @@
 					{
 						BlackBoard.drawFromCoord(dat.content)
 					}
-										
-
-
-
-				
-					
-					/*if(m)
+					else if(dat.type == "winner")
 					{
-						var dat = eval(m.data);
-						alert(dat)
-					}*/
-
+						ChatZone.reportWinner(dat.content);
+					}
+					else if(dat.type == "infoGame")
+					{
+						console.log(dat);
+						if(dat.content.drawing == true)
+						{
+							$("#wordZone").text(dat.content.word);
+						}
+						else
+						{
+							var tam = dat.content.word;
+							for(i=0; i<tam; i++)
+							{							
+								var t = $("#wordZone").text();
+								$("#wordZone").text(t+"_ ");
+							}
+						}
+						$("#wordZone").slideDown();						
+						$("#"+dat.content.painter).css("borderColor", "#09f")
+						
+						if(state.user_key == dat.content.painter)
+						{
+							$("#myCanvas").css("borderColor", "#6DBA00");
+							BlackBoard.lock(false);
+						}
+						else
+						{
+							BlackBoard.lock(true);
+						}
+					}
 
 				};
 				socket.onerror = function() {
@@ -187,9 +226,10 @@
 
 						this.isPenDown = false;
 						this.penDownPos = {};
-						this.penColor = "gray";
+						this.penColor = "#09f";
 						this.penThickness = 3;
 				
+						this.locked = false;
 
 						this.bufferedPath = [];
 						this.lastBufferTime = new Date().getTime();
@@ -200,6 +240,11 @@
 						else
 							this.bindEvents();
 
+					},
+					
+					lock: function(status) {
+						this.locked = status;
+						
 					},
 
 					bindEvents: function() {
@@ -217,7 +262,7 @@
 						self.penDownPos.y = e.pageY - this.offsetTop;
 
 						clearInterval(self.broadcastPathIntervalID);
-						self.broadcastPathIntervalID = setInterval(self.broadcastPath, 1000);
+						self.broadcastPathIntervalID = setInterval(self.broadcastPath, 600);
 
 						console.log("Mouse down");
 						return false;
@@ -234,28 +279,30 @@
 					mouseMove: function(e) {
 
 						var self = BlackBoard;
-						if(self.isPenDown)
+						if(self.isPenDown && !self.locked)
 						{
 							var mouseX = e.pageX - this.offsetLeft;
 							var mouseY = e.pageY - this.offsetTop;
 
 							if ((new Date().getTime() - self.lastBufferTime) > 10) {
-								self.bufferedPath.push(mouseX + "," + mouseY);
+								self.bufferedPath.push(self.penDownPos.x + "," + self.penDownPos.y + "," + mouseX + "," + mouseY);
 								self.lastBufferTime = new Date().getTime();
+								
+								self.drawLine(self.penColor, self.penThickness, self.penDownPos.x, self.penDownPos.y, mouseX, mouseY)
+
+								self.penDownPos.x = e.pageX - this.offsetLeft;
+								self.penDownPos.y = e.pageY - this.offsetTop;
 
 							}
 
 							//console.log("Mouse move");
-							self.drawLine(self.penColor, self.penThickness, self.penDownPos.x, self.penDownPos.y, mouseX, mouseY)
 							
-							self.penDownPos.x = e.pageX - this.offsetLeft;
-							self.penDownPos.y = e.pageY - this.offsetTop;
+							
 						}
 
 					},
 
 					drawLine: function(color, thickness, x1, y1, x2, y2) {
-
 						this.context.strokeStyle = color;
 						this.context.lineWidth   = thickness;
 						this.context.lineCap = 'round';
@@ -291,7 +338,6 @@
 					sendBuffer: function() {
 						
 						var self = BlackBoard;
-						console.log("## Envio")
 						console.log(self.bufferedPath)
 						sendMessage("http://localhost:8080/gamebroadcast/draw", self.bufferedPath);
 
@@ -299,18 +345,19 @@
 					
 					drawFromCoord: function(m) {
 						var self = BlackBoard;
-						console.log(m.coord);
+						//console.log(m.coord);
 						var path = m.coord.split(",");
 
 						// For each point, push a "lineTo" command onto the drawing-command stack 
 						// for the sender
-						var positionBase = {x:parseInt(path[i]), y:parseInt(path[i+1])};
-						for (var i = 2; i < path.length; i+=2) {
-							position = {x:parseInt(path[i]), y:parseInt(path[i+1])};
-							console.log(position)
+						for (var i = 0; i < path.length; i+=4)
+						{							
+							posOri = {x:parseInt(path[i]), y:parseInt(path[i+1])};
+							position = {x:parseInt(path[i+2]), y:parseInt(path[i+3])};
 							//addDrawingCommand(fromClientID, DrawingCommands.LINE_TO, position);
-							self.drawLine(self.penColor, self.penThickness, position.x, position.y, positionBase.x, positionBase.y)
-							positionBase = position;
+							//setTimeout(function() {
+							self.drawLine(self.penColor, self.penThickness, posOri.x, posOri.y, position.x, position.y);
+							//},(i/2)*100);
 
 						}
 					}
@@ -358,6 +405,20 @@
 						}).prependTo(li);
 						
 						self.config.history.find("ul").prop({ scrollTop:self.config.history.find("ul").prop("scrollHeight") });
+					},
+					
+					reportWinner: function(m) {
+						var self = ChatZone;
+						var li = $("<li></li>", {
+							text: " ha acertado la palabra. \nLa palabra era "+m.word+"."
+							
+						}).appendTo(self.config.history.find("ul"));
+						
+						$("<span></span>", {
+							text: "## "+m.user							
+						}).prependTo(li);
+						
+						self.config.history.find("ul").prop({ scrollTop:self.config.history.find("ul").prop("scrollHeight") });
 					}
 				};
 
@@ -377,9 +438,12 @@
 {% block content %}
 <div id="game-content">
 	<div id="usersZone">
+		<h3>Palabra</h3>
+		<p id="wordZone"></p>
+		<h3>Jugadores</h3>
 		<ul>
 		{% for userBlock in users_playing %}
-			<li>{{ userBlock.user.nick }}</li>
+			<li id="{{ userBlock.user.key }}"><a href="/perfil?user={{userBlock.user.nick}}" title="Ir al perfil de {{userBlock.user.nick}}">{{ userBlock.user.nick }}</a></li>
 		{% endfor %}
 		</ul>
 	</div>
@@ -392,7 +456,7 @@
 			</ul>
 		</div>
 		<form id="chatZone-form">
-			<input type="text" />
+			<input type="text" placeholder="Respuesta | mensaje" />
 		</form>
 
 	</div>

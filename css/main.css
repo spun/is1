@@ -382,13 +382,13 @@ ul {
 	margin: 8px 2px 0px 8px;
 	padding: 10px;
 	font-size: small;
-	box-shadow: inset 0px 0px 8px #898989;
+	box-shadow: inset 0px 0px 8px #A7A7A7;
 	border-radius: 5px;
 	-webkit-transition: box-shadow 0.3s;
 }
 
 #playerContainer:hover {
-	box-shadow: inset 0px 0px 25px #09f;
+	box-shadow: inset 0px 0px 25px #45B5FF;
 }
 
 #playerAvatar {
@@ -442,7 +442,7 @@ ul {
 
 #bodyIndex {
 	text-align: center;
-	padding: 60px 0px 0px 50px;
+	padding: 30px 0px 0px 50px;
 	float: left;
 	position:relative;
 }
@@ -450,10 +450,29 @@ ul {
 .botonIndex {
 	float: left;
 	postion:relative;
-	margin: 0px 20px 0px 20px;
+	margin: 0px 40px 0px 30px;
 	border-radius: 5px;
 	background-color: #F2F2F2;
+	overflow: hidden;
 }
+
+.botonIndex img {
+	position: relative;
+	opacity: 0.3;
+	left: -40px;
+	width: 100px;
+	height: 100px;
+}
+
+.botonIndex span {
+	float: right;
+	margin: 50px 10px 0 0;
+	color: gray;
+	font-weight: bold;
+	font-size: 1.2em;
+	min-width: 90px;
+}
+
 
 #botonNewUser {
 	border: solid 1px #3ADF00;

@@ -73,7 +73,7 @@ class Salas(webapp2.RequestHandler):
 				user.put()
 				#Creamos el juego
 				game = GameDB()
-				miJuego = game.AddGame(user.idSala)
+				miJuego = game.AddGame(user.idSala, user)
 				#Metemos al usuario en el juego
 				userGame = UsersInGameDB()
 				userGame.AddUserInGame(user, miJuego)

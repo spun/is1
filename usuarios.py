@@ -60,6 +60,7 @@ class Registro(webapp2.RequestHandler):
 							else:
 								userCtrl.AddUser(cgi.escape(self.request.get('user')), cgi.escape(self.request.get('contra')), cgi.escape(self.request.get('mail')))
 								self.response.out.write("<br/>Registro completado")
+								self.redirect('/')
 			
 class Login(webapp2.RequestHandler):
 	def get(self):
