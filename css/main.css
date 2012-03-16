@@ -21,6 +21,10 @@ input[type="submit"] {
 	padding: 0 5px;
 }
 
+input[disabled="disabled"] {
+	background-color: #BFBFBF;
+}
+
 a {
     color:#09F;
     text-decoration: none;
@@ -55,7 +59,7 @@ body {
 }
 
 #header {
-	padding: 10px;
+	padding: 20px;
 	overflow: hidden;
 	box-shadow: 0px 0px 15px #636363;
 	border-top: 4px solid #FFCF00;
@@ -63,7 +67,7 @@ body {
 	margin-bottom: 20px;
 }
 
-a#login-button {
+a#login-button, a#profile-button {
 	border-radius: 3px;
 	border: 1px solid #C6C6C6;
 	padding: 8px 10px;
@@ -76,14 +80,14 @@ a#login-button {
 	text-align: center;
 }
 
-a#login-button:hover {
+a#login-button:hover, a#profile-button:hover {
 	border: 1px solid #00C3FF;
 }
-a#login-button:active {
+a#login-button:active, a#profile-button:active {
 	border: 1px solid #09f;
 }
 
-a#login-button img {
+a#login-button img, a#profile-button img {
 	float: left;
 }
 
@@ -115,12 +119,16 @@ a#login-button img {
 	min-height: 400px;
 	margin-top: 20px;
 	overflow: hidden;
+	margin-bottom: 10px; 
+	font-size: 0.9em;
 }
 
 h2 {
 	color: gray;
 	border-bottom: 1px solid silver;
 	padding-left: 5px;
+	margin-bottom: 20px;
+	font-size: 1.6em;
 }
 
 ul {
@@ -162,10 +170,12 @@ ul {
 }
 
 #nuevaSala {
-	float: left;
 	width: 100%;
-	text-align: center;
-	margin: 20px 0px 20px 0px;
+	margin: 0 0px 20px 0px;
+}
+
+#buttons.modal {
+	float: right;
 }
 
 #listaPaginas {
@@ -186,6 +196,7 @@ ul {
 	width: 10%;
 	text-align: center;
 	padding: 0 60 0 0;
+	color: #454545;
 }
 
 #nextArrow {
@@ -198,24 +209,18 @@ ul {
 
 .Sala {
 	float:left;
-	background-color: #D0F5A9;
 	width: 100px;
 	height: 125px;
 	padding: 10 10 10 10;
 	margin: 10 5 10 10;
-	box-shadow: 0px 0px 10px #636363;
-	border-radius: 1px;
+	box-shadow: 0px 0px 10px #20A4FF;
+	border: 1px solid silver;
+	border-radius: 5px;
+	-webkit-transition: box-shadow 0.3s;
 }
 
 .Sala:hover {
-	float:left;
-	background-color: #D0F5A9;
-	width: 100px;
-	height: 125px;
-	padding: 10 10 10 10;
-	margin: 10 5 10 10;
-	box-shadow: 0px 0px 25px #0B3B0B;
-	border-radius: 1px;
+	box-shadow: 0px 0px 40px #85FF20;
 }
 
 .rowEstado {
@@ -228,6 +233,10 @@ ul {
 	color: #424242;
 }
 
+.bodyRow img {
+	margin-right: 5px;
+}
+
 .rowImage {
 	text-align: center;
 	margin: 5 0 20 0;
@@ -237,12 +246,15 @@ ul {
 	font-size: small;
 	text-align: center;
 	font-weight: bold;
-	background-color: #92FF0B;
-	border-radius: 5px;
-	border: dashed 1px;
+	border-bottom: 1px solid silver;
 	margin: 0 0 10 0;
 	color: #848484;
 }
+
+.rowNomb img{
+	float: right;
+}
+
 .rowAutor {
 	
 }
@@ -260,14 +272,16 @@ ul {
 }
 
 .rowEnter {
-	font-size: large;
-	border-radius: 5px;
 	text-align: center;
-
-	margin: 1 0 10 0;
-	font: #00C3FF;
-	
+	font-size: 1.1em;
+	font-weight: bold;
+	margin-top: 10px;
+	font: #00C3FF;	
 }
+.rowEnter img {
+	width: 30px;
+}
+
 
 #buttons a, #buttons button{
     margin:0 7px 0 0;
@@ -323,10 +337,11 @@ ul {
 
 #salaJuegoUsers {
 	float:left;
-	width: 79%;
+	width: 78%;
 	height: 50%;
 	margin: 0px 9px 0px 0px;
-	box-shadow: 0px 0px 10px #636363;
+	border: 1px solid silver;
+	border-top-left-radius: 5px;
 }
 
 #salaJuegoChat {
@@ -334,36 +349,46 @@ ul {
 	float: left;
 	width: 20%;
 	height: 50%;
-	box-shadow: 0px 0px 10px #636363;
+	border: 1px solid silver;
+	border-top-right-radius: 5px;
 }
 
 #salaJuegoChatIn {
 	float:left;
-	width: 79%;
-	height: 10%;
+	width: 78%;
+	height: 70px;
 	margin: 10px 9px 0px 0px;
-	box-shadow: 0px 0px 10px #636363;
+	border: 1px solid silver;
+	border-bottom-left-radius: 5px;
+	
 }
 
 #salaPlay {
 	float:left;
 	width: 20%;
-	height: 7%;
+	height: 50px;
 	margin: 10px 0px 0px 0px;
-	box-shadow: 0px 0px 10px #636363;
+	border: 1px solid silver;
 	text-align: center;
 	font-size: larger;
 	font-weight: bold;
 	padding: 20px 0px 0px 0px;
+	border-bottom-right-radius: 5px;
 }
 
 #playerContainer {
 	float: left;
 	position: relative;
 	margin: 8px 2px 0px 8px;
+	padding: 10px;
 	font-size: small;
-	box-shadow: 0px 0px 10px #636363;
-	
+	box-shadow: inset 0px 0px 8px #898989;
+	border-radius: 5px;
+	-webkit-transition: box-shadow 0.3s;
+}
+
+#playerContainer:hover {
+	box-shadow: inset 0px 0px 25px #09f;
 }
 
 #playerAvatar {
@@ -380,13 +405,17 @@ ul {
 
 
 /*################## PERFIL #############*/
-#perfil
+
+#perfil {
+	overflow: hidden;
+}
+
+#perfil img
 {
-	width: 750px;
-	height: 275px;
-	border-style: solid;
-	border-width: 2px;
-	margin: 100px;
+	float: right;
+	padding: 3px;
+	border: 1px solid gray;
+	width: 100px;
 }
 
 #avatar
@@ -398,17 +427,16 @@ ul {
 #userdata label
 {
 	margin: 20px;
-	padding: 20px;
-}
-
-#userdata
-{
-	margin-top: 100px;
 	
-	float: left;
 }
 
-#userdata label
+#userdata span
+{
+	font-weight: bold;
+	color: #2D2D2D;
+}
+
+
 
 /*#######################INDICE##################*/
 
@@ -419,38 +447,32 @@ ul {
 	position:relative;
 }
 
-#botonNewUser {
+.botonIndex {
 	float: left;
 	postion:relative;
 	margin: 0px 20px 0px 20px;
-	border: solid 1px #3ADF00;
 	border-radius: 5px;
 	background-color: #F2F2F2;
+}
+
+#botonNewUser {
+	border: solid 1px #3ADF00;
 }
 
 #botonListado {
-	float: left;
-	postion:relative;
-	margin: 0px 20px 0px 20px;
 	border: solid 1px #FE9A2E;
-	border-radius: 5px;
-	background-color: #F2F2F2;
 }
 
 #botonAdmin {
-	float: left;
-	postion:relative;
-	margin: 0px 20px 0px 20px;
 	border: solid 1px #0080FF;
-	border-radius: 5px;
-	background-color: #F2F2F2;
 }
 
 a#logout-button img{
 	float:right;
 	border-radius: 3px;
-	border: 1px solid #C6C6C6;
 	text-align: center;
 	padding: 3px 3px 3px 3px;
 	margin: 0px 0px 0px 2px;
+	width: 24px;
+	height: 24px;
 }

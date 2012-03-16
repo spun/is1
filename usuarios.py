@@ -86,10 +86,10 @@ class Login(webapp2.RequestHandler):
 			if self.sess.load():
 				self.sess.store('', 0)
 			self.sess.store(str(users.get().key()), expires)
-			path = os.path.join(os.path.dirname(__file__), 'index.html')
-			self.response.out.write(template.render(path, template_values))
+			self.redirect('/')
 		else:
-			self.response.out.write("no existe el usuario")		
+			# self.response.out.write("no existe el usuario")		
+			self.redirect('/login')
 		
 class Logout(webapp2.RequestHandler):
 	def get(self):

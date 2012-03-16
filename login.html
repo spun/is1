@@ -44,17 +44,14 @@
 
 {% block content %}
 
-	<form id="f1" action="/login" method="post" onsubmit="return validalogin()">
-		<fieldset>
-		<legend>Iniciar sesión</legend>
-		<label for="user">Nombre Usuario: </label>
-		<input type="text" id="log" name="user" size="10" maxlength="20"/>
+	<h2>Entrada de usuarios</h2>
+	<form id="f1" action="/login" method="post">
+		<label for="user">Nombre Usuario: </label><br />  
+		<input type="text" id="log" name="user" maxlength="20"/>
 		<br />  
-		<label for="contra">Password: </label>
-		<input type="password" id="passlog" name="contra" size="10" maxlength="20"/>
+		<label for="contra">Password: </label><br />  
+		<input type="password" id="passlog" name="contra" maxlength="20"/>
 		<br /> 		
 		<input type="submit" value="Enviar"/>
-		<input type="reset" value="Borrar" />
-		</fieldset>
 	</form>
 {% endblock %}

@@ -3,21 +3,16 @@
 {% block title %}Perfil{% endblock %}
 
 {% block content %}
-
-	<div id="perfil">
-		<h2> Perfil de {{user.nick}} </h2>
-		<img id="avatar" src="/img/Perfil/nyan.png" width="200" height="200" alt="nyan"/> 
+	<h2> Perfil de {{userProfile.nick}} </h2>
+	<div id="perfil">		
+		<img id="avatar" src="/img/Perfil/default.jpg" alt="nyan"/> 
 		<div id="userdata">
-			<label> Nombre de Usuario: <b>{{user.nick}}</b></label>
-			
-			<br/>
-			
-			<label> Correo electrónico: <b>{{user.email}}</b></label>
-			
-			<br/>
-		</div>
-		
+			<label><span>Nombre de usuario:</span> {{userProfile.nick}}</label>			
+			<br/>			
+		</div>	
 	</div>
+	<h2> Puntuaciones </h2>
+	<p>---</p>
 
 {% endblock %}
 
