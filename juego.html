@@ -444,7 +444,8 @@
 		<h3>Jugadores</h3>
 		<ul>
 		{% for userBlock in users_playing %}
-			<li id="{{ userBlock.user.key }}"><p><a href="/perfil?user={{userBlock.user.nick}}" title="Ir al perfil de {{userBlock.user.nick}}">{{ userBlock.user.nick }}</a></p><p><span class="{{userBlock.user.nick}}"><b>Ptos:</b> 0</span></p></li>
+			<li id="{{ userBlock.user.key }}"><p><a href="/perfil?user={{userBlock.user.nick}}" title="Ir al perfil de {{userBlock.user.nick}}">{{ userBlock.user.nick }}</a></p>
+						<p><span class="{{userBlock.user.nick}}"><b>Ptos:</b> {{userBlock.ptos}}</span></p></li>
 		{% endfor %}
 		</ul>
 	</div>

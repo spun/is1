@@ -36,7 +36,7 @@ class Game(db.Model):
 class UsersInGame(db.Model):
 	game = db.ReferenceProperty(Game)
 	user = db.ReferenceProperty(User)
-	ptos = db.IntegerProperty()
+	ptos = db.IntegerProperty(default=0)
 	
 ########### METODOS ################
 

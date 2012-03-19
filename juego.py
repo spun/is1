@@ -113,7 +113,6 @@ class GameBroadcastChat(webapp2.RequestHandler):
 				if game.palabra.palabra == cgi.escape(self.request.get('d')): 
 					if user.key() != game.dibujante.key():
 						ptos = UsersInGameDB().scoreUp(user)
-						miKey = user.key()
 						messageRaw = {
 						"type": "winner", 
 						"content": {
