@@ -38,7 +38,6 @@ class UsersInGame(db.Model):
 	user = db.ReferenceProperty(User)
 	ptos = db.IntegerProperty(default=0)
 	state = db.StringProperty(default="espera")
-	
 ########### METODOS ################
 
 class UserDB:

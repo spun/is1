@@ -138,6 +138,8 @@
 				background: #F5F5F5;
 			}
 
+
+			
 		</style>
 		<script type="text/javascript" src='/_ah/channel/jsapi'></script>
 		<script type="text/javascript">
@@ -447,11 +449,72 @@
 					form: $("#chatZone-form")
 				});
 
-
-
 			});
 
 		</script>
+		
+		<script language="javascript" type="text/javascript">  
+		//CRONOMETRO  
+		var CronoID = null  
+		var CronoEjecutandose = false  
+		var decimas, segundos, minutos  
+		  
+		function DetenerCrono (){  
+			if(CronoEjecutandose)  
+				clearTimeout(CronoID)  
+			CronoEjecutandose = false  
+		}  
+		  
+		function InicializarCrono () {  
+			//inicializa contadores globales  
+			decimas = 9 
+			segundos = 29  
+			minutos = 1  
+			  
+			//pone a cero los marcadores  
+			document.crono.display.value = '01:30:0'  
+		}  
+		  
+		function MostrarCrono () {  
+					 
+			//incrementa el crono  
+			decimas--
+			
+			if ( decimas < 0 ) {  
+				decimas = 9  
+				segundos--
+				if ( segundos < 0 ) {  
+					segundos = 59  
+					minutos--  
+					if ( minutos < 0 ) {  
+						alert('Fin de la cuenta')  
+						DetenerCrono()  
+						return true  
+					}  
+				}  
+			}  
+		  
+			//configura la salida  
+			var ValorCrono = ""  
+			ValorCrono = (minutos < 10) ? "0" + minutos : minutos  
+			ValorCrono += (segundos < 10) ? ":0" + segundos : ":" + segundos  
+			ValorCrono += ":" + decimas   
+					  
+			document.crono.display.value = ValorCrono  
+		  
+			CronoID = setTimeout("MostrarCrono()", 100)  
+			CronoEjecutandose = true  
+			return true  
+		}  
+		  
+		function IniciarCrono () {  
+			DetenerCrono()  
+			InicializarCrono()  
+			MostrarCrono()  
+		}  
+		   
+		</script>		
+		
 
 {% endblock %}
 
@@ -474,7 +537,15 @@
 			</li>
 		{% endfor %}
 		</ul>
+		<div id="timeZone">
+			<h3>Tiempo</h3>
+			<form id="timer-form" name="crono">  
+			<p><input type="text" size="8" name="display" value="01:30:0"> <input type="button" name="Iniciar" value=" Iniciar " onClick="IniciarCrono()"></p>  
+			<p><input type="button" name="Parar" value=" Parar " onClick="DetenerCrono()"> <input type="button" name="Cero" value="  Cero  " onClick="DetenerCrono(); InicializarCrono()"></p> 
+			</form>
+		</div>			
 	</div>
+
 	<div id="drawZone">
 		<canvas id="myCanvas" width="600" height="500"></canvas>
 	</div>
