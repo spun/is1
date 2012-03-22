@@ -229,7 +229,8 @@
 						this.penColor = "#09f";
 						this.penThickness = 3;
 				
-						this.locked = false;
+						this.locked = true;
+						this.moves = [];
 
 						this.bufferedPath = [];
 						this.lastBufferTime = new Date().getTime();
@@ -354,12 +355,29 @@
 						{							
 							posOri = {x:parseInt(path[i]), y:parseInt(path[i+1])};
 							position = {x:parseInt(path[i+2]), y:parseInt(path[i+3])};
-							//addDrawingCommand(fromClientID, DrawingCommands.LINE_TO, position);
-							//setTimeout(function() {
-							self.drawLine(self.penColor, self.penThickness, posOri.x, posOri.y, position.x, position.y);
-							//},(i/2)*100);
+						
+							var point = {posOrigen: posOri, posFinal: position};						
+							self.moves.push(point);						
+
+							setTimeout(self.drawTest,(i/2)*10);
+							
 
 						}
+						console.log(self.moves);
+						
+					},
+
+					drawTest: function() {
+						var self = BlackBoard;
+						var datos = self.moves.shift()
+
+						self.context.strokeStyle = self.penColor;
+						self.context.lineWidth   = self.penThickness;
+						self.context.lineCap = 'round';
+						self.context.beginPath();
+						self.context.moveTo(datos.posOrigen.x, datos.posOrigen.y)
+						self.context.lineTo(datos.posFinal.x, datos.posFinal.y);
+						self.context.stroke();
 					}
 
 				};
@@ -418,8 +436,9 @@
 							text: "## "+m.user							
 						}).prependTo(li);
 						self.config.history.find("ul").prop({ scrollTop:self.config.history.find("ul").prop("scrollHeight") });
-						
-						$("."+m.user).replaceWith('<b>Ptos: </b>'+m.ptos);
+						console.log(m);
+						$("li#"+m.userKey+" .userScore").text(m.ptosUser);
+						$("li#"+m.userDibKey+" .userScore").text(m.ptosDib);
 					}
 				};
 
@@ -444,8 +463,15 @@
 		<h3>Jugadores</h3>
 		<ul>
 		{% for userBlock in users_playing %}
-			<li id="{{ userBlock.user.key }}"><p><a href="/perfil?user={{userBlock.user.nick}}" title="Ir al perfil de {{userBlock.user.nick}}">{{ userBlock.user.nick }}</a></p>
-						<p><span class="{{userBlock.user.nick}}"><b>Ptos:</b> {{userBlock.ptos}}</span></p></li>
+			<li id="{{ userBlock.user.key }}">
+				<p>
+					<a href="/perfil?user={{userBlock.user.nick}}" title="Ir al perfil de {{userBlock.user.nick}}">{{ userBlock.user.nick }}</a>
+				</p>
+				<p>
+					<b>Ptos:</b>
+					<span class="userScore"> {{userBlock.ptos}}</span>
+				</p>
+			</li>
 		{% endfor %}
 		</ul>
 	</div>

@@ -9,6 +9,7 @@ from google.appengine.api import channel
 import session
 from BD.clases import UserDB
 from BD.clases import Game
+from BD.clases import GameDB
 from BD.clases import UsersInGame
 from BD.clases import UsersInGameDB
 from BD.clases import Palabras
@@ -112,19 +113,24 @@ class GameBroadcastChat(webapp2.RequestHandler):
 				messageRaw = None
 				if game.palabra.palabra == cgi.escape(self.request.get('d')): 
 					if user.key() != game.dibujante.key():
-						ptos = UsersInGameDB().scoreUp(user)
+						ptosUser = UsersInGameDB().scoreUp(user, 30)
+						ptosDib = UsersInGameDB().scoreUp(game.dibujante, 20)
 						messageRaw = {
 						"type": "winner", 
 						"content": {
+							"userKey": str(user.key()),
+							"userDibKey": str(game.dibujante.key()),
 							"user": user.nick,
 							"word": game.palabra.palabra,
-							"ptos": ptos
+							"ptosUser": ptosUser,
+							"ptosDib": ptosDib
 							}
 						}
 					else:
 						messageRaw = {
 						"type": "chat", 
 						"content": {
+							"userKey": str(user.key()),
 							"messaje": "#########",
 							"user": user.nick							
 							}
@@ -192,34 +198,38 @@ class GameBroadcastLoad(webapp2.RequestHandler):
 				self.sess = session.Session('enginesession')
 				if self.sess.load():
 					user = UserDB().getUserByKey(self.sess.user)
-					
-				if user.key() != game.dibujante.key():
-					messageRaw = {
-					"type": "infoGame", 
-					"content": {
-						"drawing": False,
-						"word": len(game.palabra.palabra),
-						"painter": str(game.dibujante.key())
-						}
-					}		
-				else:
-					messageRaw = {
-					"type": "infoGame", 
-					"content": {
-						"drawing": True,
-						"word": game.palabra.palabra,
-						"painter": str(game.dibujante.key())
-						}
-					}	
-		
-				users_by_game = UsersInGame.all()
-				users_by_game.filter("user =", user.key())
-				result = users_by_game.get()
-		
-				message = json.dumps(messageRaw)
+					UsersInGameDB().changeState(user)					
 				
-				channel.send_message(str(result.key()), message)
-		
+				idSala = GameDB().getSalaByGame(game)
+				if UsersInGameDB().usersPlaying(game) == UserDB().getNumUsersBySala(idSala):
+					users_by_game = UsersInGame.all()
+					users_by_game.filter("game =", game)
+
+					results = users_by_game.fetch(30)
+
+					for r in results:	
+						if r.user.key() != game.dibujante.key():
+							messageRaw = {
+							"type": "infoGame", 
+							"content": {
+								"drawing": False,
+								"word": len(game.palabra.palabra),
+								"painter": str(game.dibujante.key())
+								}
+							}		
+						else:
+							messageRaw = {
+							"type": "infoGame", 
+							"content": {
+								"drawing": True,
+								"word": game.palabra.palabra,
+								"painter": str(game.dibujante.key())
+								}
+							}	
+
+						message = json.dumps(messageRaw)	
+						channel.send_message(str(r.key()), message)
+
 
 app = webapp2.WSGIApplication([('/juego', GamePage),
 								('/gamebroadcast/chat', GameBroadcastChat),

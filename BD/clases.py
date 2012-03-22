@@ -37,6 +37,7 @@ class UsersInGame(db.Model):
 	game = db.ReferenceProperty(Game)
 	user = db.ReferenceProperty(User)
 	ptos = db.IntegerProperty(default=0)
+	state = db.StringProperty(default="espera")
 	
 ########### METODOS ################
 
@@ -87,6 +88,12 @@ class UserDB:
 		q = User.all()
 		q.filter("idSala =", idSala)
 		return q
+
+	def getNumUsersBySala(self, idSala):
+		q = User.all()
+		q.filter("idSala =", idSala)
+		res = q.count()		
+		return res
 
 
 class SalasDB:
@@ -167,6 +174,11 @@ class GameDB:
 		res = game.get()
 		Game.delete(res)
 
+	def getSalaByGame(self, game):
+		game = Game.get(game.key())
+		res = game.idSala
+		return res
+
 class UsersInGameDB:
 	
 	def AddUserInGame(self, user, game):
@@ -190,14 +202,27 @@ class UsersInGameDB:
 		res = inGame.get()
 		UsersInGame.delete(res)
 	
-	def scoreUp(self, user):
+	def scoreUp(self, user, ptos):
 		inGame = UsersInGame.all()
 		inGame.filter("user =", user)
 		res = inGame.get()
-		res.ptos = res.ptos + 100
+		res.ptos += ptos
 		res.put()
 		return res.ptos
-		
+
+	def changeState(self, user, state="jugando"):
+		inGame = UsersInGame.all()
+		inGame.filter("user =", user)
+		res = inGame.get()
+		res.state = state
+		res.put()
+
+	def usersPlaying(self, game):
+		inGame = UsersInGame.all()
+		inGame.filter("state =", "jugando")
+		inGame.filter("game =", game)
+		res = inGame.count()
+		return res
 
 class PalabrasDB:
 
