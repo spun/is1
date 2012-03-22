@@ -32,12 +32,14 @@ class Game(db.Model):
 	idSala = db.StringProperty()
 	palabra = db.ReferenceProperty(Palabras)
 	dibujante = db.ReferenceProperty(User)
+	timestamp = db.DateTimeProperty(default = datetime.datetime.now())
 	
 class UsersInGame(db.Model):
 	game = db.ReferenceProperty(Game)
 	user = db.ReferenceProperty(User)
 	ptos = db.IntegerProperty(default=0)
 	state = db.StringProperty(default="espera")
+
 ########### METODOS ################
 
 class UserDB:
@@ -177,6 +179,23 @@ class GameDB:
 		game = Game.get(game.key())
 		res = game.idSala
 		return res
+	
+	def nuevaPalabra(self, game):
+		game = Game.get(game.key())
+		palabra = None
+		p = Palabras.all()
+		if p.count() != 0:
+			n = random.randint(0, p.count()-1)
+			listapalabra = Palabras().all()
+			palabra = listapalabra.fetch(1,n)[0]
+		else:
+			nuevapalabra = Palabras()
+			nuevapalabra.palabra = "casa"
+			nuevapalabra.tema = "casa"
+			nuevapalabra.put()
+			palabra = nuevapalabra
+		game.palabra = palabra
+		game.put()
 
 class UsersInGameDB:
 	
