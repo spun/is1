@@ -10,6 +10,7 @@ import session
 from BD.clases import UserDB
 from BD.clases import Game
 from BD.clases import UsersInGame
+from BD.clases import UsersInGameDB
 from BD.clases import Palabras
 
 
@@ -111,11 +112,13 @@ class GameBroadcastChat(webapp2.RequestHandler):
 				messageRaw = None
 				if game.palabra.palabra == cgi.escape(self.request.get('d')): 
 					if user.key() != game.dibujante.key():
+						ptos = UsersInGameDB().scoreUp(user)
 						messageRaw = {
 						"type": "winner", 
 						"content": {
 							"user": user.nick,
-							"word": game.palabra.palabra							
+							"word": game.palabra.palabra,
+							"ptos": ptos
 							}
 						}
 					else:

@@ -37,6 +37,7 @@ class UsersInGame(db.Model):
 	game = db.ReferenceProperty(Game)
 	user = db.ReferenceProperty(User)
 	state = db.StringProperty()
+	ptos = db.IntegerProperty(default=0)
 ########### METODOS ################
 
 class UserDB:
@@ -188,6 +189,14 @@ class UsersInGameDB:
 		inGame.filter("user =", user)
 		res = inGame.get()
 		UsersInGame.delete(res)
+	
+	def scoreUp(self, user):
+		inGame = UsersInGame.all()
+		inGame.filter("user =", user)
+		res = inGame.get()
+		res.ptos = res.ptos + 100
+		res.put()
+		return res.ptos
 		
 
 class PalabrasDB:
