@@ -36,6 +36,7 @@ class Game(db.Model):
 class UsersInGame(db.Model):
 	game = db.ReferenceProperty(Game)
 	user = db.ReferenceProperty(User)
+	state = db.StringProperty()
 ########### METODOS ################
 
 class UserDB:
