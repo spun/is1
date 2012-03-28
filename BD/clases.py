@@ -32,12 +32,15 @@ class Game(db.Model):
 	idSala = db.StringProperty()
 	palabra = db.ReferenceProperty(Palabras)
 	dibujante = db.ReferenceProperty(User)
+	timestamp = db.DateTimeProperty(default = datetime.datetime.now())
 	
 class UsersInGame(db.Model):
 	game = db.ReferenceProperty(Game)
 	user = db.ReferenceProperty(User)
 	state = db.StringProperty(default="esperando")
+>>>>>>> origin/master
 	ptos = db.IntegerProperty(default=0)
+
 ########### METODOS ################
 
 class UserDB:
@@ -87,6 +90,12 @@ class UserDB:
 		q = User.all()
 		q.filter("idSala =", idSala)
 		return q
+
+	def getNumUsersBySala(self, idSala):
+		q = User.all()
+		q.filter("idSala =", idSala)
+		res = q.count()		
+		return res
 
 
 class SalasDB:
@@ -167,6 +176,28 @@ class GameDB:
 		res = game.get()
 		Game.delete(res)
 
+	def getSalaByGame(self, game):
+		game = Game.get(game.key())
+		res = game.idSala
+		return res
+	
+	def nuevaPalabra(self, game):
+		game = Game.get(game.key())
+		palabra = None
+		p = Palabras.all()
+		if p.count() != 0:
+			n = random.randint(0, p.count()-1)
+			listapalabra = Palabras().all()
+			palabra = listapalabra.fetch(1,n)[0]
+		else:
+			nuevapalabra = Palabras()
+			nuevapalabra.palabra = "casa"
+			nuevapalabra.tema = "casa"
+			nuevapalabra.put()
+			palabra = nuevapalabra
+		game.palabra = palabra
+		game.put()
+
 class UsersInGameDB:
 	
 	def AddUserInGame(self, user, game):
@@ -190,14 +221,27 @@ class UsersInGameDB:
 		res = inGame.get()
 		UsersInGame.delete(res)
 	
-	def scoreUp(self, user):
+	def scoreUp(self, user, ptos):
 		inGame = UsersInGame.all()
 		inGame.filter("user =", user)
 		res = inGame.get()
-		res.ptos = res.ptos + 100
+		res.ptos += ptos
 		res.put()
 		return res.ptos
-		
+
+	def changeState(self, user, state="jugando"):
+		inGame = UsersInGame.all()
+		inGame.filter("user =", user)
+		res = inGame.get()
+		res.state = state
+		res.put()
+
+	def usersPlaying(self, game):
+		inGame = UsersInGame.all()
+		inGame.filter("state =", "jugando")
+		inGame.filter("game =", game)
+		res = inGame.count()
+		return res
 
 class PalabrasDB:
 

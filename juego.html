@@ -199,6 +199,14 @@
 						{
 							BlackBoard.lock(true);
 						}
+						
+						IniciarCrono();
+					}
+					else if (dat.type == "finish")
+					{
+						$("#myCanvas").css("borderColor", "#FF5100");
+						BlackBoard.lock(true);
+						sendMessage("http://localhost:8080/gamebroadcast/load", "None");
 					}
 
 				};
@@ -231,7 +239,8 @@
 						this.penColor = "#09f";
 						this.penThickness = 3;
 				
-						this.locked = false;
+						this.locked = true;
+						this.moves = [];
 
 						this.bufferedPath = [];
 						this.lastBufferTime = new Date().getTime();
@@ -356,12 +365,29 @@
 						{							
 							posOri = {x:parseInt(path[i]), y:parseInt(path[i+1])};
 							position = {x:parseInt(path[i+2]), y:parseInt(path[i+3])};
-							//addDrawingCommand(fromClientID, DrawingCommands.LINE_TO, position);
-							//setTimeout(function() {
-							self.drawLine(self.penColor, self.penThickness, posOri.x, posOri.y, position.x, position.y);
-							//},(i/2)*100);
+						
+							var point = {posOrigen: posOri, posFinal: position};						
+							self.moves.push(point);						
+
+							setTimeout(self.drawTest,(i/2)*10);
+							
 
 						}
+						console.log(self.moves);
+						
+					},
+
+					drawTest: function() {
+						var self = BlackBoard;
+						var datos = self.moves.shift()
+
+						self.context.strokeStyle = self.penColor;
+						self.context.lineWidth   = self.penThickness;
+						self.context.lineCap = 'round';
+						self.context.beginPath();
+						self.context.moveTo(datos.posOrigen.x, datos.posOrigen.y)
+						self.context.lineTo(datos.posFinal.x, datos.posFinal.y);
+						self.context.stroke();
 					}
 
 				};
@@ -420,8 +446,9 @@
 							text: "## "+m.user							
 						}).prependTo(li);
 						self.config.history.find("ul").prop({ scrollTop:self.config.history.find("ul").prop("scrollHeight") });
-						
-						$("."+m.user).replaceWith('<b>Ptos: </b>'+m.ptos);
+						console.log(m);
+						$("li#"+m.userKey+" .userScore").text(m.ptosUser);
+						$("li#"+m.userDibKey+" .userScore").text(m.ptosDib);
 					}
 				};
 
@@ -431,71 +458,67 @@
 				});
 
 			});
-
-		</script>
-		
-		<script language="javascript" type="text/javascript">  
-		//CRONOMETRO  
-		var CronoID = null  
-		var CronoEjecutandose = false  
-		var decimas, segundos, minutos  
-		  
-		function DetenerCrono (){  
-			if(CronoEjecutandose)  
-				clearTimeout(CronoID)  
-			CronoEjecutandose = false  
-		}  
-		  
-		function InicializarCrono () {  
-			//inicializa contadores globales  
-			decimas = 9 
-			segundos = 29  
-			minutos = 1  
-			  
-			//pone a cero los marcadores  
-			document.crono.display.value = '01:30:0'  
-		}  
-		  
-		function MostrarCrono () {  
-					 
-			//incrementa el crono  
-			decimas--
 			
-			if ( decimas < 0 ) {  
-				decimas = 9  
-				segundos--
-				if ( segundos < 0 ) {  
-					segundos = 59  
-					minutos--  
-					if ( minutos < 0 ) {  
-						alert('Fin de la cuenta')  
-						DetenerCrono()  
-						return true  
+			//CRONOMETRO  
+			var CronoID = null  
+			var CronoEjecutandose = false  
+			var decimas, segundos, minutos  
+			  
+			function DetenerCrono (){  
+				if(CronoEjecutandose)  
+					clearTimeout(CronoID)  
+				CronoEjecutandose = false  
+			}  
+			  
+			function InicializarCrono () {  
+				//inicializa contadores globales  
+				decimas = 9 
+				segundos = 4  
+				minutos = 0  
+				  
+				//pone a cero los marcadores  
+				document.crono.display.value = '00:05:00'  
+			}  
+			  
+			function MostrarCrono () {  
+						 
+				//incrementa el crono  
+				decimas--
+				
+				if ( decimas < 0 ) {  
+					decimas = 9  
+					segundos--
+					if ( segundos < 0 ) {  
+						segundos = 59  
+						minutos--  
+						if ( minutos < 0 ) {  
+							DetenerCrono()
+							sendMessage("http://localhost:8080/gamebroadcast/crono", "None");
+							return true  
+						}  
 					}  
 				}  
+			  
+				//configura la salida  
+				var ValorCrono = ""  
+				ValorCrono = (minutos < 10) ? "0" + minutos : minutos  
+				ValorCrono += (segundos < 10) ? ":0" + segundos : ":" + segundos  
+				ValorCrono += ":" + decimas   
+						  
+				document.crono.display.value = ValorCrono  
+			  
+				CronoID = setTimeout("MostrarCrono()", 100)  
+				CronoEjecutandose = true  
+				return true  
 			}  
-		  
-			//configura la salida  
-			var ValorCrono = ""  
-			ValorCrono = (minutos < 10) ? "0" + minutos : minutos  
-			ValorCrono += (segundos < 10) ? ":0" + segundos : ":" + segundos  
-			ValorCrono += ":" + decimas   
-					  
-			document.crono.display.value = ValorCrono  
-		  
-			CronoID = setTimeout("MostrarCrono()", 100)  
-			CronoEjecutandose = true  
-			return true  
-		}  
-		  
-		function IniciarCrono () {  
-			DetenerCrono()  
-			InicializarCrono()  
-			MostrarCrono()  
-		}  
-		   
+			  
+			function IniciarCrono () {  
+				DetenerCrono()  
+				InicializarCrono()  
+				MostrarCrono()  
+			}  
+
 		</script>		
-		
 
 {% endblock %}
 
@@ -507,15 +530,21 @@
 		<h3>Jugadores</h3>
 		<ul>
 		{% for userBlock in users_playing %}
-			<li id="{{ userBlock.user.key }}"><p><a href="/perfil?user={{userBlock.user.nick}}" title="Ir al perfil de {{userBlock.user.nick}}">{{ userBlock.user.nick }}</a></p>
-						<p><span class="{{userBlock.user.nick}}"><b>Ptos:</b> {{userBlock.ptos}}</span></p></li>
+			<li id="{{ userBlock.user.key }}">
+				<p>
+					<a href="/perfil?user={{userBlock.user.nick}}" title="Ir al perfil de {{userBlock.user.nick}}">{{ userBlock.user.nick }}</a>
+				</p>
+				<p>
+					<b>Ptos:</b>
+					<span class="userScore"> {{userBlock.ptos}}</span>
+				</p>
+			</li>
 		{% endfor %}
 		</ul>
 		<div id="timeZone">
 			<h3>Tiempo</h3>
 			<form id="timer-form" name="crono">  
-			<p><input type="text" size="8" name="display" value="01:30:0"> <input type="button" name="Iniciar" value=" Iniciar " onClick="IniciarCrono()"></p>  
-			<p><input type="button" name="Parar" value=" Parar " onClick="DetenerCrono()"> <input type="button" name="Cero" value="  Cero  " onClick="DetenerCrono(); InicializarCrono()"></p> 
+			<p><input type="text" size="8" name="display" value="01:30:0"></p>
 			</form>
 		</div>			
 	</div>
