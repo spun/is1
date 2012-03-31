@@ -190,9 +190,14 @@ class GameBroadcastLoad(webapp2.RequestHandler):
 	def post(self):
 		
 		game_key = self.request.get('g')
+		option = self.request.get('d')
 		if game_key:
 			game = Game.get(game_key)
-			GameDB().nuevaPalabra(game)
+			
+			if option=="New":
+				GameDB().nuevaPalabra(game)
+				game = Game.get(game_key)
+			
 			if game:				
 				user = None
 				self.sess = session.Session('enginesession')
@@ -233,6 +238,7 @@ class GameBroadcastLoad(webapp2.RequestHandler):
 class Crono(webapp2.RequestHandler):
 	def post(self):
 		game_key = self.request.get('g')
+
 		if game_key:
 			game = Game.get(game_key)
 			

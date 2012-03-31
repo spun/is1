@@ -37,9 +37,8 @@ class Game(db.Model):
 class UsersInGame(db.Model):
 	game = db.ReferenceProperty(Game)
 	user = db.ReferenceProperty(User)
-	state = db.StringProperty(default="esperando")
->>>>>>> origin/master
 	ptos = db.IntegerProperty(default=0)
+	state = db.StringProperty(default="espera")
 
 ########### METODOS ################
 
@@ -197,6 +196,22 @@ class GameDB:
 			palabra = nuevapalabra
 		game.palabra = palabra
 		game.put()
+
+	def nuevaPalabra2(self):
+		palabra = None
+		p = Palabras.all()
+		if p.count() != 0:
+			n = random.randint(0, p.count()-1)
+			listapalabra = Palabras().all()
+			palabra = listapalabra.fetch(1,n)[0]
+		else:
+			nuevapalabra = Palabras()
+			nuevapalabra.palabra = "casa"
+			nuevapalabra.tema = "casa"
+			nuevapalabra.put()
+			palabra = nuevapalabra
+		return palabra.palabra
+
 
 class UsersInGameDB:
 	

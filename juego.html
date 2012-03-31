@@ -174,6 +174,7 @@
 					else if(dat.type == "infoGame")
 					{
 						console.log(dat);
+						BlackBoard.context.clearRect(0, 0, 600, 500);
 						if(dat.content.drawing == true)
 						{
 							$("#wordZone").text(dat.content.word);
@@ -181,6 +182,7 @@
 						else
 						{
 							var tam = dat.content.word;
+							$("#wordZone").text("");
 							for(i=0; i<tam; i++)
 							{							
 								var t = $("#wordZone").text();
@@ -206,7 +208,7 @@
 					{
 						$("#myCanvas").css("borderColor", "#FF5100");
 						BlackBoard.lock(true);
-						sendMessage("http://localhost:8080/gamebroadcast/load", "None");
+						sendMessage("http://localhost:8080/gamebroadcast/load", "New");
 					}
 
 				};
@@ -449,6 +451,7 @@
 						console.log(m);
 						$("li#"+m.userKey+" .userScore").text(m.ptosUser);
 						$("li#"+m.userDibKey+" .userScore").text(m.ptosDib);
+						sendMessage("http://localhost:8080/gamebroadcast/load", "New");
 					}
 				};
 
@@ -473,11 +476,11 @@
 			function InicializarCrono () {  
 				//inicializa contadores globales  
 				decimas = 9 
-				segundos = 4  
+				segundos = 29  
 				minutos = 0  
 				  
 				//pone a cero los marcadores  
-				document.crono.display.value = '00:05:00'  
+				document.crono.display.value = '00:30:00'  
 			}  
 			  
 			function MostrarCrono () {  
@@ -485,13 +488,16 @@
 				//incrementa el crono  
 				decimas--
 				
-				if ( decimas < 0 ) {  
+				if ( decimas < 0 )
+				{  
 					decimas = 9  
 					segundos--
-					if ( segundos < 0 ) {  
+					if ( segundos < 0 )
+					{  
 						segundos = 59  
 						minutos--  
-						if ( minutos < 0 ) {  
+						if ( minutos < 0 )
+						{  
 							DetenerCrono()
 							sendMessage("http://localhost:8080/gamebroadcast/crono", "None");
 							return true  

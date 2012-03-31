@@ -6,57 +6,69 @@
 	<script>
 		function validaregistro(r)
 		{
-			var msg = "Error:\n";
-			var todook = true;
-			
-			/*********** NOMBRE ***********/
+			var nombre = document.getElementById("user").value;
+			var pass = document.getElementById("contra").value;
+			var pass2 = document.getElementById("contra2").value;
+			var mail = document.getElementById("mail").value;
 
-			var name = document.getElementById("user").value;
-
-			var expuser = /^([A-NO-Za-no-z0-9])+$/;
-
-			if(!expuser.test(name))
-			{
-				msg += "El nombre de usuario sólo admite caracteres alfanuméricos\n";
-				todook = false;
-			}
-
-			/*********** CONTRASEÑA ***********/
-
-			var password = document.getElementById("contra").value;
-
-			var exppass = /^[A-NO-Za-no-z0-9]{6,15}$/;
-			
-			if(!exppass.test(password))
-			{
-				msg += "La contraseña sólo puede tener letras y números. Con una longitud entre 6 y 15 caracteres\n";
-				todook = false;
-			}
-			/*********** CONTRASEÑA2 ***********/
-			var password2 = document.getElementById("contra2");
-			
-			if(password2.value != password)
-			{
-				msg += "Las contraseñas no coinciden\n";
-				todook = false;
-			}
-			
-			/*********** DIRECCIÓN DE EMAIL ***********/
-			
-			var mail = document.getElementById("dir").value;
-			
+			// Expresiones regulares
+			var expuserpass = /^([A-Za-z0-9])+$/;
 			var expmail = /^[a-z0-9-_]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
 
-			if(!expmail.test(mail))
-			{
-				todook=false;
-				msg += "La dirección de e-mail no es correcta\n";
+			var erroruser = document.getElementById("erroruser");
+			var errorpass = document.getElementById("errorpass"); 
+			var errorpass2 = document.getElementById("errorpass2");
+			var errormail = document.getElementById("errormail");
+
+			if(nombre == "" || !expuserpass.test(nombre))
+			{	
+				errorpass.style.display='none';
+				errorpass2.style.display='none';
+				errormail.style.display='none';
+
+				erroruser.style.display='block';
+				erroruser.style.color='red';
+				erroruser.style.float='left';
+				return false;		
 			}
+
+			if(pass == "" || !expuserpass.test(pass))
+			{	
+				erroruser.style.display='none';
+				errorpass2.style.display='none';
+				errormail.style.display='none';
+
+				errorpass.style.display='block';
+				errorpass.style.color='red';
+				errorpass.style.float='left';
+				return false;		
+			}		
+
+			if(pass2 == "" || pass2 != pass)
+			{	
+				errorpass.style.display='none';
+				erroruser.style.display='none';
+				errormail.style.display='none';
+
+				errorpass2.style.display='block';
+				errorpass2.style.color='red';
+				errorpass2.style.float='left';
+				return false;		
+			}		
 			
-			if (!todook) {
-				alert(msg);
-				return false;
-			}
+			if(mail == "" || !expmail.test(mail))
+			{	
+				errorpass2.style.display='none';
+				erroruser.style.display='none';
+				errorpass.style.display='none';
+
+				errormail.style.display='block';
+				errormail.style.color='red';
+				errormail.style.float='left';
+				return false;		
+			}			
+
+			return true;		
 		}
 	</script>
 
@@ -64,24 +76,32 @@
 
 {% block content %}
 	<h2>Registro de usuarios</h2>
-	<form id="f1" action="/registro" method="post">
+	<form id="f1" action="/registro" method="post" onsubmit="return validaregistro(this)">
 
 		<label for="user">Nombre Usuario: </label>
 		<br />  
-		<input type="text" id="user" name="user" maxlength="20"/>
+		<input type="text" id="user" name="user" maxlength="20" style="float:left"/> <p id="erroruser" style="display:none"> El nombre de usuario sólo admite caracteres alfanuméricos</p>
+		<br/>
 		<br />  
+		<br />
 		<label for="contra">Contraseña: </label>
 		<br />  
-		<input type="password" id="contra" name="contra" maxlength="20"/>
-		<br /> 
+		<input type="password" id="contra" name="contra" maxlength="20" style="float:left"/> <p id="errorpass" style="display:none"> La contraseña sólo admite caracteres alfanuméricos</p>
+		<br/>
+		<br />  
+		<br />
 		<label for="contra2">Repetir contraseña: </label>
 		<br />  
-		<input type="password" id="contra2" name="contra2"/>
-		<br /> 
+		<input type="password" id="contra2" name="contra2" style="float:left"/> <p id="errorpass2" style="display:none">Las contraseñas no coinciden </p>
+		<br/>
+		<br />  
+		<br />
 		<label for="dir">Dirección de e-mail: </label>
 		<br />  
-		<input type="text" id="dir" name="mail" maxlength="40"/>
-		<br /> 		
+		<input type="text" id="mail" name="mail" maxlength="40" style="float:left"/> <p id="errormail" style="display:none">La dirección de e-mail no es correcta </p>
+		<br/>
+		<br />  
+		<br />
 		<input type="submit" value="Enviar"/>
 	</form>
 {% endblock %}
