@@ -2,17 +2,28 @@
 
 {% block title %}Perfil{% endblock %}
 
-{% block content %}
-	<h2> Perfil de {{userProfile.nick}} </h2>
-	<div id="perfil">		
-		<img id="avatar" src="/img/Perfil/default.jpg" alt="nyan"/> 
-		<div id="userdata">
-			<label><span>Nombre de usuario:</span> {{userProfile.nick}}</label>			
-			<br/>			
-		</div>	
+{% block container %}
+
+	<div class="row">
+		<div class="span12">
+			<h2> Perfil de {{userProfile.nick}} </h2>
+			<div class="row">
+				<div class="span9">
+					<label><span>Nombre de usuario:</span> {{userProfile.nick}}</label>	
+				</div>
+				<div class="span3">
+					<img id="avatar" src="/img/Perfil/default.jpg" alt="nyan"/> 
+				</div>
+			</div>
+		</div>
 	</div>
-	<h2> Puntuaciones </h2>
-	<p>---</p>
+	
+	<div class="row">
+		<div class="span12">
+			<h2> Puntuaciones </h2>
+			<p>---</p>
+		</div>
+	</div>
 
 {% endblock %}
 

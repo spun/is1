@@ -42,8 +42,35 @@
 
 {% endblock %}
 
-{% block content %}
+{% block container %}
+	<div class="row">
+		<div class="span12">
+			<form class="form-horizontal" id="formLogin" action="/login" method="post">
+				<fieldset>
+				<legend>Entrada de usuarios</legend>
+					<div class="control-group">
+						<label class="control-label" for="inputRegNick">Nick</label>
+						<div class="controls">
+							<input type="text" name="user" id="inputRegNick">
+							<span class="help-inline">El nombre de usuario sólo admite caracteres alfanuméricos</span>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputRegPass">Contraseña</label>
+						<div class="controls">
+							<input type="password" name="pass" id="inputRegPass">
+							<span class="help-inline">La contraseña sólo admite caracteres alfanuméricos</span>
+						</div>
+					</div>
+					<div class="form-actions">
+						<button type="submit" class="btn btn-primary">Entrar</button>
+					</div>
+				</fieldset>
+			</form>  
+		</div>
+	</div>
 
+<!--
 	<h2>Entrada de usuarios</h2>
 	<form id="f1" action="/login" method="post">
 		<label for="user">Nombre Usuario: </label><br />  
@@ -56,4 +83,5 @@
 	</form>
 	<br/><br/>
 	<p>Si no tienes cuenta puedes <a href="http://localhost:8080/registro">registrate aquí.</a></p>
+-->
 {% endblock %}

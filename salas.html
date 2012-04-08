@@ -1,47 +1,9 @@
 {% extends "templates/pattern.html" %}
 
-{% block head %}
-
-<script>
- 
-$(document).ready(function() {  
- 
-    //select all the a tag with name equal to modal
-	$('#buttons.modal').on("click", function(e) {
-		e.preventDefault();
-		$("#formSalas").fadeIn("normal", function() {
-			$("#formSalasBox").fadeIn();
-		}).on("click", function() {
-			$("#formSalas").fadeOut("normal", function() {
-				$("#formSalasBox").hide();
-			});
-		}).children().click(function(e) {
-			return false;
-		});
-	});
-
-     
-    //if close button is clicked
-    $('.positive').click(function (e) {
-        //Cancel the link behavior
-        document.forms["formSalasBox"].submit();
-    });     
-     
-    //if mask is clicked
-    $('#mask').click(function () {
-        $(this).hide();
-        $('.window').hide();
-    });         
-     
-});
- 
-</script>
-
-{% endblock %}
-
 {% block title %}Salas{% endblock %}
 
-{% block content %}
+{% block container %}
+<!--
 	<h2>Listado de salas</h2>
         <div id="ListaSalasBody">
             
@@ -98,20 +60,119 @@ $(document).ready(function() {
             {% endif %}
                 
         </div>
-{% endblock %}
+-->
 
-{% block body %}
-	<div id="formSalas">
-            <form action="/salas?p=1" method="post" id="formSalasBox">
-                <p><b>Nombre: </b><input type="text" name="nombre"></p>
-                <p><b>Password: </b><input type="text" name="password" disabled="disabled"></p>
-                <p><b>Tipo: </b><input type="text" name="password" disabled="disabled"></p>
-                <div id="buttons">
-                    <button type="submit" class="positive" name="save">
-                        <img src="/img/ListadoPartidas/master.png" alt=""/>
-                        Crear Sala
-                    </button>
-                </div>
-            </form>
-        </div>
+
+
+
+
+
+
+
+
+	<div class="row">
+		<div class="span12">
+			<div class="row">
+				<div class="span12">
+					<a class="btn btn-inverse pull-right" data-toggle="modal" href="#myModal" ><i class="icon-plus icon-white"></i> Crear Sala</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span10 offset1">
+					<div class="accordion" id="accordion2">
+						
+						{% for sala in salas_list %}
+						
+						{% endfor %}
+						
+						
+						{% for sala in salas_list %}
+						<div class="accordion-group">
+							<div class="accordion-heading">
+								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+								{{sala.nombre}}
+								</a>
+							</div>
+							<div id="collapseOne" class="accordion-body collapse" style="height: 0px; ">
+								<div class="accordion-inner">
+									Demo de aspecto de salas. Aquí los datos de la sala
+									<a href="/salajuego?id={{sala.idSala}}">Entrar</a>
+								</div>
+							</div>
+						</div>
+						{% endfor %}				
+										
+						<!--
+						<div class="Sala">
+							<div class="rowNomb">{{sala.nombre}}<img src="/img/ListadoPartidas/unlock.png" alt="Estado" /></div>
+							<div class="bodyRow">
+								<div class="rowAutor"><img src="/img/ListadoPartidas/master.png" alt="Master" /> {{sala.autor}}</div>
+								<div class="rowFecha"><img src="/img/ListadoPartidas/fecha.png" alt="Fecha de creacion" /> {{sala.fechaCrea.hour}}:{{sala.fechaCrea.minute}}</div>
+								<div class="rowTipo"><img src="/img/ListadoPartidas/tipo.png" alt="Tipo" />Pictionary</div>
+								<div class="rowPlayers"><img src="/img/ListadoPartidas/players.png" alt="Jugadores" />{{sala.players}}/10</div>
+								<div class="rowEnter"><a href="/salajuego?id={{sala.idSala}}">Entrar</a></div>
+							</div>
+						</div>
+						-->
+					</div>
+				</div>
+			</div>		
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal hide fade" id="myModal">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3>Crear nueva sala</h3>
+	</div>
+	<div class="modal-body">
+	
+		<form class="form-horizontal" id="creasSalaForm" action="/salas?p=1" method="post">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label" for="inputPalabra">Nombre</label>
+					<div class="controls">
+						<input type="text" name="nombre" id="inputPalabra">
+						<!-- <span class="help-inline">---</span> -->
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputTema">Password</label>
+					<div class="controls">
+						<input type="text" name="password" id="inputTema" disabled="disabled">
+						<!-- <span class="help-inline">---</span> -->
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputTema">Tipo</label>
+					<div class="controls">
+						<input type="text" name="tema" id="inputTema" disabled="disabled">
+						<!-- <span class="help-inline">---</span> -->
+					</div>
+				</div>
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary">Crear sala</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">Cancelar</a>
+		<a href="#" class="btn btn-primary">Crear sala</a>
+	</div>	
+</div>
+
 {% endblock %}

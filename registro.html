@@ -2,79 +2,105 @@
 
 {% block title %}Registro{% endblock %}
 
-{% block head %}
+{% block script %}
 	<script>
-		function validaregistro(r)
+		
+		$(document).ready(function() {	
+			$('.help-inline').hide();
+			$('.control-group').removeClass('error');
+			$('#formRegistro').on('submit', function(e) {
+				console.log('yes');
+				$('.help-inline').hide();
+				$('.control-group').removeClass('error');
+				if (validaRegistro() == false)
+					e.preventDefault();
+			});			
+		});
+		
+		function validaRegistro()
 		{
-			var nombre = document.getElementById("user").value;
-			var pass = document.getElementById("contra").value;
-			var pass2 = document.getElementById("contra2").value;
-			var mail = document.getElementById("mail").value;
-
-			// Expresiones regulares
-			var expuserpass = /^([A-Za-z0-9])+$/;
-			var expmail = /^[a-z0-9-_]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
-
-			var erroruser = document.getElementById("erroruser");
-			var errorpass = document.getElementById("errorpass"); 
-			var errorpass2 = document.getElementById("errorpass2");
-			var errormail = document.getElementById("errormail");
-
-			if(nombre == "" || !expuserpass.test(nombre))
-			{	
-				errorpass.style.display='none';
-				errorpass2.style.display='none';
-				errormail.style.display='none';
-
-				erroruser.style.display='block';
-				erroruser.style.color='red';
-				erroruser.style.float='left';
-				return false;		
+			var correcto = true;
+						
+			var nick = $('#inputRegNick');
+			var regexUserPass = /^([A-Za-z0-9])+$/;
+			if (nick.val() == "" || !regexUserPass.test(nick.val()))
+			{
+				nick.parents('div.control-group').addClass('error').find('.help-inline').show();
+				correcto = false;
 			}
-
-			if(pass == "" || !expuserpass.test(pass))
-			{	
-				erroruser.style.display='none';
-				errorpass2.style.display='none';
-				errormail.style.display='none';
-
-				errorpass.style.display='block';
-				errorpass.style.color='red';
-				errorpass.style.float='left';
-				return false;		
-			}		
-
-			if(pass2 == "" || pass2 != pass)
-			{	
-				errorpass.style.display='none';
-				erroruser.style.display='none';
-				errormail.style.display='none';
-
-				errorpass2.style.display='block';
-				errorpass2.style.color='red';
-				errorpass2.style.float='left';
-				return false;		
-			}		
 			
-			if(mail == "" || !expmail.test(mail))
-			{	
-				errorpass2.style.display='none';
-				erroruser.style.display='none';
-				errorpass.style.display='none';
-
-				errormail.style.display='block';
-				errormail.style.color='red';
-				errormail.style.float='left';
-				return false;		
-			}			
-
-			return true;		
-		}
+			var pass = $('#inputRegPass');
+			if (pass.val() == "" || !regexUserPass.test(pass.val()))
+			{
+				pass.parents('div.control-group').addClass('error').find('.help-inline').show();
+				correcto = false;
+			}
+			
+			var pass2 = $('#inputRegPass2');
+			if (pass2.val() == "" || pass2.val() != pass.val())
+			{
+				pass2.parents('div.control-group').addClass('error').find('.help-inline').show();
+				correcto = false;
+			}
+			
+			var mail = $('#inputRegMail');
+			var regexMail = /^[a-z0-9-_]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+			if (mail.val() == "" || !regexMail.test(mail.val()))
+			{
+				mail.parents('div.control-group').addClass('error').find('.help-inline').show();
+				correcto = false;
+			}
+			
+			return correcto;
+		}		
 	</script>
 
 {% endblock %}
 
-{% block content %}
+{% block container %}
+	<div class="row">
+		<div class="span12">
+			<form class="form-horizontal" id="formRegistro" action="/registro" method="post">
+				<fieldset>
+				<legend>Registro</legend>
+					<div class="control-group">
+						<label class="control-label" for="inputRegNick">Nick</label>
+						<div class="controls">
+							<input type="text" name="user" id="inputRegNick">
+							<span class="help-inline">El nombre de usuario sólo admite caracteres alfanuméricos</span>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputRegPass">Contraseña</label>
+						<div class="controls">
+							<input type="password" name="contra" id="inputRegPass">
+							<span class="help-inline">La contraseña sólo admite caracteres alfanuméricos</span>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputRegPass2">Repetir contraseña</label>
+						<div class="controls">
+							<input type="password" name="contra2" id="inputRegPass2">
+							<span class="help-inline">Las contraseñas no coinciden</span>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputRegMail">Correo electronico</label>
+						<div class="controls">
+							<input type="text" name="mail" id="inputRegMail">
+							<span class="help-inline">La dirección de e-mail no es correcta</span>
+						</div>
+					</div>
+					<div class="form-actions">
+						<button type="submit" class="btn btn-primary">Completar registro</button>
+					</div>
+				</fieldset>
+			</form>  
+		</div>
+	</div>
+
+<!--
+
 	<h2>Registro de usuarios</h2>
 	<form id="f1" action="/registro" method="post" onsubmit="return validaregistro(this)">
 
@@ -104,6 +130,7 @@
 		<br />
 		<input type="submit" value="Enviar"/>
 	</form>
+-->
 {% endblock %}
 
 

@@ -48,22 +48,37 @@
 
 {% endblock %}
 
-{% block content %}
-	<h2>Página de Administración</h2>
-	<br/><br/>
+{% block container %}
+
+<div class="row">
+		<div class="span12">
+			<form class="form-horizontal" id="insPalabraForm" action="/administracion" method="post">
+				<fieldset>
+				<legend>Página de Administración</legend>
+					<div class="control-group">
+						<label class="control-label" for="inputPalabra">Palabra</label>
+						<div class="controls">
+							<input type="text" name="palabra" id="inputPalabra">
+							<!--
+							<span class="help-inline">---</span>
+							-->
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputTema">Tema</label>
+						<div class="controls">
+							<input type="text" name="tema" id="inputTema">
+							<!--
+							<span class="help-inline">---</span>
+							-->
+						</div>
+					</div>
+					<div class="form-actions">
+						<button type="submit" class="btn btn-primary">Añadir palabra</button>
+					</div>
+				</fieldset>
+			</form>  
+		</div>
+	</div>
 	
-	{%if error %}
-		{{error}}
-	{% endif %}
-	<form id="insertapalabra" action="/administracion" method="post" onsubmit="return validapalabra()">	
-		<label for="palabra"> Palabra </label>
-		<br/>
-		<input type="text" id="palabra" name="palabra"/>
-		<br/>
-		<label for="tema">Tema</label>
-		<br/>
-		<input type="text" id="tema" name="tema"/>	
-		<br/>
-		<input type="submit" value="Añadir"/>
-	</form>
 {% endblock %}

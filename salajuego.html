@@ -25,3 +25,29 @@
         <div id="salaPlay"><p><a href="/juego?gamekey={{gamekey}}">PLAY!</a></p><p><a href="/salajuego?e=1">Salir</a></p></div>
     </div>
 {% endblock %}
+
+{% block container %}
+	<div class="row">
+		<div class="span9">
+			1
+			{% for user in user_list %}
+			<a href="/perfil?user={{user.nick}}" title="Ir al perfil de {{user.nick}}">{{user.nick}}</a>
+            {% endfor %}
+		</div>
+		<div class="span3">
+			2
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="span9">
+			3
+		</div>
+		<div class="span3">
+			4
+			<a href="/juego?gamekey={{gamekey}}">PLAY!</a>
+			<a href="/salajuego?e=1">Salir</a>
+		</div>
+	</div>
+
+{% endblock %}

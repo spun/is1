@@ -1,4 +1,4 @@
-{% extends "templates/pattern_game.html" %}
+{% extends "templates/pattern.html" %}
 
 {% block title %}Juego{% endblock %}
 
@@ -570,4 +570,32 @@
 	</div>
 </div>
 
+{% endblock %}
+
+
+
+
+{% block container %}
+	<div class="row">
+		<div class="span12">
+		Level 1 of column
+			<div class="row">
+				<div class="span2" style="background-color: red">Level 2</div>
+				<div class="span8" style="background-color: green">
+					<canvas id="myCanvas" width="600" height="500" style="border: 1px solid red">
+					</canvas>
+				</div>
+				<div class="span2" style="background-color: orange">
+					<form class="form-horizontal">
+						<fieldset>
+							<div class="input-append">
+								<input class="span" id="appendedPrependedInput" style="width: 120px" size="6" type="text"><button class="btn" type="button">Enviar</button>
+							</div>
+
+						</fieldset>
+					</form>					
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
