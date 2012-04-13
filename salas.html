@@ -2,6 +2,17 @@
 
 {% block title %}Salas{% endblock %}
 
+{% block script %}
+	<script>
+		$(document).ready(function() {	
+			$("#createButton").on('click', function() {
+				$("#creaSalaForm").submit();
+			});
+		});
+	</script>
+	
+{% endblock %}
+
 {% block container %}
 <!--
 	<h2>Listado de salas</h2>
@@ -140,7 +151,7 @@
 	</div>
 	<div class="modal-body">
 	
-		<form class="form-horizontal" id="creasSalaForm" action="/salas?p=1" method="post">
+		<form class="form-horizontal" id="creaSalaForm" action="/salas?p=1" method="post">
 			<fieldset>
 				<div class="control-group">
 					<label class="control-label" for="inputPalabra">Nombre</label>
@@ -163,7 +174,7 @@
 						<!-- <span class="help-inline">---</span> -->
 					</div>
 				</div>
-				<div class="form-actions">
+				<div class="form-actions hide">
 					<button type="submit" class="btn btn-primary">Crear sala</button>
 				</div>
 			</fieldset>
@@ -171,7 +182,7 @@
 	</div>
 	<div class="modal-footer">
 		<a href="#" class="btn" data-dismiss="modal">Cancelar</a>
-		<a href="#" class="btn btn-primary">Crear sala</a>
+		<a href="#" class="btn btn-primary" id="createButton">Crear sala</a>
 	</div>	
 </div>
 

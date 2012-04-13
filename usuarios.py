@@ -26,11 +26,6 @@ class Registro(webapp2.RequestHandler):
 			self.response.out.write(template.render(path, template_values))
 			
 	def post(self):
-		self.response.out.write("Aqui recibo el formulario de registro")
-		self.response.out.write("<br/>Usuario: " + cgi.escape(self.request.get('user')))
-		self.response.out.write("<br/>Pass: " + cgi.escape(self.request.get('contra')))
-		self.response.out.write("<br/>Pass2: " + cgi.escape(self.request.get('contra2')))
-		self.response.out.write("<br/>Mail: " + cgi.escape(self.request.get('mail')))
 				
 		userCtrl = UserDB()
 		user = userCtrl.getUserByNick(cgi.escape(self.request.get('user')))
@@ -60,7 +55,9 @@ class Registro(webapp2.RequestHandler):
 							else:
 								userCtrl.AddUser(cgi.escape(self.request.get('user')), cgi.escape(self.request.get('contra')), cgi.escape(self.request.get('mail')))
 								self.response.out.write("<br/>Registro completado")
-								self.redirect('/')
+																							
+								self.redirect('/')								
+								
 			
 class Login(webapp2.RequestHandler):
 	def get(self):
@@ -89,8 +86,19 @@ class Login(webapp2.RequestHandler):
 			self.sess.store(str(users.get().key()), expires)
 			self.redirect('/')
 		else:
-			# self.response.out.write("no existe el usuario")		
-			self.redirect('/login')
+			# Extraemos el usuario de la sesion 
+			if self.sess.load():
+				user = UserDB().getUserByKey(self.sess.user)
+				template_values['user'] = user
+			
+			template_values['errorMsg'] = {
+				"title": "Ocurrió un error al intenficar al usuario.",
+				"text": "No existe el usuario o la contraseña no es correcta."
+			}
+
+			path = os.path.join(os.path.dirname(__file__), 'login.html')
+			self.response.out.write(template.render(path, template_values))
+
 		
 class Logout(webapp2.RequestHandler):
 	def get(self):

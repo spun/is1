@@ -70,17 +70,58 @@
 		</div>
 	</div>
 
-
+	
     <div class="container">
+		
+		<!-- Avisos y mensajes de error -->
+		{% if errorMsg and errorMsg.text %}
 		<div class="row">
 			<div class="span12">
 				<div class="alert alert-error">
 					<a class="close" data-dismiss="alert">×</a>
-					<h4 class="alert-heading">Ocurrió un error</h4>
-					El usuario o contraseña introducida no es correcta.
+					{% if errorMsg.title %}
+					<h4 class="alert-heading">{{ errorMsg.title }}</h4>
+					{% else %}
+					<h4 class="alert-heading">Ocurrió un error.</h4>
+					{% endif %}					
+					{{ errorMsg.text }}
 				</div>
 			</div>
 		</div>
+		{% endif %}
+		
+		{% if infoMsg and infoMsg.text %}
+		<div class="row">
+			<div class="span12">
+				<div class="alert alert-info">
+					<a class="close" data-dismiss="alert">×</a>
+					{% if infoMsg.title %}
+					<h4 class="alert-heading">{{ infoMsg.title }}</h4>
+					{% else %}
+					<h4 class="alert-heading">Ocurrió un error.</h4>
+					{% endif %}
+					{{ infoMsg.text }}
+				</div>
+			</div>
+		</div>
+		{% endif %}
+		
+		{% if successMsg and successMsg.text %}
+		<div class="row">
+			<div class="span12">
+				<div class="alert alert-success">
+					<a class="close" data-dismiss="alert">×</a>
+					{% if successMsg.title %}
+					<h4 class="alert-heading">{{ successMsg.title }}</h4>
+					{% else %}
+					<h4 class="alert-heading">La acción se ha realizado correctamente.</h4>
+					{% endif %}
+					{{ successMsg.text }}
+				</div>
+			</div>
+		</div>
+		{% endif %}
+		
 		
 		{% block container %}{% endblock %}
     </div>

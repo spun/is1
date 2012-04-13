@@ -2,42 +2,42 @@
 
 {% block title %}Login{% endblock %}
 
-{% block head %}
+{% block script %}
 
 	<script>
-		function validalogin()
+		
+		$(document).ready(function() {	
+			$('#formLogin').on('submit', function(e) {
+				console.log('yes');
+				$('.help-inline').hide();
+				$('.control-group').removeClass('error');
+				if (validaLogin() == false)
+					e.preventDefault();
+			});			
+		});
+		
+		function validaLogin()
 		{
-			var msg = "Error:\n";
-			var todook = true;
-				
-			/*********** NOMBRE ***********/
-
-			var name = document.getElementById("log").value;
-
-			var expuser = /^([A-NO-Za-no-z0-9])+$/;
-
-			if(!expuser.test(name))
+			var correcto = true;
+						
+			var nick = $('#inputLogNick');
+			var regexUserPass = /^([A-Za-z0-9])+$/;
+			if (nick.val() == "" || !regexUserPass.test(nick.val()))
 			{
-				msg += "El nombre de usuario sólo admite caracteres alfanuméricos\n";
-				todook = false;
+				nick.parents('div.control-group').addClass('error').find('.help-inline').show();
+				correcto = false;
 			}
-
-			/*********** CONTRASEÑA ***********/
-
-			var password = document.getElementById("passlog").value;
-			var exppass = /^[A-NO-Za-no-z0-9]{6,15}$/;
-					
-			if(!exppass.test(password))
+			
+			var pass = $('#inputLogPass');
+			if (pass.val() == "" || !regexUserPass.test(pass.val()))
 			{
-				msg += "La contraseña sólo puede tener letras y números. Con una longitud entre 6 y 15 caracteres\n";
-				todook = false;
+				pass.parents('div.control-group').addClass('error').find('.help-inline').show();
+				correcto = false;
 			}
-
-			if (!todook) {
-				alert(msg);
-				return false;
-			}			
+						
+			return correcto;
 		}		
+			
 	</script>
 
 {% endblock %}
@@ -49,17 +49,17 @@
 				<fieldset>
 				<legend>Entrada de usuarios</legend>
 					<div class="control-group">
-						<label class="control-label" for="inputRegNick">Nick</label>
+						<label class="control-label" for="inputLogNick">Nick</label>
 						<div class="controls">
-							<input type="text" name="user" id="inputRegNick">
-							<span class="help-inline">El nombre de usuario sólo admite caracteres alfanuméricos</span>
+							<input type="text" name="user" id="inputLogNick">
+							<span class="help-inline hide">El nombre de usuario sólo admite caracteres alfanuméricos</span>
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="inputRegPass">Contraseña</label>
+						<label class="control-label" for="inputLogPass">Contraseña</label>
 						<div class="controls">
-							<input type="password" name="pass" id="inputRegPass">
-							<span class="help-inline">La contraseña sólo admite caracteres alfanuméricos</span>
+							<input type="password" name="pass" id="inputLogPass">
+							<span class="help-inline hide">La contraseña sólo admite caracteres alfanuméricos</span>
 						</div>
 					</div>
 					<div class="form-actions">
