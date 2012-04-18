@@ -21,8 +21,14 @@
 	<div class="row">
 		<div class="span12">
 			<h2> Puntuaciones </h2>
-			<h4> Total: {{userProfile.ptos}} </h4>
-			<p>---</p>
+			<p><b> Total: </b>{{userProfile.ptos}} </p>
+			<p><h4>Ultimas partidas</h4></p>
+			{% for p in listaPartidas %}
+				<p>{{p.nombrePartida}} {{p.ptos}}
+				{% if p.win %}
+					Win
+				{% endif %}</p>
+			{%endfor%}
 		</div>
 	</div>
 

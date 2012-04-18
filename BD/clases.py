@@ -22,7 +22,11 @@ class Sala(db.Model):
 	players = db.StringProperty()
 	
 	
-
+class PartidasJugadas(db.Model):
+	user = db.ReferenceProperty(User)
+	nombrePartida = db.StringProperty()
+	ptos = db.IntegerProperty(default=0)
+	win = db.BooleanProperty()
 
 class Palabras(db.Model):
 	palabra = db.StringProperty()
@@ -287,4 +291,20 @@ class PalabrasDB:
 		q.filter("tema =", tema)
 		results = q.get()
 		return results
+	
+class PartidasJugadasDB:
+	
+	def  ObtenerLista(self, user):
+		q = PartidasJugadas.all()
+		q.filter("user =", user)
+		results = q.fetch(20)
+		return results
+	
+	def setPartida(self, user, titulo, ptos, win):
+		partida = PartidasJugadas()
+		partida.user = user
+		partida.nombrePartida = titulo
+		partida.ptos = ptos
+		partida.win = win
+		partida.put()		
 
