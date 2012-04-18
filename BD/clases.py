@@ -44,6 +44,11 @@ class UsersInGame(db.Model):
 	user = db.ReferenceProperty(User)
 	ptos = db.IntegerProperty(default=0)
 	state = db.StringProperty(default="espera")
+	
+class Amigos(db.Model):
+	user = db.StringProperty()
+	amigo = db.ReferenceProperty(User)
+	aceptado = db.BooleanProperty(default = False)
 
 ########### METODOS ################
 
@@ -306,5 +311,61 @@ class PartidasJugadasDB:
 		partida.nombrePartida = titulo
 		partida.ptos = ptos
 		partida.win = win
-		partida.put()		
+		partida.put()
+		
+class AmigosDB:
+	
+	def ObtenerAmigos(self, user):
+		q = Amigos.all()
+		q.filter("user =", user.nick)
+		q.filter("aceptado =", True)
+		results = q.fetch(100)
+		return results
+	
+	def ObtenerPeticiones(self, user):
+		q = Amigos.all()
+		q.filter("user =", user.nick)
+		q.filter("aceptado =", False)
+		results = q.fetch(100)
+		return results
+	
+	def DenegarAmistad(self, user, amigo):
+		q = Amigos.all()
+		q.filter("user =", user.nick)
+		q.filter("amigo =", amigo)
+		res = q.get()
+		Amigos.delete(res)
+	
+	def EliminarAmistad(self, user, amigo):
+		q = Amigos.all()
+		q.filter("user =", user.nick)
+		q.filter("amigo =", amigo)
+		res = q.get()
+		Amigos.delete(res)
+		q = Amigos.all()
+		q.filter("user =", amigo.nick)
+		q.filter("amigo =", user)
+		res = q.get()
+		Amigos.delete(res)
+		
+	def AceptarAmistad(self, user, amigo):
+		q = Amigos.all()
+		q.filter("user =", user.nick)
+		q.filter("amigo =", amigo)
+		res = q.get()
+		res.aceptado=True
+		res.put()
+		q = Amigos()
+		q.user=amigo.nick
+		q.amigo=user
+		q.aceptado=True
+		q.put()
+		
+	def PedirAmistad(self, user, amigo):
+		a = Amigos()
+		a.user=user.nick
+		a.amigo=amigo
+		a.aceptado=False
+		a.put()
+		
 

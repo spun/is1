@@ -29,6 +29,30 @@
 					Win
 				{% endif %}</p>
 			{%endfor%}
+			
+			<h2> Amigos </h2>
+			{% if user %}
+				{% if user != userProfile %}
+					<a href="/perfil?user={{userProfile.nick}}&amistad=0">Pedir amistad</a>
+				{% endif %}
+			{% endif %}
+			
+			{% if user %}
+				{% if user == userProfile %}
+					<h4> Peticiones </h4>
+					{% for p in listaPeticiones %}
+						<p>{{p.amigo.nick}}</p>
+						<a href="/perfil?user={{userProfile.nick}}&aceptar={{p.amigo.nick}}">Aceptar</a>
+						<a href="/perfil?user={{userProfile.nick}}&denegar={{p.amigo.nick}}">Denegar</a>
+					{%endfor%}
+					<h4> Lista </h4>
+					{% for p in listaAmigos %}
+						<p>{{p.amigo.nick}}</p>
+						<a href="/perfil?user={{userProfile.nick}}&eliminar={{p.amigo.nick}}">Eliminar</a>
+					{%endfor%}
+				{% endif %}
+			{% endif %}
+				
 		</div>
 	</div>
 
