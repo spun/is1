@@ -10,6 +10,7 @@ class User(db.Model):
 	password = db.StringProperty()
 	email = db.EmailProperty()
 	idSala = db.StringProperty()
+	ptos = db.IntegerProperty(default=0)
 
 class Sala(db.Model):
 	#autor = db.ReferenceProperty(User)
@@ -242,6 +243,8 @@ class UsersInGameDB:
 		res = inGame.get()
 		res.ptos += ptos
 		res.put()
+		user.ptos += ptos
+		user.put()
 		return res.ptos
 
 	def changeState(self, user, state="jugando"):
