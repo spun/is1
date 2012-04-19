@@ -8,6 +8,7 @@ from BD.clases import SalasDB
 from BD.clases import UserDB
 from BD.clases import GameDB
 from BD.clases import UsersInGameDB
+import urllib2
 
 class Salas(webapp2.RequestHandler):
 	def get(self):
@@ -27,8 +28,12 @@ class Salas(webapp2.RequestHandler):
 						self.redirect("/salajuego?id="+str(user.idSala))
 					
 			salas=SalasDB()		
-			res=salas.ListarSalas()
 			
+			if self.request.get('b'):
+				cadena= urllib2.unquote(self.request.get('b'))
+				res=salas.ListarBusqueda(cadena)
+			else:
+				res=salas.ListarSalas()
 			#Listamos las salas que hay por acada pagina
 			i=0
 			res2 =[]

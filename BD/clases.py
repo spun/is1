@@ -132,7 +132,13 @@ class SalasDB:
 		sala=Sala.all()
 		res=sala.fetch(100)
 		return res
-		
+	
+	def ListarBusqueda(self, texto):
+		sala=Sala.all()
+		sala.filter("nombre =", texto)
+		res=sala.fetch(100)
+		return res
+
 	def getSalaByAutor(self, autor):
 		sala = Sala.all()
 		sala.filter("autor =", autor)

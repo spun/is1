@@ -7,9 +7,17 @@
 		$(document).ready(function() {	
 			$("#createButton").on('click', function() {
 				$("#creaSalaForm").submit();
+                                
 			});
 		});
-
+                
+                $(document).ready(function() {	
+			$("#searchButton").on('click', function() {
+				$("#BuscaSalaForm").submit();
+                                window.location = '/salas?p=1&b='+$("#salaText").val();
+			});
+		});
+                
                 function changeTipo(elm)
                 {
                     var num = elm.selectedIndex;
@@ -112,50 +120,40 @@
 
 	<div class="row">
 		<div class="span12">
-			<div class="row">
-				<div class="span12">
-                                        {% if user %}
-                                            <a class="btn btn-inverse pull-right" data-toggle="modal" href="#myModal" ><i class="icon-plus icon-white"></i> Crear Sala</a>
-                                        {% endif %}
-                                </div>
-			</div>
+                        <div class="row">
+                            <div class="span12">
+                                <form class="well form-search" id="BuscaSalaForm" action="/salas?p=1" method="get">
+                                    <button href="#" id="searchButton" class="btn pull-right">Buscar</button>
+                                    <input type="text" id="salaText" name="salaText" class="input-medium search-query pull-right">
+                                    {% if user %}
+                                        <a class="btn btn-inverse" data-toggle="modal" href="#myModal" ><i class="icon-plus icon-white"></i> Crear Sala</a>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </div>
 			<div class="row">
 				<div class="span10 offset1">
 					<div class="accordion" id="accordion2">
-						
-						{% for sala in salas_list %}
-						
-						{% endfor %}
-						
-						
 						{% for sala in salas_list %}
 						<div class="accordion-group">
-							<div class="accordion-heading">
-								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+							<div class="accordion-heading" style="background-color: #E6E6E6;">
+								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{sala.key}}">
 								{{sala.nombre}}
+                                                                <i class="icon-plus-sign pull-right"></i>
 								</a>
+                                                                
 							</div>
-							<div id="collapseOne" class="accordion-body collapse" style="height: 0px; ">
+							<div id="collapse{{sala.key}}" class="accordion-body collapse" style="height: 0px; ">
 								<div class="accordion-inner">
-									Demo de aspecto de salas. Aquí los datos de la sala
-									<a href="/salajuego?id={{sala.idSala}}">Entrar</a>
+									<p><i class="icon-star"></i> {{sala.autor}}</p>
+                                                                        <p><i class="icon-time"></i> {{sala.fechaCrea.hour}}:{{sala.fechaCrea.minute}}</p>
+                                                                        <p><i class="icon-flag"></i> {{sala.tipo}}</p>
+                                                                        <p><i class="icon-user"></i> {{sala.players}}/10</p>
+                                                                        <p><a class="btn btn-success" href="/salajuego?id={{sala.idSala}}"><i class="icon-arrow-right icon-white"></i> Entrar </a></p>
 								</div>
 							</div>
 						</div>
 						{% endfor %}				
-										
-						<!--
-						<div class="Sala">
-							<div class="rowNomb">{{sala.nombre}}<img src="/img/ListadoPartidas/unlock.png" alt="Estado" /></div>
-							<div class="bodyRow">
-								<div class="rowAutor"><img src="/img/ListadoPartidas/master.png" alt="Master" /> {{sala.autor}}</div>
-								<div class="rowFecha"><img src="/img/ListadoPartidas/fecha.png" alt="Fecha de creacion" /> {{sala.fechaCrea.hour}}:{{sala.fechaCrea.minute}}</div>
-								<div class="rowTipo"><img src="/img/ListadoPartidas/tipo.png" alt="Tipo" />Pictionary</div>
-								<div class="rowPlayers"><img src="/img/ListadoPartidas/players.png" alt="Jugadores" />{{sala.players}}/10</div>
-								<div class="rowEnter"><a href="/salajuego?id={{sala.idSala}}">Entrar</a></div>
-							</div>
-						</div>
-						-->
 					</div>
 				</div>
 			</div>		
