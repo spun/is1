@@ -62,11 +62,24 @@ class Salas(webapp2.RequestHandler):
 		if self.sess.load():
 			user = UserDB().getUserByKey(self.sess.user)
 			if self.request.get('nombre'): #!="" and SalasDB().getSalaByAutor(user.nick)=="":
+				partyPass=None
+				tipo=None
+				puntos = 0
 				#Creamos una nueva sala	
 				salas=SalasDB()			
 				nombre=self.request.get('nombre')
 				autor=user.nick
-				salas.AddSala(nombre, autor)
+				if self.request.get('password'):
+					partyPass = self.request.get('password')
+				if self.request.get('tipo') == "Puntos":
+					tipo = "Puntos"
+					puntos = int(self.request.get('puntos'))
+				else:
+					tipo="Rondas"
+					
+				tematica = self.request.get('tema')
+				
+				salas.AddSala(nombre, autor, tipo, puntos, partyPass, tematica)
 				#Insertamos al usuario que creo la sala en esta
 				miSala=SalasDB().getSalaByAutor(user.nick)
 				user.idSala=miSala[0].idSala

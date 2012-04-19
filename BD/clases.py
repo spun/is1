@@ -20,6 +20,10 @@ class Sala(db.Model):
 	estado = db.StringProperty()
 	idSala = db.StringProperty()
 	players = db.StringProperty()
+	tipo = db.StringProperty()
+	numPuntos = db.IntegerProperty(default=0)
+	password = db.StringProperty()
+	tematica = db.StringProperty()
 	
 	
 class PartidasJugadas(db.Model):
@@ -109,7 +113,7 @@ class UserDB:
 
 class SalasDB:
 
-	def AddSala(self, nombreSala, autor):
+	def AddSala(self, nombreSala, autor, tipo, puntos, password, tematica):
 		u = uuid.uuid4()
 		nuevaSala = Sala()
 		#nuevaSala.autor = usuario
@@ -118,6 +122,10 @@ class SalasDB:
 		nuevaSala.fechaCrea = datetime.datetime.now()
 		nuevaSala.estado = "Privado"
 		nuevaSala.idSala = u.hex
+		nuevaSala.tipo = tipo
+		nuevaSala.numPuntos = puntos
+		nuevaSala.password = password
+		nuevaSala.tematica = tematica
 		nuevaSala.put()
 
 	def ListarSalas(self):

@@ -9,6 +9,35 @@
 				$("#creaSalaForm").submit();
 			});
 		});
+
+                function changeTipo(elm)
+                {
+                    var num = elm.selectedIndex;
+                    
+                    if(elm.options[num].text == 'Puntos')
+                    {
+                         $("#Puntos").attr('class', 'control-group')
+                         //$("#Rondas").attr('class', 'control-group hide')
+                    }
+                    else
+                    {
+                        // $("#Rondas").attr('class', 'control-group')
+                         $("#Puntos").attr('class', 'control-group hide')
+                    }
+                   
+                }
+                
+                function activaPass(est)
+                {
+                    if (est.checked)
+                    {
+                        $("#inputPass").removeAttr("disabled")
+                    }
+                    else
+                    {
+                        $("#inputPass").attr('disabled', 'disabled')
+                    }
+                }
 	</script>
 	
 {% endblock %}
@@ -156,26 +185,68 @@
 		<form class="form-horizontal" id="creaSalaForm" action="/salas?p=1" method="post">
 			<fieldset>
 				<div class="control-group">
-					<label class="control-label" for="inputPalabra">Nombre</label>
+					<label class="control-label" for="inputNombre">Nombre</label>
 					<div class="controls">
 						<input type="text" name="nombre" id="inputPalabra">
 						<!-- <span class="help-inline">---</span> -->
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="inputTema">Password</label>
+					<label class="control-label" for="inputPass">Password</label>
 					<div class="controls">
-						<input type="text" name="password" id="inputTema" disabled="disabled">
+						<input type="text" name="password" id="inputPass" disabled="disabled">
+						<label class="checkbox">
+                                                    <input type="checkbox" onclick='activaPass(this);'> Activar
+                                                </label>
+					</div>
+				</div>
+                                
+                                <div class="control-group">
+                                    <label class="control-label" for="select01">Tipo de juego</label>
+                                    <div class="controls">
+                                      <select name="tipo" id="select01" onchange='changeTipo(this);'>
+                                        <option>Puntos</option>
+                                        <option>Rondas</option>
+                                      </select>
+                                      <span class="help-inline"> ¿Tienes <a href="/">dudas</a>? </span> 
+                                    </div>
+                                </div>
+                                
+                                <div class="control-group" id="Puntos">
+					<label class="control-label" for="inputPuntos">Num. de puntos</label>
+					<div class="controls">
+						<input type="text" name="puntos" id="inputTema">
 						<!-- <span class="help-inline">---</span> -->
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="inputTema">Tipo</label>
+
+                                <!--<div class="control-group hide" id="Rondas">
+					<label class="control-label" for="inputRondas">Num. de rondas</label>
 					<div class="controls">
-						<input type="text" name="tema" id="inputTema" disabled="disabled">
-						<!-- <span class="help-inline">---</span> -->
+						<input type="text" name="tema" id="inputTema">
+						<!-- <span class="help-inline">---</span> 
 					</div>
-				</div>
+                                </div> -->
+                                
+                                <div class="control-group">
+                                    <label class="control-label" for="select02">Temática</label>
+                                    <div class="controls">
+                                      <select name="tema" id="select02">
+                                        <option>Ninguna</option>
+                                        <option>Animales</option>
+                                        <option>Playa</option>
+                                      </select>
+                                    </div>
+                                </div>
+                                
+                                <!--<div class="control-group">
+					<label class="control-label" for="inputTiempo">Tiempo</label>
+					<div class="controls">
+						<input type="text" name="tiempo" id="inputTiempo">
+						<span class="help-inline">00:00:00</span>
+					</div>
+				</div>-->
+                                
 				<div class="form-actions hide">
 					<button type="submit" class="btn btn-primary">Crear sala</button>
 				</div>
