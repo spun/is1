@@ -51,9 +51,11 @@
 								{% if user == userProfile %}
 									<h4> Peticiones </h4>
 									{% for p in listaPeticiones %}
-										<p>{{p.amigo.nick}}</p>
-										<a href="/perfil?user={{userProfile.nick}}&aceptar={{p.amigo.nick}}">Aceptar</a>
-										<a href="/perfil?user={{userProfile.nick}}&denegar={{p.amigo.nick}}">Denegar</a>
+										<form class="well">
+											<p>{{p.amigo.nick}}
+											<a class="btn btn-success" href="/perfil?user={{userProfile.nick}}&aceptar={{p.amigo.nick}}"><i class="icon-ok icon-white"></i></a>
+											<a class="btn btn-danger" href="/perfil?user={{userProfile.nick}}&denegar={{p.amigo.nick}}"><i class="icon-remove icon-white"></i></a>
+										</form>
 									{%endfor%}
 									<h4> Lista </h4>
 									{% for p in listaAmigos %}
