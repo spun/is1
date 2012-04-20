@@ -2,59 +2,97 @@
 
 {% block title %}Perfil{% endblock %}
 
+{% block script %}
+	<script>
+		$('#myTab').tab('show')
+		$(function () {
+			$('.tabs a:last').tab('show')
+		})
+	</script>
+{% endblock %}
+
+
 {% block container %}
 
-	<div class="row">
-		<div class="span12">
-			<h2> Perfil de {{userProfile.nick}} </h2>
+	<ul class="nav nav-tabs">
+	  <li class="active"><a href="#perfil" data-toggle="tab">Perfil</a></li>
+	  <li><a href="#amigos" data-toggle="tab">Amigos</a></li>
+	  <li><a href="#puntuaciones" data-toggle="tab">Puntuaciones</a></li>
+	</ul>
+
+	<div class="tab-content">
+		<div class="tab-pane active" id="perfil">
 			<div class="row">
-				<div class="span9">
-					<label><span>Nombre de usuario:</span> {{userProfile.nick}}</label>	
+				<div class="span12">
+					<div class="row">
+						<div class="span9">
+							<label><span>Nombre de usuario:</span> {{userProfile.nick}}</label>	
+						</div>
+						<div class="span3">
+							<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
+						</div>
+					</div>
 				</div>
-				<div class="span3">
-					<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
+			</div>
+		</div>
+	
+		<div class="tab-pane" id="amigos">
+			<div class="row">
+				<div class="span12">
+					<div class="row">
+						<div class="span9">
+							{% if user %}
+								{% if user != userProfile %}
+									<a href="/perfil?user={{userProfile.nick}}&amistad=0">Pedir amistad</a>
+								{% endif %}
+							{% endif %}
+							
+							{% if user %}
+								{% if user == userProfile %}
+									<h4> Peticiones </h4>
+									{% for p in listaPeticiones %}
+										<p>{{p.amigo.nick}}</p>
+										<a href="/perfil?user={{userProfile.nick}}&aceptar={{p.amigo.nick}}">Aceptar</a>
+										<a href="/perfil?user={{userProfile.nick}}&denegar={{p.amigo.nick}}">Denegar</a>
+									{%endfor%}
+									<h4> Lista </h4>
+									{% for p in listaAmigos %}
+										<p>{{p.amigo.nick}}</p>
+										<a href="/perfil?user={{userProfile.nick}}&eliminar={{p.amigo.nick}}">Eliminar</a>
+									{%endfor%}
+								{% endif %}
+							{% endif %}
+						</div>
+						<div class="span3">
+							<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="tab-pane" id="puntuaciones">
+			<div class="row">
+				<div class="span12">
+					<div class="row">
+						<div class="span9">
+							<p><b> Total: </b>{{userProfile.ptos}} </p>
+							<p><h4>Ultimas partidas</h4></p>
+							{% for p in listaPartidas %}
+								<p>{{p.nombrePartida}} {{p.ptos}}
+								{% if p.win %}
+									Win
+								{% endif %}</p>
+							{%endfor%}
+						</div>
+						<div class="span3">
+							<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-	<div class="row">
-		<div class="span12">
-			<h2> Puntuaciones </h2>
-			<p><b> Total: </b>{{userProfile.ptos}} </p>
-			<p><h4>Ultimas partidas</h4></p>
-			{% for p in listaPartidas %}
-				<p>{{p.nombrePartida}} {{p.ptos}}
-				{% if p.win %}
-					Win
-				{% endif %}</p>
-			{%endfor%}
-			
-			<h2> Amigos </h2>
-			{% if user %}
-				{% if user != userProfile %}
-					<a href="/perfil?user={{userProfile.nick}}&amistad=0">Pedir amistad</a>
-				{% endif %}
-			{% endif %}
-			
-			{% if user %}
-				{% if user == userProfile %}
-					<h4> Peticiones </h4>
-					{% for p in listaPeticiones %}
-						<p>{{p.amigo.nick}}</p>
-						<a href="/perfil?user={{userProfile.nick}}&aceptar={{p.amigo.nick}}">Aceptar</a>
-						<a href="/perfil?user={{userProfile.nick}}&denegar={{p.amigo.nick}}">Denegar</a>
-					{%endfor%}
-					<h4> Lista </h4>
-					{% for p in listaAmigos %}
-						<p>{{p.amigo.nick}}</p>
-						<a href="/perfil?user={{userProfile.nick}}&eliminar={{p.amigo.nick}}">Eliminar</a>
-					{%endfor%}
-				{% endif %}
-			{% endif %}
-				
-		</div>
-	</div>
+
 
 {% endblock %}
 
