@@ -4,11 +4,73 @@
 
 {% block script %}
 	<script>
+            
+                var realpass;
+                var idSala;
+                
 		$(document).ready(function() {	
 			$("#createButton").on('click', function() {
 				$("#creaSalaForm").submit();
+                                
 			});
 		});
+                
+                $(document).ready(function() {	
+			$("#searchButton").on('click', function() {
+				$("#BuscaSalaForm").submit();
+                                window.location = '/salas?p=1&b='+$("#salaText").val();
+			});
+		});
+                
+                function almacenaDatos(pass, id)
+                {
+                    realpass=pass;
+                    idSala=id;
+                }
+                
+                $(document).ready(function() {	
+			$("#passButton").on('click', function() {
+                                var mipass = $("#inputPassword").val();
+
+				if(mipass == realpass)
+                                {
+                                    window.location = "/salajuego?id="+idSala;
+                                }
+                                else
+                                {
+                                    alert(mipass+", "+realpass);
+                                }
+			});
+		});
+                
+                function changeTipo(elm)
+                {
+                    var num = elm.selectedIndex;
+                    
+                    if(elm.options[num].text == 'Puntos')
+                    {
+                         $("#Puntos").attr('class', 'control-group')
+                         //$("#Rondas").attr('class', 'control-group hide')
+                    }
+                    else
+                    {
+                        // $("#Rondas").attr('class', 'control-group')
+                         $("#Puntos").attr('class', 'control-group hide')
+                    }
+                   
+                }
+                
+                function activaPass(est)
+                {
+                    if (est.checked)
+                    {
+                        $("#inputPass").removeAttr("disabled")
+                    }
+                    else
+                    {
+                        $("#inputPass").attr('disabled', 'disabled')
+                    }
+                }
 	</script>
 	
 {% endblock %}
@@ -83,48 +145,48 @@
 
 	<div class="row">
 		<div class="span12">
-			<div class="row">
-				<div class="span12">
-					<a class="btn btn-inverse pull-right" data-toggle="modal" href="#myModal" ><i class="icon-plus icon-white"></i> Crear Sala</a>
-				</div>
-			</div>
+                        <div class="row">
+                            <div class="span12">
+                                <form class="well form-search" id="BuscaSalaForm" action="/salas?p=1" method="get">
+                                    <button href="#" id="searchButton" class="btn pull-right">Buscar</button>
+                                    <input type="text" id="salaText" name="salaText" class="input-medium search-query pull-right">
+                                    {% if user %}
+                                        <a class="btn btn-inverse" data-toggle="modal" href="#myModal" ><i class="icon-plus icon-white"></i> Crear Sala</a>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </div>
 			<div class="row">
 				<div class="span10 offset1">
 					<div class="accordion" id="accordion2">
-						
-						{% for sala in salas_list %}
-						
-						{% endfor %}
-						
-						
 						{% for sala in salas_list %}
 						<div class="accordion-group">
-							<div class="accordion-heading">
-								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+							<div class="accordion-heading" style="background-color: #E6E6E6;">
+								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{sala.key}}">
 								{{sala.nombre}}
+                                                                <i class="icon-plus-sign pull-right"></i>
+                                                                {% if sala.password %}
+                                                                <i class="icon-eye-close pull-right"></i>
+                                                                {% endif %}
 								</a>
 							</div>
-							<div id="collapseOne" class="accordion-body collapse" style="height: 0px; ">
+							<div id="collapse{{sala.key}}" class="accordion-body collapse" style="height: 0px; ">
 								<div class="accordion-inner">
-									Demo de aspecto de salas. Aquí los datos de la sala
-									<a href="/salajuego?id={{sala.idSala}}">Entrar</a>
+									<p><i class="icon-star"></i> {{sala.autor}}</p>
+                                                                        <p><i class="icon-time"></i> {{sala.fechaCrea.hour}}:{{sala.fechaCrea.minute}}</p>
+                                                                        <p><i class="icon-flag"></i> {{sala.tipo}}</p>
+                                                                        <p><i class="icon-user"></i> {{sala.players}}/10</p>
+                                                                        {% if user %}
+                                                                            {% if sala.password %}
+                                                                                <p><a class="btn btn-success" onclick='almacenaDatos("{{sala.password}}", "{{sala.idSala}}");' data-toggle="modal" href="#passModal"><i class="icon-arrow-right icon-white"></i> Entrar </a></p>
+                                                                            {% else %}
+                                                                                <p><a class="btn btn-success" href="/salajuego?id={{sala.idSala}}"><i class="icon-arrow-right icon-white"></i> Entrar </a></p>
+                                                                            {% endif %}
+                                                                        {% endif %}
 								</div>
 							</div>
 						</div>
 						{% endfor %}				
-										
-						<!--
-						<div class="Sala">
-							<div class="rowNomb">{{sala.nombre}}<img src="/img/ListadoPartidas/unlock.png" alt="Estado" /></div>
-							<div class="bodyRow">
-								<div class="rowAutor"><img src="/img/ListadoPartidas/master.png" alt="Master" /> {{sala.autor}}</div>
-								<div class="rowFecha"><img src="/img/ListadoPartidas/fecha.png" alt="Fecha de creacion" /> {{sala.fechaCrea.hour}}:{{sala.fechaCrea.minute}}</div>
-								<div class="rowTipo"><img src="/img/ListadoPartidas/tipo.png" alt="Tipo" />Pictionary</div>
-								<div class="rowPlayers"><img src="/img/ListadoPartidas/players.png" alt="Jugadores" />{{sala.players}}/10</div>
-								<div class="rowEnter"><a href="/salajuego?id={{sala.idSala}}">Entrar</a></div>
-							</div>
-						</div>
-						-->
 					</div>
 				</div>
 			</div>		
@@ -134,7 +196,28 @@
 
 
 
-
+<div class="modal hide fade" id="passModal">
+    <div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3>Atencion! Esta sala tiene password</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="inputPass">Password</label>
+                    <div class="controls">
+                            <input type="text" name="password" id="inputPassword">
+                    </div>
+                </div>               
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">Cancelar</a>
+            <a href="#" class="btn btn-primary" id="passButton">Entrar</a>
+    </div>	
+</div>
 
 
 
@@ -154,26 +237,68 @@
 		<form class="form-horizontal" id="creaSalaForm" action="/salas?p=1" method="post">
 			<fieldset>
 				<div class="control-group">
-					<label class="control-label" for="inputPalabra">Nombre</label>
+					<label class="control-label" for="inputNombre">Nombre</label>
 					<div class="controls">
-						<input type="text" name="nombre" id="inputPalabra">
+						<input type="text" name="nombre" id="inputNombre">
 						<!-- <span class="help-inline">---</span> -->
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="inputTema">Password</label>
+					<label class="control-label" for="inputPass">Password</label>
 					<div class="controls">
-						<input type="text" name="password" id="inputTema" disabled="disabled">
+						<input type="text" name="password" id="inputPass" disabled="disabled">
+						<label class="checkbox">
+                                                    <input type="checkbox" onclick='activaPass(this);'> Activar
+                                                </label>
+					</div>
+				</div>
+                                
+                                <div class="control-group">
+                                    <label class="control-label" for="select01">Tipo de juego</label>
+                                    <div class="controls">
+                                      <select name="tipo" id="select01" onchange='changeTipo(this);'>
+                                        <option>Puntos</option>
+                                        <option>Rondas</option>
+                                      </select>
+                                      <span class="help-inline"> ¿Tienes <a href="/">dudas</a>? </span> 
+                                    </div>
+                                </div>
+                                
+                                <div class="control-group" id="Puntos">
+					<label class="control-label" for="inputPuntos">Num. de puntos</label>
+					<div class="controls">
+						<input type="text" name="puntos" id="inputTema">
 						<!-- <span class="help-inline">---</span> -->
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="inputTema">Tipo</label>
+
+                                <!--<div class="control-group hide" id="Rondas">
+					<label class="control-label" for="inputRondas">Num. de rondas</label>
 					<div class="controls">
-						<input type="text" name="tema" id="inputTema" disabled="disabled">
-						<!-- <span class="help-inline">---</span> -->
+						<input type="text" name="tema" id="inputTema">
+						<!-- <span class="help-inline">---</span> 
 					</div>
-				</div>
+                                </div> -->
+                                
+                                <div class="control-group">
+                                    <label class="control-label" for="select02">Temática</label>
+                                    <div class="controls">
+                                      <select name="tema" id="select02">
+                                        <option>Ninguna</option>
+                                        <option>Animales</option>
+                                        <option>Playa</option>
+                                      </select>
+                                    </div>
+                                </div>
+                                
+                                <!--<div class="control-group">
+					<label class="control-label" for="inputTiempo">Tiempo</label>
+					<div class="controls">
+						<input type="text" name="tiempo" id="inputTiempo">
+						<span class="help-inline">00:00:00</span>
+					</div>
+				</div>-->
+                                
 				<div class="form-actions hide">
 					<button type="submit" class="btn btn-primary">Crear sala</button>
 				</div>
