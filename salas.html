@@ -4,6 +4,10 @@
 
 {% block script %}
 	<script>
+            
+                var realpass;
+                var idSala;
+                
 		$(document).ready(function() {	
 			$("#createButton").on('click', function() {
 				$("#creaSalaForm").submit();
@@ -15,6 +19,27 @@
 			$("#searchButton").on('click', function() {
 				$("#BuscaSalaForm").submit();
                                 window.location = '/salas?p=1&b='+$("#salaText").val();
+			});
+		});
+                
+                function almacenaDatos(pass, id)
+                {
+                    realpass=pass;
+                    idSala=id;
+                }
+                
+                $(document).ready(function() {	
+			$("#passButton").on('click', function() {
+                                var mipass = $("#inputPassword").val();
+
+				if(mipass == realpass)
+                                {
+                                    window.location = "/salajuego?id="+idSala;
+                                }
+                                else
+                                {
+                                    alert(mipass+", "+realpass);
+                                }
 			});
 		});
                 
@@ -140,8 +165,10 @@
 								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{sala.key}}">
 								{{sala.nombre}}
                                                                 <i class="icon-plus-sign pull-right"></i>
+                                                                {% if sala.password %}
+                                                                <i class="icon-eye-close pull-right"></i>
+                                                                {% endif %}
 								</a>
-                                                                
 							</div>
 							<div id="collapse{{sala.key}}" class="accordion-body collapse" style="height: 0px; ">
 								<div class="accordion-inner">
@@ -149,7 +176,13 @@
                                                                         <p><i class="icon-time"></i> {{sala.fechaCrea.hour}}:{{sala.fechaCrea.minute}}</p>
                                                                         <p><i class="icon-flag"></i> {{sala.tipo}}</p>
                                                                         <p><i class="icon-user"></i> {{sala.players}}/10</p>
-                                                                        <p><a class="btn btn-success" href="/salajuego?id={{sala.idSala}}"><i class="icon-arrow-right icon-white"></i> Entrar </a></p>
+                                                                        {% if user %}
+                                                                            {% if sala.password %}
+                                                                                <p><a class="btn btn-success" onclick='almacenaDatos("{{sala.password}}", "{{sala.idSala}}");' data-toggle="modal" href="#passModal"><i class="icon-arrow-right icon-white"></i> Entrar </a></p>
+                                                                            {% else %}
+                                                                                <p><a class="btn btn-success" href="/salajuego?id={{sala.idSala}}"><i class="icon-arrow-right icon-white"></i> Entrar </a></p>
+                                                                            {% endif %}
+                                                                        {% endif %}
 								</div>
 							</div>
 						</div>
@@ -163,7 +196,28 @@
 
 
 
-
+<div class="modal hide fade" id="passModal">
+    <div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3>Atencion! Esta sala tiene password</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" id="creaSalaForm" action="/salas?p=1" method="post">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="inputPass">Password</label>
+                    <div class="controls">
+                            <input type="text" name="password" id="inputPassword">
+                    </div>
+                </div>               
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">Cancelar</a>
+            <a href="#" class="btn btn-primary" id="passButton">Entrar</a>
+    </div>	
+</div>
 
 
 
@@ -185,7 +239,7 @@
 				<div class="control-group">
 					<label class="control-label" for="inputNombre">Nombre</label>
 					<div class="controls">
-						<input type="text" name="nombre" id="inputPalabra">
+						<input type="text" name="nombre" id="inputNombre">
 						<!-- <span class="help-inline">---</span> -->
 					</div>
 				</div>
