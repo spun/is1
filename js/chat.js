@@ -14,7 +14,7 @@ var ChatZone = {
 
 		if(self.config.form.find("input").val() != "")
 		{	
-			sendMessage(self.config.urlChat , self.config.form.find("input").val());
+			self.config.sender(self.config.urlChat , self.config.form.find("input").val());
 			self.config.form.find("input").val("")
 		}
 	},

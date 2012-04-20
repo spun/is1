@@ -1,3 +1,47 @@
+
+var Broadcast = {
+	init: function( config ) {
+		
+		this.config = config;
+		this.channel = new goog.appengine.Channel(this.config.state.token);
+		this.socket = this.channel.open();
+		
+		this.bindEvents();		
+	},
+	
+	bindEvents: function() {
+		var self = Broadcast;
+		this.socket.onopen = function() {
+			self.config.onopen();
+		};
+		this.socket.onmessage = function(m) {
+			self.config.onmessage(m);
+		};
+		this.socket.onerror = function() {
+			console.log('# Socket error');
+		};
+		this.socket.onclose = function() {
+			console.log('# Socket closed');
+		};		
+	},
+	
+	sendMessage: function(path, opt_param) {
+		var self = Broadcast;
+		path += '?g=' + self.config.state.game_key;
+		if (opt_param) {
+			path += '&d=' + opt_param;
+		}
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', path, true);
+		xhr.send();
+	}
+};
+
+
+
+
+/*
+
 channel = new goog.appengine.Channel('{{ token }}');
 				socket = channel.open();
 				socket.onopen = function() {
@@ -76,3 +120,4 @@ channel = new goog.appengine.Channel('{{ token }}');
 					xhr.send();
 				};
 
+*/

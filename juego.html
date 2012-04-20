@@ -4,177 +4,20 @@
 
 
 {% block script %}
-		<script type="text/javascript" src='/_ah/channel/jsapi'></script>
-		<script type="text/javascript" src='js/blackboard.js'></script>
-		<script type="text/javascript" src='js/chat.js'></script>
-		
-		<script type="text/javascript">
-			var state = {
-				token: '{{ token }}',
-				game_key: '{{ game_key }}',
-				user_key: '{{ user.key }}'
-			};
-
-			$(document).ready(function(){
-
-				/*channel = new goog.appengine.Channel('{{ token }}');
-				socket = channel.open();
-				socket.onopen = function() {
-					console.log("onopen");
-					sendMessage("http://localhost:8080/gamebroadcast/load", "None");
-				};
-				socket.onmessage = function(m) {
-					dat = JSON.parse(m.data)
-					if(dat.type == "chat")
-					{
-						ChatZone.receiveMessage(dat.content);
-					}
-					else if(dat.type == "draw")
-					{
-						BlackBoard.drawFromCoord(dat.content)
-					}
-					else if(dat.type == "winner")
-					{
-						ChatZone.reportWinner(dat.content);
-					}
-					else if(dat.type == "infoGame")
-					{
-						console.log(dat);
-						BlackBoard.context.clearRect(0, 0, 600, 500);
-						if(dat.content.drawing == true)
-						{
-							$("#wordZone").text(dat.content.word);
-						}
-						else
-						{
-							var tam = dat.content.word;
-							$("#wordZone").text("");
-							for(i=0; i<tam; i++)
-							{							
-								var t = $("#wordZone").text();
-								$("#wordZone").text(t+"_ ");
-							}
-						}
-						$("#wordZone").slideDown();						
-						$("#"+dat.content.painter).css("borderColor", "#09f")
-						
-						if(state.user_key == dat.content.painter)
-						{
-							$("#myCanvas").css("borderColor", "#6DBA00");
-							BlackBoard.lock(false);
-						}
-						else
-						{
-							BlackBoard.lock(true);
-						}
-						
-						IniciarCrono();
-					}
-					else if (dat.type == "finish")
-					{
-						$("#myCanvas").css("borderColor", "#FF5100");
-						BlackBoard.lock(true);
-						sendMessage("http://localhost:8080/gamebroadcast/load", "New");
-					}
-
-				};
-				socket.onerror = function() {
-					console.log("onerror");
-				};
-				socket.onclose = function() {
-					console.log("onclose");
-				};
-
-				sendMessage = function(path, opt_param) {
-					path += '?g=' + state.game_key;
-					if (opt_param) {
-						path += '&d=' + opt_param;
-					}
-					var xhr = new XMLHttpRequest();
-					xhr.open('POST', path, true);
-					xhr.send();
-				};
-
-*/
-
-				
-
-
-				BlackBoard.init({
-					board: $('#myCanvas'),
-					urlDraw: 'http://localhost:8080/gamebroadcast/draw'
-				});
-
-				ChatZone.init({
-					history: $('#chatZone-history'),
-					form: $('#chatZone-form'),
-					urlChat: 'http://localhost:8080/gamebroadcast/chat'
-				});
-			});
-			
-			//CRONOMETRO  
-			/*var CronoID = null  
-			var CronoEjecutandose = false  
-			var decimas, segundos, minutos  
-			  
-			function DetenerCrono (){  
-				if(CronoEjecutandose)  
-					clearTimeout(CronoID)  
-				CronoEjecutandose = false  
-			}  
-			  
-			function InicializarCrono () {  
-				//inicializa contadores globales  
-				decimas = 9 
-				segundos = 29  
-				minutos = 0  
-				  
-				//pone a cero los marcadores  
-				document.crono.display.value = '00:30:00'  
-			}  
-			  
-			function MostrarCrono () {  
-						 
-				//incrementa el crono  
-				decimas--
-				
-				if ( decimas < 0 )
-				{  
-					decimas = 9  
-					segundos--
-					if ( segundos < 0 )
-					{  
-						segundos = 59  
-						minutos--  
-						if ( minutos < 0 )
-						{  
-							DetenerCrono()
-							sendMessage("http://localhost:8080/gamebroadcast/crono", "None");
-							return true  
-						}  
-					}  
-				}  
-			  
-				//configura la salida  
-				var ValorCrono = ""  
-				ValorCrono = (minutos < 10) ? "0" + minutos : minutos  
-				ValorCrono += (segundos < 10) ? ":0" + segundos : ":" + segundos  
-				ValorCrono += ":" + decimas   
-						  
-				document.crono.display.value = ValorCrono  
-			  
-				CronoID = setTimeout("MostrarCrono()", 100)  
-				CronoEjecutandose = true  
-				return true  
-			}  
-			  
-			function IniciarCrono () {  
-				DetenerCrono()  
-				InicializarCrono()  
-				MostrarCrono()  
-			}  */
-
-		</script>		
+	<script type="text/javascript" src='/_ah/channel/jsapi'></script>
+	<script type="text/javascript">
+		var state = {
+			token: '{{ token }}',
+			game_key: '{{ game_key }}',
+			user_key: '{{ user.key }}'
+		};		
+	</script>
+	<script type="text/javascript" src='js/broadcast.js'></script>
+	<script type="text/javascript" src='js/blackboard.js'></script>
+	<script type="text/javascript" src='js/chat.js'></script>
+	<script type="text/javascript" src='js/juego.js'></script>
+	
+	
 
 {% endblock %}
 
@@ -230,7 +73,46 @@
 		<div class="span12">
 		Level 1 of column
 			<div class="row">
-				<div class="span2">Level 2</div>
+				<div class="span2">Level 2
+						<h3>Palabra</h3>
+						<p id="wordZone"></p>
+						<h3>Jugadores</h3>
+						<ul>
+						{% for userBlock in users_playing %}
+							<li id="{{ userBlock.user.key }}">
+								<p>
+									<a href="/perfil?user={{userBlock.user.nick}}" title="Ir al perfil de {{userBlock.user.nick}}">{{ userBlock.user.nick }}</a>
+								</p>
+								<p>
+									<b>Ptos:</b>
+									<span class="userScore"> {{userBlock.ptos}}</span>
+								</p>
+							</li>
+						{% endfor %}
+						</ul>
+						<div id="timeZone">
+							<h3>Tiempo</h3>
+							<form id="timer-form" name="crono">  
+							<p><input type="text" size="8" name="display" value="01:30:0"></p>
+							</form>
+						</div>	
+					<p id="toRojo" > Rojo</p>
+					<p id="toAzul" > Azul</p>
+					<p id="toAmarillo" > Amarillo</p>
+					<p id="toNegro" > Negro</p>
+					<p id="toVerde" > Verde</p>
+					<p id="toMarron" > Marron</p>
+					<p id="toNaranja" > Naranja</p>
+					<p id="toGris" > Gris</p>
+					<p id="toLila" > Lila</p>
+					<p id="toTres" > 3</p>
+					<p id="toCinco" > 5</p>
+					<p id="toDiez" > 10</p>
+					<p id="toVeinte" > 20</p>
+					<p id="toLapiz" > Lapiz</p>
+					<p id="toRectangulo" > Rectangulo</p>
+				
+				</div>
 				<div class="span8">
 					<canvas id="myCanvas" width="600" height="500" style="border: 1px solid red">
 					</canvas>
@@ -250,7 +132,9 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="span8 offset2">Level 3</div>
+				<div class="span8 offset2">	Level 3
+
+				</div>
 			</div>
 		</div>
 	</div>
