@@ -70,40 +70,79 @@ BlackBoard.init({
 	urlDraw: location.host+'/gamebroadcast/draw'
 });
 
-	$("#toRojo").on("click", function() {
+
+
+	$('#colorPicker-btn').on('click', function(e) {
+		$(this).popover('toggle');
+		e.preventDefault();
+	});
+	
+	
+	var colorPickerContent = '<ul id="colorPicker">';
+	colorPickerContent += '<li id="toRojo" style="background-color: #FF0000" ></li>';
+	colorPickerContent += '<li id="toAzul" style="background-color: #09f" ></li>';
+	colorPickerContent += '<li id="toAmarillo" style="background-color: #FFFF00" ></li>';
+	colorPickerContent += '<li id="toNegro" style="background-color: #000000" ></li>';
+	colorPickerContent += '<li id="toVerde" style="background-color: #00FF00" ></li>';
+	colorPickerContent += '<li id="toMarron" style="background-color: #8B6914" ></li>';
+	colorPickerContent += '<li id="toNaranja" style="background-color: #FFA500" ></li>';
+	colorPickerContent += '<li id="toGris" style="background-color: #7F7F7F" ></li>';
+	colorPickerContent += '<li id="toLila" style="background-color: #A020F0" ></li>';
+	colorPickerContent += '</ul>';
+	
+
+	$('#colorPicker-btn').popover({
+		placement: 'right',
+
+		trigger: 'manual',
+		content: colorPickerContent
+	});
+
+
+
+	$("#toRojo").live("click", function() {
 		BlackBoard.setColor("#FF0000");
+		$('#colorPicker-btn').popover('hide');
 	});
 	
-	$("#toAzul").on("click", function() {
+	$("#toAzul").live("click", function() {
 		BlackBoard.setColor("#09f");
+		$('#colorPicker-btn').popover('hide');
 	});
 	
-	$("#toAmarillo").on("click", function() {
+	$("#toAmarillo").live("click", function() {
 		BlackBoard.setColor("#FFFF00");
+		$('#colorPicker-btn').popover('hide');
 	});
 	
-	$("#toNegro").on("click", function() {
+	$("#toNegro").live("click", function() {
 		BlackBoard.setColor("#000000");
+		$('#colorPicker-btn').popover('hide');
 	});
 	
-	$("#toVerde").on("click", function() {
+	$("#toVerde").live("click", function() {
 		BlackBoard.setColor("#00FF00");
+		$('#colorPicker-btn').popover('hide');
 	});
 	
-	$("#toMarron").on("click", function() {
+	$("#toMarron").live("click", function() {
 		BlackBoard.setColor("#8B6914");
+		$('#colorPicker-btn').popover('hide');
 	});
 	
-	$("#toNaranja").on("click", function() {
+	$("#toNaranja").live("click", function() {
 		BlackBoard.setColor("#FFA500");
+		$('#colorPicker-btn').popover('hide');
 	});
 	
-	$("#toGris").on("click", function() {
+	$("#toGris").live("click", function() {
 		BlackBoard.setColor("#7F7F7F");
+		$('#colorPicker-btn').popover('hide');
 	});
 	
-	$("#toLila").on("click", function() {
+	$("#toLila").live("click", function() {
 		BlackBoard.setColor("#A020F0");
+		$('#colorPicker-btn').popover('hide');
 	});
 
 	$("#toTres").on("click", function() {
@@ -122,13 +161,22 @@ BlackBoard.init({
 		BlackBoard.setThickness(20);
 	});
 
-	$("#toLapiz").on("click", function() {
+	$("#toLapiz").on("click", function(e) {
 		BlackBoard.setTool('pencil');
+		$("#toLapiz").addClass('active');
+		$("#toRectangulo").removeClass('active');
+		e.preventDefault();
 	});
 	
-	$("#toRectangulo").on("click", function() {
+	$("#toRectangulo").on("click", function(e) {
 		BlackBoard.setTool('rectangle');
+		$("#toRectangulo").addClass('active');
+		$("#toLapiz").removeClass('active');
+		e.preventDefault();
 	});
+	
+	
+	
 
 $(document).ready(function(){
 

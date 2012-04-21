@@ -57,7 +57,7 @@ var BlackBoard = {
 	initTools: function() {
 		this.tools.pencil = new Pencil(BlackBoard);
 		this.tools.rectangle = new Rectangle(this);
-		this.tool = this.tools.rectangle;
+		this.tool = this.tools.pencil;
 	},
 	
 	setTool: function(toolName) {
@@ -65,7 +65,8 @@ var BlackBoard = {
 	},
 	
 	bindEvents: function() {
-		$(this.canvasRender).on('mousedown', this.ev_canvas);
+		var self = BlackBoard;
+		$(this.canvasRender).on('mousedown', function(e) {self.ev_canvas(e); return false;});
 		$(this.canvasRender).on('mouseleave', this.ev_canvas);
 		$(document).on('mouseup', this.ev_canvas);
 		$(this.canvasRender).on('mousemove', this.ev_canvas);
@@ -166,7 +167,6 @@ function Rectangle(board) {
 				w = Math.abs(ev._x - tool.x0),
 				h = Math.abs(ev._y - tool.y0);
 
-		console.log(tool.board);
 		tool.board.renderContext.clearRect(0, 0, tool.board.canvasRender.width, tool.board.canvasRender.height);
 
 		if (!w || !h) {
@@ -180,8 +180,7 @@ function Rectangle(board) {
 		if (tool.started) {
 			tool.mousemove(ev);
 			tool.started = false;
-			tool.board.img_update();
-			
+			tool.board.img_update();			
 		}
 	};
 }

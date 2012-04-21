@@ -1,0 +1,497 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+input[type="text"], input[type="password"], textarea {
+	-webkit-border-radius: 5px;
+	-webkit-box-shadow: 1px 1px 5px -1px rgba(0, 0, 0, 0.25) inset;
+	background-color: white;
+	border: 1px solid #B9B9B9;
+	margin: 2px 0 10px 0;
+	padding: 3px 3px 3px 5px;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+	border: 1px solid #00C3FF;
+	outline: none;
+}
+
+input[type="submit"] {
+	padding: 0 5px;
+}
+
+input[disabled="disabled"] {
+	background-color: #BFBFBF;
+}
+
+a {
+    color:#09F;
+    text-decoration: none;
+}
+a:hover {
+    color: #2ea8ff;
+    text-decoration: underline;
+}
+
+a:visited {
+    color:#D45CE1;
+    text-decoration: none;
+}
+
+body {
+	font-family: Arial, Verdana, Georgia, sans-serif;
+	vertical-align: top;
+	background-color: #EDFFDF;
+	height: 100%;
+	
+}
+
+#logo {
+	color: gray;
+	font-size: 1.4em;
+}
+
+#container {
+
+	overflow: hidden;
+
+}
+
+#header {
+	padding: 20px;
+	overflow: hidden;
+	box-shadow: 0px 0px 15px #636363;
+	border-top: 4px solid #FFCF00;
+	background-color: #fff;
+	margin-bottom: 20px;
+}
+
+a#login-button, a#profile-button {
+	border-radius: 3px;
+	border: 1px solid #C6C6C6;
+	padding: 8px 10px;
+	text-decoration: none;
+	font-size: 0.9em;
+	color: black;
+	float: right;
+	height: 15px;
+	width: 100px;
+	text-align: center;
+}
+
+a#login-button:hover, a#profile-button:hover {
+	border: 1px solid #00C3FF;
+}
+a#login-button:active, a#profile-button:active {
+	border: 1px solid #09f;
+}
+
+a#login-button img, a#profile-button img {
+	float: left;
+}
+
+#login-menu {
+	padding: 20px;
+	background-color: white;
+	position: absolute;
+	top: 64px;
+	right: 20px;
+	border: 1px solid #C6C6C6;
+	border-radius: 5px;
+	border-top-right-radius: 0;
+	display: none;
+	font-size: 0.8em;
+}
+
+
+
+.wrap_center {
+	width: 960px;
+	margin: 0 auto;
+}
+
+#main-content {
+	background-color: #fff;
+	padding: 40px;
+	box-shadow: 0px 0px 15px #636363;
+	border-top: 4px solid #92FF0B;
+	min-height: 400px;
+	margin-top: 20px;
+	overflow: hidden;
+	margin-bottom: 10px; 
+	font-size: 0.9em;
+}
+
+h2 {
+	color: gray;
+	border-bottom: 1px solid silver;
+	padding-left: 5px;
+	margin-bottom: 20px;
+	font-size: 1.6em;
+}
+
+ul {
+	list-style: none;
+}
+
+/*################Listar Salas###################*/
+
+#ListaSalasBody {
+	padding:20px;
+}
+
+#formSalas {
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	position: fixed;
+	top: 0;
+	left: 0;
+	opacity: 0.6;
+	display: none;
+}
+
+
+#formSalasBox {
+	background-color: white;
+	width: 300px;
+	margin: 20% auto;
+	padding: 30px;
+	border-top: 4px solid red;
+	display: none;
+
+}
+
+#ListaSalas {
+	float:left;
+	padding: 0px 0px 0px 80px;
+	width: 100%;
+}
+
+#nuevaSala {
+	width: 100%;
+	margin: 0 0px 20px 0px;
+}
+
+#buttons.modal {
+	float: right;
+}
+
+#listaPaginas {
+	padding: 0 0 0 100;
+}
+
+#prevArrow {
+	float: left;
+	position: relative;
+	width: 40%;
+	padding: 0px 0px 0px 0px;
+	margin: 0 0 0 0;
+}
+
+#numPags {
+	float:left;
+	position: relative;
+	width: 10%;
+	text-align: center;
+	padding: 0 60 0 0;
+	color: #454545;
+}
+
+#nextArrow {
+	text-align: right;
+	float: left;
+	position: relative;
+	width: 33%;
+	padding: 0px 0px 0px 0px;
+}
+
+.Sala {
+	float:left;
+	width: 100px;
+	height: 125px;
+	padding: 10 10 10 10;
+	margin: 10 5 10 10;
+	box-shadow: 0px 0px 10px #20A4FF;
+	border: 1px solid silver;
+	border-radius: 5px;
+	-webkit-transition: box-shadow 0.3s;
+}
+
+.Sala:hover {
+	box-shadow: 0px 0px 40px #85FF20;
+}
+
+.rowEstado {
+	padding: 0 0 0 10;
+	float: left;
+}
+
+.bodyRow {
+	font-size: small;
+	color: #424242;
+}
+
+.bodyRow img {
+	margin-right: 5px;
+}
+
+.rowImage {
+	text-align: center;
+	margin: 5 0 20 0;
+}
+
+.rowNomb {
+	font-size: small;
+	text-align: center;
+	font-weight: bold;
+	border-bottom: 1px solid silver;
+	margin: 0 0 10 0;
+	color: #848484;
+}
+
+.rowNomb img{
+	float: right;
+}
+
+.rowAutor {
+	
+}
+.rowFecha {
+	font: #00C3FF;
+}
+.rowTipo {
+	
+}
+.rowPlayers {
+	
+}
+.rowEstado {
+	
+}
+
+.rowEnter {
+	text-align: center;
+	font-size: 1.1em;
+	font-weight: bold;
+	margin-top: 10px;
+	font: #00C3FF;	
+}
+.rowEnter img {
+	width: 30px;
+}
+
+
+#buttons a, #buttons button{
+    margin:0 7px 0 0;
+    background-color:#f5f5f5;
+    border:1px solid #dedede;
+    border-top:1px solid #eee;
+    border-left:1px solid #eee;
+    font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
+    font-size:12px;
+    line-height:130%;
+    text-decoration:none;
+    font-weight:bold;
+    color:#565656;
+    cursor:pointer;
+    padding:5px 10px 6px 7px; /* Links */
+}
+#buttons button{
+    width:auto;
+    overflow:visible;
+    padding:4px 10px 3px 7px; /* IE6 */
+}
+#buttons button[type]{
+    padding:5px 10px 5px 7px; /* Firefox */
+    line-height:17px; /* Safari */
+}
+*:first-child+html button[type]{
+    padding:4px 10px 3px 7px; /* IE7 */
+}
+#buttons button img, .buttons a img{
+    margin:0 3px -3px 0 !important;
+    padding:0;
+    border:none;
+    width:16px;
+    height:16px;
+}
+
+#mask {
+  position:absolute;
+  z-index:9000;
+  background-color:#848484;
+  display:none;
+  left:-25%;
+  top: -23%;
+}
+ 
+
+
+/*##################Sala de juego#############*/
+
+#salaJuegoContent {
+	width: 100%;
+}
+
+#salaJuegoUsers {
+	float:left;
+	width: 78%;
+	height: 50%;
+	margin: 0px 9px 0px 0px;
+	border: 1px solid silver;
+	border-top-left-radius: 5px;
+}
+
+#salaJuegoChat {
+	text-align: center;
+	float: left;
+	width: 20%;
+	height: 50%;
+	border: 1px solid silver;
+	border-top-right-radius: 5px;
+}
+
+#salaJuegoChatIn {
+	float:left;
+	width: 78%;
+	height: 70px;
+	margin: 10px 9px 0px 0px;
+	border: 1px solid silver;
+	border-bottom-left-radius: 5px;
+	
+}
+
+#salaPlay {
+	float:left;
+	width: 20%;
+	height: 50px;
+	margin: 10px 0px 0px 0px;
+	border: 1px solid silver;
+	text-align: center;
+	font-size: larger;
+	font-weight: bold;
+	padding: 20px 0px 0px 0px;
+	border-bottom-right-radius: 5px;
+}
+
+#playerContainer {
+	float: left;
+	position: relative;
+	margin: 8px 2px 0px 8px;
+	padding: 10px;
+	font-size: small;
+	box-shadow: inset 0px 0px 8px #A7A7A7;
+	border-radius: 5px;
+	-webkit-transition: box-shadow 0.3s;
+}
+
+#playerContainer:hover {
+	box-shadow: inset 0px 0px 25px #45B5FF;
+}
+
+#playerAvatar {
+	padding: 2px 2px 2px 2px;
+	float: left;
+	position: relative;
+}
+
+#playerDatos {
+	padding: 2px 2px 2px 2px;
+	float: left;
+	position: relative;
+}
+
+
+/*################## PERFIL #############*/
+
+#perfil {
+	overflow: hidden;
+}
+
+#perfil img
+{
+	float: right;
+	padding: 3px;
+	border: 1px solid gray;
+	width: 100px;
+}
+
+#avatar
+{
+	margin: 25px;
+	float: left;
+}
+
+#userdata label
+{
+	margin: 20px;
+	
+}
+
+#userdata span
+{
+	font-weight: bold;
+	color: #2D2D2D;
+}
+
+
+
+/*#######################INDICE##################*/
+
+#bodyIndex {
+	text-align: center;
+	padding: 30px 0px 0px 50px;
+	float: left;
+	position:relative;
+}
+
+.botonIndex {
+	float: left;
+	postion:relative;
+	margin: 0px 40px 0px 30px;
+	border-radius: 5px;
+	background-color: #F2F2F2;
+	overflow: hidden;
+}
+
+.botonIndex img {
+	position: relative;
+	opacity: 0.3;
+	left: -40px;
+	width: 100px;
+	height: 100px;
+}
+
+.botonIndex span {
+	float: right;
+	margin: 50px 10px 0 0;
+	color: gray;
+	font-weight: bold;
+	font-size: 1.2em;
+	min-width: 90px;
+}
+
+
+#botonNewUser {
+	border: solid 1px #3ADF00;
+}
+
+#botonListado {
+	border: solid 1px #FE9A2E;
+}
+
+#botonAdmin {
+	border: solid 1px #0080FF;
+}
+
+a#logout-button img{
+	float:right;
+	border-radius: 3px;
+	text-align: center;
+	padding: 3px 3px 3px 3px;
+	margin: 0px 0px 0px 2px;
+	width: 24px;
+	height: 24px;
+}
