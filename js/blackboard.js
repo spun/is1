@@ -28,6 +28,10 @@ var BlackBoard = {
 		this.renderContext.strokeStyle = "#09f";
 		this.renderContext.lineWidth   = 3;
 		this.renderContext.lineCap = 'round';
+
+		this.context.strokeStyle = "#09f";
+		this.context.lineWidth   = 3;
+		this.context.lineCap = 'round';
 	},
 	
 	createCanvasRender: function() {
@@ -66,10 +70,12 @@ var BlackBoard = {
 	
 	bindEvents: function() {
 		var self = BlackBoard;
-		$(this.canvasRender).on('mousedown', function(e) {self.ev_canvas(e); return false;});
-		$(this.canvasRender).on('mouseleave', this.ev_canvas);
-		$(document).on('mouseup', this.ev_canvas);
-		$(this.canvasRender).on('mousemove', this.ev_canvas);
+
+		this.canvasRender.addEventListener('mousedown', function(e) {self.ev_canvas(e); return false;}, false);
+		this.canvasRender.addEventListener('mouseup', self.ev_canvas, false);
+		this.canvasRender.addEventListener('mouseleave', self.ev_canvas, false);
+
+		this.canvasRender.addEventListener('mousemove', self.ev_canvas, false);
 	},
 	
 	ev_canvas: function(ev) {
@@ -87,8 +93,7 @@ var BlackBoard = {
 		var func = self.tool[ev.type];
 		if (func) {
 			func(ev);
-		}
-		
+		}		
 	},	
 	
 
@@ -110,14 +115,14 @@ var BlackBoard = {
 		var info = JSON.parse(a.data);
 		if(info.type=='rectangle')
 		{
-			this.context.strokeStyle = info.color;
+			this.context.strokeStyle = '#'+info.color;
 			this.context.lineWidth = info.thick;
 			this.context.lineCap = 'round';
 			this.context.strokeRect(info.coord.posOrigen.x, info.coord.posOrigen.y, info.coord.posFinal.x, info.coord.posFinal.y);
 		}
 		else if(info.type=='pencil')
 		{
-			this.context.strokeStyle = info.color;
+			this.context.strokeStyle = '#'+info.color;
 			this.context.lineWidth = info.thick;
 			this.context.lineCap = 'round';
 
@@ -167,11 +172,13 @@ function Pencil(board) {
 	this.mousemove = function (ev) {
 		if (tool.started) {
 			
-
-			tool.board.renderContext.lineTo(ev._x, ev._y);
-			tool.board.renderContext.stroke();
 			
 			if ((new Date().getTime() - tool.lastBufferTime) > 10) {
+
+				tool.board.renderContext.moveTo(tool.penDownPos.x, tool.penDownPos.y);
+				tool.board.renderContext.lineTo(ev._x, ev._y);
+				tool.board.renderContext.stroke();
+
 				var posOri = {x: tool.penDownPos.x, y: tool.penDownPos.y};	
 				var position = {x: ev._x, y: ev._y};	
 				var point = {posOrigen: posOri, posFinal: position};						

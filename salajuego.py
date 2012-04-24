@@ -62,11 +62,8 @@ class SalaJuego(webapp2.RequestHandler):
 
 
 				# Si el usuario identificado esta asignado al juego
-				
 				token = channel.create_channel(str(user.key()))
-				template_values = {'token': token,
-					'user': user,
-				}
+				
 				
 	
 			else:

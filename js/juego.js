@@ -70,7 +70,6 @@ ChatZone.init({
 
 BlackBoard.init({
 	board: $('#myCanvas'),
-	board2: $('#myCanvas2'),
 	urlDraw: 'http://'+location.host+'/gamebroadcast/draw',
 	sender: Broadcast.sendMessage
 });
