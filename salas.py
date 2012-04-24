@@ -27,19 +27,28 @@ class Salas(webapp2.RequestHandler):
 					#Si el usuario ya estaba en una sala lo redirigimos a ella
 					if user.idSala!="None":
 						self.redirect("/salajuego?id="+str(user.idSala))
-					
+				
+			
+			#Extraemos el numero de paginas que tiene el listado de salas
+			numPags=0
+			if SalasDB().getNumSalas()/8==0:
+				numPags=1
+			else:
+				numPags=(SalasDB().getNumSalas()/8)+1
+				
 			salas=SalasDB()		
 			
-			if self.request.get('b'):
-				cadena= urllib2.unquote(self.request.get('b'))
+			if self.request.get('salaText'):
+				cadena= urllib2.unquote(self.request.get('salaText'))
 				res=salas.ListarBusqueda(cadena)
+				numPags=1
 			else:
 				res=salas.ListarSalas()
 			#Listamos las salas que hay por acada pagina
 			i=0
 			res2 =[]
 			for sala in res:
-				if i>=(int(self.request.get('p'))-1)*12 and i<(int(self.request.get('p')))*12:
+				if i>=(int(self.request.get('p'))-1)*8 and i<(int(self.request.get('p')))*8:
 					res = UserDB().getUsersBySala(sala.idSala)
 					sala.players = str(res.count())
 					res2.append(sala)
@@ -48,18 +57,13 @@ class Salas(webapp2.RequestHandler):
 				
 			template_values['salas_list'] = res2
 			
-			#Extraemos el numero de paginas que tiene el listado de salas
-			numPags=0
-			if SalasDB().getNumSalas()/12==0:
-				numPags=1
-			else:
-				numPags=(SalasDB().getNumSalas()/12)+1
-			
 			template_values['numSalas']=SalasDB().getNumSalas()
 			template_values['pags']= numPags
 			template_values['pag']=self.request.get('p')
-			template_values['nextPage']=int(self.request.get('p'))+1
-			template_values['prevPage']=int(self.request.get('p'))-1
+			template_values['nextPage']=int(self.request.get('p'))+2
+			template_values['prevPage']=int(self.request.get('p'))-2
+			template_values['next']=int(self.request.get('p'))+1
+			template_values['prev']=int(self.request.get('p'))-1
 			path = os.path.join(os.path.dirname(__file__), 'salas.html')
 			self.response.out.write(template.render(path, template_values))
 		
