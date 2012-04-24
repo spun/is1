@@ -1,5 +1,6 @@
 import os
 import webapp2
+import json
 
 from google.appengine.ext.webapp import template
 
@@ -101,7 +102,38 @@ class Salas(webapp2.RequestHandler):
 				self.redirect("/salas?p=1")
 		else:
 			self.redirect("/salas?p=1")
-	
 
-app = webapp2.WSGIApplication([('/salas', Salas)],
-                              debug=True)
+
+class BuscadorSalas(webapp2.RequestHandler):
+	def get(self):
+		salas=SalasDB()
+		messageRaw={}
+		if self.request.get('b'):
+			cadena= urllib2.unquote(self.request.get('b'))
+			res=salas.ListarBusqueda(cadena)
+		else:
+			res=salas.ListarSalas()
+		
+		for r in res:
+			messageRaw = {
+				"idSala": r.idSala, 
+				"content": {
+					"nombre": r.nombre,
+					"autor": r.autor,
+					"fechaCrea": str(r.fechaCrea.hour) + ":" + str(r.fechaCrea.minute),
+					"players": r.players,
+					"tipo": r.tipo,
+					"password": r.password
+					}
+				}
+			
+		
+
+		
+		message = json.dumps(messageRaw)
+		self.response.out.write(message)	
+		
+
+app = webapp2.WSGIApplication([('/salas', Salas),
+					('/busquedasalas', BuscadorSalas)],
+				debug=True)

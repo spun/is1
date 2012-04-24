@@ -10,8 +10,18 @@
                 
 		$(document).ready(function() {	
 			$("#createButton").on('click', function() {
-				$("#creaSalaForm").submit();
-                                
+                                var status = $("#Puntos").attr('class');
+                                if(status=='control-group')
+                                {
+                                    if($("#inputPuntos").val()!="")
+                                    {
+                                        $("#creaSalaForm").submit();
+                                    }
+                                }
+                                else
+                                {
+                                    $("#creaSalaForm").submit();
+                                }
 			});
 		});
                 
@@ -267,8 +277,8 @@
                                 <div class="control-group" id="Puntos">
 					<label class="control-label" for="inputPuntos">Num. de puntos</label>
 					<div class="controls">
-						<input type="text" name="puntos" id="inputTema">
-						<!-- <span class="help-inline">---</span> -->
+						<input type="text" value='0' name="puntos" id="inputPuntos">
+						<span class="help-inline" value="HOLA"></span>
 					</div>
 				</div>
 
