@@ -38,24 +38,25 @@ Broadcast.init({
 				}
 			}
 			$("#wordZone").slideDown();						
-			$("#"+dat.content.painter).css("borderColor", "#09f")
+			$(".userBlock").removeClass("active");
+			$("#"+dat.content.painter).addClass("active");
 			
 			if(state.user_key == dat.content.painter)
 			{
-				$("#myCanvas").css("borderColor", "#6DBA00");
-				//BlackBoard.lock(false);
+				$(BlackBoard.canvasRender).css("borderColor", "#6DBA00");
+				BlackBoard.lock(false);
 			}
 			else
 			{
-				//BlackBoard.lock(true);
+				BlackBoard.lock(true);
 			}
 			
 			IniciarCrono();
 		}
 		else if (dat.type == "finish")
 		{
-			$("#myCanvas").css("borderColor", "#FF5100");
-			// BlackBoard.lock(true);
+			$(BlackBoard.canvasRender).css("borderColor", "#FF5100");
+			BlackBoard.lock(true);
 			Broadcast.sendMessage("http://localhost:8080/gamebroadcast/load", "New");
 		}
 	}
@@ -141,6 +142,7 @@ BlackBoard.init({
 	
 	$("#toGris").live("click", function() {
 		BlackBoard.setColor("#7F7F7F");
+		$('#colorPicker-btn').css("background-color", "red");
 		$('#colorPicker-btn').popover('hide');
 	});
 	
@@ -149,20 +151,32 @@ BlackBoard.init({
 		$('#colorPicker-btn').popover('hide');
 	});
 
-	$("#toTres").on("click", function() {
+	$("#toTres").on("click", function(e) {
+		$(".thickBtn").removeClass('active');
+		$("#toTres").addClass('active');
 		BlackBoard.setThickness(3);
+		e.preventDefault();
 	});
 	
-	$("#toCinco").on("click", function() {
+	$("#toCinco").on("click", function(e) {
+		$(".thickBtn").removeClass('active');
+		$("#toCinco").addClass('active');
 		BlackBoard.setThickness(5);
+		e.preventDefault();
 	});
 	
-	$("#toDiez").on("click", function() {
+	$("#toDiez").on("click", function(e) {
+		$(".thickBtn").removeClass('active');
+		$("#toDiez").addClass('active');
 		BlackBoard.setThickness(10);
+		e.preventDefault();
 	});
 	
-	$("#toVeinte").on("click", function() {
+	$("#toVeinte").on("click", function(e) {		
+		$(".thickBtn").removeClass('active');
+		$("#toVeinte").addClass('active');
 		BlackBoard.setThickness(20);
+		e.preventDefault();
 	});
 
 	$("#toLapiz").on("click", function(e) {
@@ -179,6 +193,88 @@ BlackBoard.init({
 		e.preventDefault();
 	});
 	
+
+
+//CRONOMETRO  
+var CronoID = null  
+var CronoEjecutandose = false  
+var decimas, segundos, minutos  
+  
+function DetenerCrono (){  
+	if(CronoEjecutandose)  
+		clearTimeout(CronoID)  
+	CronoEjecutandose = false  
+}  
+  
+function InicializarCrono () {  
+	//inicializa contadores globales  
+	decimas = 9 
+	segundos = 29  
+	minutos = 0  
+	  
+	//pone a cero los marcadores  
+	document.crono.display.value = '00:30:00'  
+}  
+  
+function MostrarCrono () {  
+			 
+	//incrementa el crono  
+	decimas--
+	
+	if ( decimas < 0 )
+	{  
+		decimas = 9  
+		segundos--
+		if ( segundos < 0 )
+		{  
+			segundos = 59  
+			minutos--  
+			if ( minutos < 0 )
+			{  
+				DetenerCrono();
+				Broadcast.sendMessage('http://'+location.host+'/gamebroadcast/crono', "None");
+				return true;
+			}  
+		}  
+	}  
+  
+	//configura la salida  
+	var ValorCrono = ""  
+	ValorCrono = (minutos < 10) ? "0" + minutos : minutos  
+	ValorCrono += (segundos < 10) ? ":0" + segundos : ":" + segundos  
+	ValorCrono += ":" + decimas   
+			  
+	document.crono.display.value = ValorCrono  
+  
+	CronoID = setTimeout("MostrarCrono()", 100)  
+	CronoEjecutandose = true  
+	return true  
+}  
+  
+function IniciarCrono () {  
+	DetenerCrono()  
+	InicializarCrono()  
+	MostrarCrono()  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 	
 
@@ -274,65 +370,3 @@ $(document).ready(function(){
 ####### */
 	
 });
-
-//CRONOMETRO  
-var CronoID = null  
-var CronoEjecutandose = false  
-var decimas, segundos, minutos  
-  
-function DetenerCrono (){  
-	if(CronoEjecutandose)  
-		clearTimeout(CronoID)  
-	CronoEjecutandose = false  
-}  
-  
-function InicializarCrono () {  
-	//inicializa contadores globales  
-	decimas = 9 
-	segundos = 29  
-	minutos = 0  
-	  
-	//pone a cero los marcadores  
-	document.crono.display.value = '00:30:00'  
-}  
-  
-function MostrarCrono () {  
-			 
-	//incrementa el crono  
-	decimas--
-	
-	if ( decimas < 0 )
-	{  
-		decimas = 9  
-		segundos--
-		if ( segundos < 0 )
-		{  
-			segundos = 59  
-			minutos--  
-			if ( minutos < 0 )
-			{  
-				DetenerCrono();
-				Broadcast.sendMessage('http://'+location.host+'/gamebroadcast/crono', "None");
-				return true;
-			}  
-		}  
-	}  
-  
-	//configura la salida  
-	var ValorCrono = ""  
-	ValorCrono = (minutos < 10) ? "0" + minutos : minutos  
-	ValorCrono += (segundos < 10) ? ":0" + segundos : ":" + segundos  
-	ValorCrono += ":" + decimas   
-			  
-	document.crono.display.value = ValorCrono  
-  
-	CronoID = setTimeout("MostrarCrono()", 100)  
-	CronoEjecutandose = true  
-	return true  
-}  
-  
-function IniciarCrono () {  
-	DetenerCrono()  
-	InicializarCrono()  
-	MostrarCrono()  
-}

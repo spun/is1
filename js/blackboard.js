@@ -10,7 +10,7 @@ var BlackBoard = {
 		this.tools = {};
 
 		this.isPenDown = false;
-		this.penDownPos = {};
+		this.penDownPos = {};		
 
 		this.locked = false;
 		this.moves = [];
@@ -32,6 +32,10 @@ var BlackBoard = {
 		this.context.strokeStyle = "#09f";
 		this.context.lineWidth   = 3;
 		this.context.lineCap = 'round';
+	},
+	
+	lock: function(status) {
+		this.locked = status;		
 	},
 	
 	createCanvasRender: function() {
@@ -91,11 +95,10 @@ var BlackBoard = {
 
 		// Call the event handler of the tool.
 		var func = self.tool[ev.type];
-		if (func) {
+		if (func && self.locked==false) {
 			func(ev);
 		}		
 	},	
-	
 
 	setColor: function(newColor) {
 		this.renderContext.strokeStyle = newColor;	
@@ -111,31 +114,10 @@ var BlackBoard = {
 	},
 	
 	drawPoints: function(a) {
-		
+		var self = BlackBoard;
 		var info = JSON.parse(a.data);
-		if(info.type=='rectangle')
-		{
-			this.context.strokeStyle = '#'+info.color;
-			this.context.lineWidth = info.thick;
-			this.context.lineCap = 'round';
-			this.context.strokeRect(info.coord.posOrigen.x, info.coord.posOrigen.y, info.coord.posFinal.x, info.coord.posFinal.y);
-		}
-		else if(info.type=='pencil')
-		{
-			this.context.strokeStyle = '#'+info.color;
-			this.context.lineWidth = info.thick;
-			this.context.lineCap = 'round';
+		self.tools[info.type].drawFromData(info);
 
-			for (i in info.coord)
-			{
-				var path = info.coord[i].split(",");
-
-				this.context.beginPath();
-				this.context.moveTo(path[0], path[1])
-				this.context.lineTo(path[2], path[3]);
-				this.context.stroke();
-			}
-		}		
 	}
 };
 
@@ -148,6 +130,7 @@ function Pencil(board) {
 	this.penDownPos = {};
 	
 	this.bufferedPath = [];
+	
 	this.lastBufferTime = new Date().getTime();
 	this.broadcastPathIntervalID;
 
@@ -222,6 +205,34 @@ function Pencil(board) {
 		}
 		
 	};
+	
+	this.drawFromData = function(info) {
+		
+		tool.board.context.strokeStyle = '#'+info.color;
+		tool.board.context.lineWidth = info.thick;
+		tool.board.context.lineCap = 'round';
+
+		for (i in info.coord)
+		{
+			var path = info.coord[i].split(",");
+			
+			posOri = {x:parseInt(path[0]), y:parseInt(path[1])};
+			position = {x:parseInt(path[2]), y:parseInt(path[3])};
+		 
+			var point = {posOrigen: posOri, posFinal: position};			
+			tool.board.moves.unshift(point);	
+			setTimeout(tool.drawPoint, (i/2)*10);
+		}
+	};	
+		
+	this.drawPoint = function()	{
+		console.log("asd");
+		var datos = tool.board.moves.shift();
+		tool.board.context.beginPath();
+		tool.board.context.moveTo(datos.posOrigen.x, datos.posOrigen.y)
+		tool.board.context.lineTo(datos.posFinal.x, datos.posFinal.y);
+		tool.board.context.stroke();		
+	};		
 };
 
 
@@ -281,6 +292,14 @@ function Rectangle(board) {
 				tool.bufferedPath = [];
 			}
 		}
+	};
+	
+	this.drawFromData = function(info) {
+		
+		tool.board.context.strokeStyle = '#'+info.color;
+		tool.board.context.lineWidth = info.thick;
+		tool.board.context.lineCap = 'round';
+		tool.board.context.strokeRect(info.coord.posOrigen.x, info.coord.posOrigen.y, info.coord.posFinal.x, info.coord.posFinal.y);
 	};
 }
 

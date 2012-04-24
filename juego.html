@@ -6,16 +6,45 @@
 {% block head %}
 	<style>
 
+		#wordZone {
+			background-color: #FAFAD6;
+			border: 2px solid #F6D87D;
+			padding: 20px 10px;
+			text-align: center;
+			margin: 15px;
+			display: none;
+			border-radius: 3px;
+			font-weight: bold;
+			color: #FF8245;
+		}
+
+		#listUsers {
+			margin: 0;
+		}
+
+		.userBlock {
+			border: 1px solid silver;
+			list-style-type: none;
+			margin: 10px;
+			padding: 5px;
+			border-radius: 5px;
+		}
+		
+		.userBlock.active {
+			border: 1px solid #09f;
+			background-color: #DFF7F8;			
+		}
 
 		canvas, canvas:active, canvas:focus {
 			cursor: pointer;
 		}
+
 		#colorPicker {
 			margin:0;
 			list-style-type: none;
 			overflow: hidden;
 		}
-		
+
 		#colorPicker li {
 			border: 1px solid black;
 			width: 20px;
@@ -25,11 +54,63 @@
 			cursor: pointer;
 			opacity: 0.6;
 		}
-		
+
 		#colorPicker li:hover {
 			opacity: 1.0;
 		}
+
+		#chatZone-history {
+			border: 1px solid silver;
+			border-radius: 3px;
+			height: 476px;
+			margin-bottom: 5px;
+		}
+
+		#chatZone-history ul {
+			list-style: none;
+			font-size: 0.9em;
+			overflow: auto;
+			height: 466px;
+			width: 145px;
+			padding: 10px 0;
+			
+		}
+
+		#chatZone-history li {
+			margin: 5px 0;
+			color: #333333;
+		}
+
+		#chatZone-history li span {
+			font-weight: bold;
+			color: black;
+		}
+
+		#chatZone-history ul::-webkit-scrollbar {
+			width: 6px;
+		}
+		/* Track */
+		#chatZone-history ul::-webkit-scrollbar-track {
+			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+			-webkit-border-radius: 10px;
+			border-radius: 10px;
+		}
+
+		/* Handle */
+		#chatZone-history ul::-webkit-scrollbar-thumb {
+			-webkit-border-radius: 10px;
+			border-radius: 10px;
+			background: #EBEBEB;
+			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+		}
+
+		#chatZone-history ul::-webkit-scrollbar-thumb:hover {
+			background: #F5F5F5;
+		}
 		
+		#chatZone-form #appendedPrependedInput {
+			width: 128px;
+		}
 	</style>
 {% endblock %}
 
@@ -48,75 +129,26 @@
 	<script type="text/javascript" src='js/chat.js'></script>
 	<script type="text/javascript" src='js/juego.js'></script>
 	
-	
-
 {% endblock %}
-
-{% block content %}
-<div id="game-content">
-	<div id="usersZone">
-		<h3>Palabra</h3>
-		<p id="wordZone"></p>
-		<h3>Jugadores</h3>
-		<ul>
-		{% for userBlock in users_playing %}
-			<li id="{{ userBlock.user.key }}">
-				<p>
-					<a href="/perfil?user={{userBlock.user.nick}}" title="Ir al perfil de {{userBlock.user.nick}}">{{ userBlock.user.nick }}</a>
-				</p>
-				<p>
-					<b>Ptos:</b>
-					<span class="userScore"> {{userBlock.ptos}}</span>
-				</p>
-			</li>
-		{% endfor %}
-		</ul>
-		<div id="timeZone">
-			<h3>Tiempo</h3>
-			<form id="timer-form" name="crono">  
-			<p><input type="text" size="8" name="display" value="01:30:0"></p>
-			</form>
-		</div>			
-	</div>
-
-	<div id="drawZone">
-		<canvas id="myCanvas" width="600" height="500"></canvas>
-	</div>
-	<div id="chatZone">
-		<div id="chatZone-history">
-			<ul>				
-			</ul>
-		</div>
-		<form id="chatZone-form">
-			<input type="text" placeholder="Respuesta | mensaje" />
-		</form>
-
-	</div>
-</div>
-
-{% endblock %}
-
-
 
 
 {% block container %}
 	<div class="row">
 		<div class="span12">
-		Level 1 of column
 			<div class="row">
-				<div class="span2">Level 2
+				<div class="span2">
 						<h3>Palabra</h3>
 						<p id="wordZone"></p>
 						<h3>Jugadores</h3>
-						<ul>
+						<ul id="listUsers">
 						{% for userBlock in users_playing %}
-							<li id="{{ userBlock.user.key }}">
+							<li class="userBlock" id="{{ userBlock.user.key }}">
 								<p>
 									<a href="/perfil?user={{userBlock.user.nick}}" title="Ir al perfil de {{userBlock.user.nick}}">{{ userBlock.user.nick }}</a>
 								</p>
 								<p>
 									<b>Ptos:</b>
-									<span class="userScore"> {{userBlock.ptos}}</span>
+									<span class="badge badge-warning">{{userBlock.ptos}}</span>
 								</p>
 							</li>
 						{% endfor %}
@@ -124,37 +156,42 @@
 						<div id="timeZone">
 							<h3>Tiempo</h3>
 							<form id="timer-form" name="crono">  
-							<p><input type="text" size="8" name="display" value="01:30:0"></p>
+							<p><input type="text" class="span2"  size="8" name="display" value="01:30:0"></p>
 							</form>
-						</div>	
-					
-					<p id="toTres" > 3</p>
-					<p id="toCinco" > 5</p>
-					<p id="toDiez" > 10</p>
-					<p id="toVeinte" > 20</p>
-				
+						</div>					
 				</div>
 				<div class="span8">
 					<div style = "width:605px; margin:auto">
 						<canvas id="myCanvas" width="600" height="500" style="border: 1px solid silver">
 						</canvas>
-						<div class="btn-group">
-							<a class="btn active" href="#" id="toLapiz"><i class="icon-pencil"></i></a>
-							<a class="btn" href="#" id="toRectangulo"><i class="icon-stop"></i></a>
-							<a class="btn" href="#" id="colorPicker-btn"><i class="icon-tint"></i></a>
+						<div class="btn-toolbar">
+							<div class="btn-group">
+								<a class="btn btn-info disabled" href="#">Formas</a>
+								<a class="btn active" href="#" id="toLapiz" title="Lapiz"><i class="icon-pencil"></i></a>
+								<a class="btn" href="#" id="toRectangulo" title="Rectangulo"><i class="icon-stop"></i></a>
+							</div>
+							<div class="btn-group">
+								<a class="btn btn-info disabled" href="#">Color</a>
+								<a class="btn" href="#" id="colorPicker-btn"><i class="icon-tint"></i></a>
+							</div>
+							<div class="btn-group">
+								<a class="btn btn-info disabled" href="#">Grosor</a>
+								<a class="btn active thickBtn" href="#" id="toTres">1</a>
+								<a class="btn thickBtn" href="#" id="toCinco">2</a>
+								<a class="btn thickBtn" href="#" id="toDiez">3</a>
+								<a class="btn thickBtn" href="#" id="toVeinte">4</a>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="span2" style="background-color: orange">
+				<div class="span2">
 					<div id="chatZone-history">
 						<ul>				
 						</ul>
 					</div>
 					<form class="form-horizontal" id="chatZone-form">
 						<fieldset>
-							<div class="input-append">
-								<input class="span" id="appendedPrependedInput" style="width: 120px" size="6" type="text"><button class="btn" type="button">></button>
-							</div>
+							 <input type="text" class="span2" placeholder="Respuesta | mensaje">
 						</fieldset>
 					</form>					
 				</div>
