@@ -15,6 +15,10 @@ Broadcast.init({
 		{
 			ChatZone.reportWinner(dat.content);
 		}
+		else if(dat.type == "draw")
+		{
+			BlackBoard.drawPoints(dat.content);
+		}
 		else if(dat.type == "infoGame")
 		{
 			console.log(dat);
@@ -67,7 +71,8 @@ ChatZone.init({
 BlackBoard.init({
 	board: $('#myCanvas'),
 	board2: $('#myCanvas2'),
-	urlDraw: location.host+'/gamebroadcast/draw'
+	urlDraw: 'http://'+location.host+'/gamebroadcast/draw',
+	sender: Broadcast.sendMessage
 });
 
 

@@ -89,8 +89,7 @@ var BlackBoard = {
 			func(ev);
 		}
 		
-	},
-	
+	},	
 	
 
 	setColor: function(newColor) {
@@ -104,6 +103,34 @@ var BlackBoard = {
 	img_update: function() {
 		this.context.drawImage(this.canvasRender, 0, 0);
 		this.renderContext.clearRect(0, 0, this.canvasRender.width, this.canvasRender.height);
+	},
+	
+	drawPoints: function(a) {
+		
+		var info = JSON.parse(a.data);
+		if(info.type=='rectangle')
+		{
+			this.context.strokeStyle = info.color;
+			this.context.lineWidth = info.thick;
+			this.context.lineCap = 'round';
+			this.context.strokeRect(info.coord.posOrigen.x, info.coord.posOrigen.y, info.coord.posFinal.x, info.coord.posFinal.y);
+		}
+		else if(info.type=='pencil')
+		{
+			this.context.strokeStyle = info.color;
+			this.context.lineWidth = info.thick;
+			this.context.lineCap = 'round';
+
+			for (i in info.coord)
+			{
+				var path = info.coord[i].split(",");
+
+				this.context.beginPath();
+				this.context.moveTo(path[0], path[1])
+				this.context.lineTo(path[2], path[3]);
+				this.context.stroke();
+			}
+		}		
 	}
 };
 
@@ -113,6 +140,11 @@ function Pencil(board) {
 	var tool = this;
 	this.board = board;
 	this.started = false;
+	this.penDownPos = {};
+	
+	this.bufferedPath = [];
+	this.lastBufferTime = new Date().getTime();
+	this.broadcastPathIntervalID;
 
 	// This is called when you start holding down the mouse button.
 	// This starts the pencil drawing.
@@ -120,8 +152,15 @@ function Pencil(board) {
 		tool.board.renderContext.beginPath();
 		tool.board.renderContext.moveTo(ev._x, ev._y);
 		tool.started = true;
+		
+		tool.penDownPos.x = ev._x;
+		tool.penDownPos.y = ev._y;
+		
+		clearInterval(tool.broadcastPathIntervalID);
+		tool.broadcastPathIntervalID = setInterval(tool.sendData, 600);
 	};
 
+	
 	// This function is called every time you move the mouse. Obviously, it only 
 	// draws if the tool.started state is set to true (when you are holding down 
 	// the mouse button).
@@ -131,6 +170,16 @@ function Pencil(board) {
 
 			tool.board.renderContext.lineTo(ev._x, ev._y);
 			tool.board.renderContext.stroke();
+			
+			if ((new Date().getTime() - tool.lastBufferTime) > 10) {
+				var posOri = {x: tool.penDownPos.x, y: tool.penDownPos.y};	
+				var position = {x: ev._x, y: ev._y};	
+				var point = {posOrigen: posOri, posFinal: position};						
+				tool.bufferedPath.push(point);
+				
+				tool.penDownPos.x = ev._x;
+				tool.penDownPos.y = ev._y;	
+			}
 		}
 	};
 
@@ -142,6 +191,30 @@ function Pencil(board) {
 			tool.board.img_update();
 		}
 	};
+	
+	this.sendData = function (ev) {
+		if (!tool.started) {
+			clearInterval(tool.broadcastPathIntervalID);
+		}
+		
+		if(tool.bufferedPath != [])
+		{					
+			var data = new Object;
+			data['type'] = 'pencil';
+			data['color'] = tool.board.renderContext.strokeStyle.replace("#", "");
+			data['thick'] = tool.board.renderContext.lineWidth;
+			data['coord'] = [];
+			var c;
+			while (c = tool.bufferedPath.pop())
+			{
+				data['coord'].push(c.posOrigen.x + "," + c.posOrigen.y + "," + c.posFinal.x + "," + c.posFinal.y);
+			}
+
+			tool.board.config.sender(tool.board.config.urlDraw, JSON.stringify(data));
+			tool.bufferedPath = [];
+		}
+		
+	};
 };
 
 
@@ -150,6 +223,7 @@ function Rectangle(board) {
 	var tool = this;
 	this.started = false;
 	this.board = board;
+	this.bufferedPath = [];
 
 	this.mousedown = function (ev) {
 		tool.started = true;
@@ -174,13 +248,31 @@ function Rectangle(board) {
 		}
 
 		tool.board.renderContext.strokeRect(x, y, w, h);
+		
+		var posOri = {x: x, y: y};
+		var position = {x: w, y: h};
+	
+		var point = {posOrigen: posOri, posFinal: position};						
+		tool.bufferedPath.push(point);	
 	};
 
 	this.mouseup = function (ev) {
 		if (tool.started) {
 			tool.mousemove(ev);
 			tool.started = false;
-			tool.board.img_update();			
+			tool.board.img_update();	
+			
+			if(tool.bufferedPath != [])
+			{
+				var ultimo = tool.bufferedPath.pop();
+				var data = new Object;
+				data['type'] = 'rectangle';
+				data['color'] = tool.board.renderContext.strokeStyle.replace("#", "");
+				data['thick'] = tool.board.renderContext.lineWidth;
+				data['coord'] = ultimo;
+				tool.board.config.sender(tool.board.config.urlDraw, JSON.stringify(data));
+				tool.bufferedPath = [];
+			}
 		}
 	};
 }

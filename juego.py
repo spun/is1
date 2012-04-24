@@ -174,7 +174,7 @@ class GameBroadcastDraw(webapp2.RequestHandler):
 				messageRaw = {
 				"type": "draw", 
 				"content": {
-					"coord": cgi.escape(self.request.get('d'))						
+					"data": cgi.escape(self.request.get('d'))						
 					}
 				}				
 				message = json.dumps(messageRaw)
