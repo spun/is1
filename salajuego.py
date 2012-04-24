@@ -2,12 +2,17 @@ import os
 import webapp2
 
 from google.appengine.ext.webapp import template
+from google.appengine.api import channel
 
 import session
 from BD.clases import SalasDB
 from BD.clases import UserDB
 from BD.clases import UsersInGameDB
 from BD.clases import GameDB
+from BD.clases import UsersInGame
+from BD.clases import Game
+from BD.clases import Sala
+from BD.clases import User
 
 class SalaJuego(webapp2.RequestHandler):
 	def get(self):
@@ -36,7 +41,8 @@ class SalaJuego(webapp2.RequestHandler):
 			
 			
 			#Comprobamos si la sala existe
-			if SalasDB().getSalaById(self.request.get('id')):
+			sala = SalasDB().getSalaById(self.request.get('id'))
+			if sala:
 				#Si el usuario aun no esta asociado a las sala lo asociamos
 				if user and user.idSala=="None" and UsersInGameDB().UserExist(user)==False:
 					user.idSala=self.request.get('id')
@@ -52,13 +58,29 @@ class SalaJuego(webapp2.RequestHandler):
 				#Listamos los usuarios en la sala
 				user_list=users.getUsersBySala(self.request.get('id'))
 				template_values['user_list']=user_list
+
+
+
+				# Si el usuario identificado esta asignado al juego
+				
+				token = channel.create_channel(str(user.key()))
+				template_values = {'token': token,
+					'user': user,
+				}
+				
+	
 			else:
 				self.redirect('/')
-				
+
+
+
+
 			path = os.path.join(os.path.dirname(__file__), 'salajuego.html')
 			self.response.out.write(template.render(path, template_values))
 		else:
 			self.redirect("/salas?p=1")
+
+
 
 app = webapp2.WSGIApplication([('/salajuego', SalaJuego)],
                               debug=True)

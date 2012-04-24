@@ -2,6 +2,42 @@
 
 {% block title %}Salas{% endblock %}
 
+{% block script %}
+	<script type="text/javascript" src='/_ah/channel/jsapi'></script>
+	<script type="text/javascript">
+		var state = {
+			token: '{{ token }}',
+			game_key: '{{ game_key }}',
+			user_key: '{{ user.key }}'
+		};		
+	</script>
+	<script type="text/javascript" src='js/broadcast.js'></script>
+	<script type="text/javascript" src='js/chat.js'></script>
+	<script type="text/javascript">
+		
+		Broadcast.init({
+			state: state,	// Declarado en juego.html
+			onopen: function() {
+				console.log('# Socket open');
+			},
+			onmessage: function(m) {
+				dat = JSON.parse(m.data);
+				console.log(dat);
+				ChatZone.receiveMessage(dat.content);		
+			}				
+		});
+
+		ChatZone.init({
+			history: $('#chatZone-history'),
+			form: $('#chatZone-form'),
+			urlChat: 'http://'+location.host+'/salaBroadcast/chat',
+			sender: Broadcast.sendMessage
+		});		
+	</script>
+
+{% endblock %}
+
+
 {% block content %}
 
     <div id="salaJuegoContent">
@@ -35,7 +71,17 @@
             {% endfor %}
 		</div>
 		<div class="span3">
-			2
+			<div id="chatZone-history">
+				<ul>				
+				</ul>
+			</div>
+			<form class="form-horizontal" id="chatZone-form">
+				<fieldset>
+					<div class="input-append">
+						<input class="span" id="appendedPrependedInput" style="width: 120px" size="6" type="text"><button class="btn" type="button">></button>
+					</div>
+				</fieldset>
+			</form>	
 		</div>
 	</div>
 	
