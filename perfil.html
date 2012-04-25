@@ -64,24 +64,31 @@
 						<div class="span9">
 							{% if user %}
 								{% if user != userProfile %}
-									<a href="/perfil?user={{userProfile.nick}}&amistad=0">Pedir amistad</a>
+									{% if not isAmigo %}
+										<a class="btn btn-info" href="/perfil?user={{userProfile.nick}}&amistad=0"><i class="icon-heart icon-white"></i> Pedir amistad</a>
+									{% else %}
+										<h3>Ya sois amigos</h3>
+									{% endif %}
 								{% endif %}
 							{% endif %}
 							
 							{% if user %}
 								{% if user == userProfile %}
-									<h4> Peticiones </h4>
+									<h2> Peticiones </h2>
 									{% for p in listaPeticiones %}
 										<form class="well">
-											<p>{{p.amigo.nick}}
-											<a class="btn btn-success" href="/perfil?user={{userProfile.nick}}&aceptar={{p.amigo.nick}}"><i class="icon-ok icon-white"></i></a>
-											<a class="btn btn-danger" href="/perfil?user={{userProfile.nick}}&denegar={{p.amigo.nick}}"><i class="icon-remove icon-white"></i></a>
+											<h3><a href="/perfil?user={{p.amigo.nick}}">{{p.amigo.nick}}</a>
+											<a class="btn btn-success btn-mini" href="/perfil?user={{userProfile.nick}}&aceptar={{p.amigo.nick}}"><i class="icon-ok icon-white"></i></a>
+											<a class="btn btn-danger btn-mini" href="/perfil?user={{userProfile.nick}}&denegar={{p.amigo.nick}}"><i class="icon-remove icon-white"></i></a></h3>
 										</form>
 									{%endfor%}
-									<h4> Lista </h4>
+									<hr></hr>
+									<h2> Lista </h2>
 									{% for p in listaAmigos %}
-										<p>{{p.amigo.nick}}</p>
-										<a href="/perfil?user={{userProfile.nick}}&eliminar={{p.amigo.nick}}">Eliminar</a>
+										<form class="well">
+											<h3><a href="/perfil?user={{p.amigo.nick}}">{{p.amigo.nick}}</a>
+											<a class="btn btn-danger btn-mini" href="/perfil?user={{userProfile.nick}}&eliminar={{p.amigo.nick}}"><i class="icon-remove-sign icon-white"></i></a></h3>
+										</form>
 									{%endfor%}
 								{% endif %}
 							{% endif %}
@@ -98,13 +105,20 @@
 				<div class="span12">
 					<div class="row">
 						<div class="span9">
-							<p><b> Total: </b>{{userProfile.ptos}} </p>
-							<p><h4>Ultimas partidas</h4></p>
+							<form class="well">
+								<h6>Total</h6>
+								<h1>{{userProfile.ptos}} ptos</h1> 
+							</form>
+							<hr></hr>
+							<p><h2>Últimas partidas</h2></p>
 							{% for p in listaPartidas %}
-								<p>{{p.nombrePartida}} {{p.ptos}}
-								{% if p.win %}
-									Win
-								{% endif %}</p>
+								<form class="well">
+									<h4>{{p.nombrePartida}}</h4>
+									<h5>{{p.ptos}}</h5>
+									{% if p.win %}
+										<p><i class="icon-star-empty icon-white"></i></p>
+									{% endif %}
+								</form>
 							{%endfor%}
 						</div>
 						<div class="span3">

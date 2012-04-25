@@ -16,6 +16,7 @@ class Perfil(webapp2.RequestHandler):
 		listaPartidas = None
 		listaAmigos = None
 		listaPeticiones = None
+		isAmigo = False;
 		
 		self.sess = session.Session('enginesession')
 		if self.sess.load():
@@ -41,9 +42,11 @@ class Perfil(webapp2.RequestHandler):
 					amigo = UserDB().getUserByNick(cgi.escape(self.request.get('eliminar')))
 					AmigosDB().EliminarAmistad(user, amigo)
 					self.redirect('/perfil')
-					
+		
 		if self.request.get('user'):
 			userProfile = UserDB().getUserByNick(cgi.escape(self.request.get('user')))
+			if self.sess.load():
+				isAmigo = AmigosDB().isAmigo(user, self.request.get('user'))
 		
 		listaPartidas = PartidasJugadasDB().ObtenerLista(userProfile)	
 		if userProfile:
@@ -52,6 +55,7 @@ class Perfil(webapp2.RequestHandler):
 			template_values['listaPartidas'] = listaPartidas
 			template_values['listaAmigos'] = listaAmigos
 			template_values['listaPeticiones'] = listaPeticiones
+			template_values['isAmigo'] = isAmigo
 			path = os.path.join(os.path.dirname(__file__), 'perfil.html')
 			self.response.out.write(template.render(path, template_values))
 		else:

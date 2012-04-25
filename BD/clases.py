@@ -381,5 +381,13 @@ class AmigosDB:
 		a.amigo=amigo
 		a.aceptado=False
 		a.put()
-		
-
+	
+	def isAmigo(self, user, amigo):
+		q = Amigos.all()
+		q.filter("user =", amigo)
+		q.filter("amigo =", user)
+		res = q.count()
+		if res>0:
+			return True
+		else:
+			return False
