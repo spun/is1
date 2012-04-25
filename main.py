@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 import webapp2
 
@@ -14,7 +16,13 @@ class MainPage(webapp2.RequestHandler):
 		if self.sess.load():
 			user = UserDB().getUserByKey(self.sess.user)
 			template_values['user'] = user
-			
+		
+		if self.request.get('a')=="0":
+			template_values['successMsg'] = {
+				"title": "Registro completado.",
+				"text": "¡Bienvenido! Ya puedes identificarte desde el formulario de login y empezar a jugar."
+			}
+		
 		path = os.path.join(os.path.dirname(__file__), 'index.html')
 		self.response.out.write(template.render(path, template_values))
 

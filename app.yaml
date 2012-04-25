@@ -38,6 +38,9 @@ handlers:
 - url: /salas
   script: salas.app
 
+- url: /salabroadcast/.*
+  script: salas.app
+
 - url: /busquedasalas
   script: salas.app
 

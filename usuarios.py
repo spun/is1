@@ -30,33 +30,57 @@ class Registro(webapp2.RequestHandler):
 		userCtrl = UserDB()
 		user = userCtrl.getUserByNick(cgi.escape(self.request.get('user')))
 		
+		error = False;
+		errorMsg = "";
 		if(self.request.get('user') == ""):
-			self.response.out.write("<br/>* Error:* El campo usuario no puede estar vacio")
-		else:	
+			error = True
+			errorMsg += "El campo usuario no puede estar vacio."
+		else:			
 			if(user):
-				self.response.out.write("<br/>* Error:* El usuario "+ cgi.escape(self.request.get('user')+" ya existe"))
+				error = True
+				errorMsg += "El nombre de usuario ya existe."
 			else:
 				contra = self.request.get('contra')
 				contra2 = self.request.get('contra2')
 				if(contra == "" or contra2 == ""):
-					self.response.out.write("<br/>* Los password no pueden estar vacios")
+					error = True
+					errorMsg += "Los campos de contraseña no pueden estar vacios."
 				else:
 					if(contra != contra2):
-						self.response.out.write("<br/>* Los passwords no coinciden")
+						error = True
+						errorMsg += "Los campos de contraseña no son iguales."
 					else:
 						mail = self.request.get('mail')
 						if(mail == ""):
-							self.response.out.write("<br/>* Error:* El campo mail no puede estar vacio")
+							error = True
+							errorMsg += "El campo de email no puede estar vacio."
 						else:
 							mail = userCtrl.getUserByMail(cgi.escape(self.request.get('mail')))
 							
-							if(mail):
-								self.response.out.write("<br/>* Error:* La direccion de correo ya esta siendo utilizada por otro usuario")
-							else:
-								userCtrl.AddUser(cgi.escape(self.request.get('user')), cgi.escape(self.request.get('contra')), cgi.escape(self.request.get('mail')))
-								self.response.out.write("<br/>Registro completado")
-																							
-								self.redirect('/')								
+							if(mail):		
+								error = True
+								errorMsg += "La direccion de correo ya esta siendo utilizada por otro usuario."
+		
+		if error == True:			
+			template_values = {}
+		
+			# Extraemos el usuario de la sesion 
+			self.sess = session.Session('enginesession')
+			if self.sess.load():
+				user = UserDB().getUserByKey(self.sess.user)
+				template_values['user'] = user
+			
+			template_values['errorMsg'] = {
+				"title": "Ocurrió un error al completar el registro.",
+				"text": errorMsg
+			}
+			
+			path = os.path.join(os.path.dirname(__file__), 'registro.html')
+			self.response.out.write(template.render(path, template_values))
+
+		else:				
+			userCtrl.AddUser(cgi.escape(self.request.get('user')), cgi.escape(self.request.get('contra')), cgi.escape(self.request.get('mail')))									
+			self.redirect('/?a=0')							
 								
 			
 class Login(webapp2.RequestHandler):
