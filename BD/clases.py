@@ -211,6 +211,10 @@ class GameDB:
 		game = Game.get(game.key())
 		palabra = None
 		p = Palabras.all()
+		miSala = SalasDB().getSalaById(game.idSala)
+		if miSala.tematica!="Ninguna":
+			p.filter("tema =", miSala.tematica)
+		
 		if p.count() != 0:
 			n = random.randint(0, p.count()-1)
 			listapalabra = Palabras().all()
@@ -305,6 +309,12 @@ class UsersInGameDB:
 		res = inGame.count()
 		return res
 
+	def getPuntos(self, user):
+		inGame = UsersInGame.all()
+		inGame.filter("user =", user)
+		res = inGame.get()
+		return res.ptos
+
 class PalabrasDB:
 
 	def AddPalabra(self, nomPalabra, temaPalabra):
@@ -337,6 +347,7 @@ class PartidasJugadasDB:
 	def  ObtenerLista(self, user):
 		q = PartidasJugadas.all()
 		q.filter("user =", user)
+		q.filter("ptos !=", 0)
 		results = q.fetch(20)
 		return results
 	

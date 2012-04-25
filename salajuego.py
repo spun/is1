@@ -13,6 +13,7 @@ from BD.clases import UsersInGame
 from BD.clases import Game
 from BD.clases import Sala
 from BD.clases import User
+from BD.clases import PartidasJugadasDB
 
 class SalaJuego(webapp2.RequestHandler):
 	def get(self):
@@ -52,9 +53,17 @@ class SalaJuego(webapp2.RequestHandler):
 					inGame = UsersInGameDB()
 					inGame.AddUserInGame(user, game)
 				
+				#Guardamos la partida en la lista de partidas
+				miSala = SalasDB().getSalaById(self.request.get('id'))
+				misPuntos = UsersInGameDB().getPuntos(user)
+				PartidasJugadasDB().setPartida(user, miSala.nombre, misPuntos, False)
+				#Cambiamos el estado del usuario
+				UsersInGameDB().changeState(user, "sala")
 				#Obtenemos el id del juego asociado a la sala
 				game = GameDB().getGameBySala(self.request.get('id'))
 				template_values['gamekey']=game.key()
+				#Ponemos la puntuacion parcial del usuario a 0
+				UsersInGameDB().scoreReset(user)
 				#Listamos los usuarios en la sala
 				user_list=users.getUsersBySala(self.request.get('id'))
 				template_values['user_list']=user_list

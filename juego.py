@@ -12,6 +12,8 @@ from BD.clases import Game
 from BD.clases import GameDB
 from BD.clases import UsersInGame
 from BD.clases import UsersInGameDB
+from BD.clases import Sala
+from BD.clases import SalasDB
 from BD.clases import Palabras
 
 
@@ -216,26 +218,45 @@ class GameBroadcastLoad(webapp2.RequestHandler):
 
 					results = users_by_game.fetch(30)
 
-					for r in results:	
-						if r.user.key() != game.dibujante.key():
-							messageRaw = {
-							"type": "infoGame", 
-							"content": {
-								"drawing": False,
-								"word": len(game.palabra.palabra),
-								"painter": str(game.dibujante.key())
-								}
-							}		
+					#Comprobamos el tipo de juego
+					fin=False
+					miSala = SalasDB().getSalaById(idSala)
+					if miSala.tipo=="Puntos":
+						#Comprobamos si algun jugador ha llegado a la puntuacion
+						for r in results:
+							if r.ptos >= miSala.numPuntos:
+								fin = True
+					else:
+						if miSala.tipo=="Rondas":
+							na=0
+					
+					for r in results:
+						if fin == False:
+							if r.user.key() != game.dibujante.key():
+								messageRaw = {
+								"type": "infoGame", 
+								"content": {
+									"drawing": False,
+									"word": len(game.palabra.palabra),
+									"painter": str(game.dibujante.key())
+									}
+								}		
+							else:
+								messageRaw = {
+								"type": "infoGame", 
+								"content": {
+									"drawing": True,
+									"word": game.palabra.palabra,
+									"painter": str(game.dibujante.key())
+									}
+								}	
 						else:
 							messageRaw = {
-							"type": "infoGame", 
+							"type": "finPartida", 
 							"content": {
-								"drawing": True,
-								"word": game.palabra.palabra,
-								"painter": str(game.dibujante.key())
+								"Fin": True
 								}
-							}	
-
+							}								
 						message = json.dumps(messageRaw)	
 						channel.send_message(str(r.key()), message)
 						
