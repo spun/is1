@@ -21,7 +21,7 @@ Broadcast.init({
 		}
 		else if(dat.type == "infoGame")
 		{
-			console.log(dat);
+			//console.log(dat);
 			BlackBoard.context.clearRect(0, 0, 600, 500);
 			if(dat.content.drawing == true)
 			{
@@ -59,6 +59,10 @@ Broadcast.init({
 			$(BlackBoard.canvasRender).css("borderColor", "#FF5100");
 			//BlackBoard.lock(true);
 			Broadcast.sendMessage("http://localhost:8080/gamebroadcast/load", "New");
+		}
+		else if (dat.type == "finPartida")
+		{
+			window.location.replace("/salas");
 		}
 	}
 });

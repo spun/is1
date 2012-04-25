@@ -52,6 +52,10 @@ class SalaJuego(webapp2.RequestHandler):
 					inGame = UsersInGameDB()
 					inGame.AddUserInGame(user, game)
 				
+				#Ponemos la puntuacion parcial del usuario a 0
+				UsersInGameDB().scoreReset(user)
+				#Cambiamos el estado del usuario
+				UsersInGameDB().changeState(user, "sala")
 				#Obtenemos el id del juego asociado a la sala
 				game = GameDB().getGameBySala(self.request.get('id'))
 				template_values['gamekey']=game.key()
