@@ -30,6 +30,7 @@
 		<li class="active"><a href="#perfil" data-toggle="tab">Perfil</a></li>
 		<li><a href="#amigos" data-toggle="tab">Amigos</a></li>
 		<li><a href="#puntuaciones" data-toggle="tab">Puntuaciones</a></li>
+		<li><a href="#mensajes" data-toggle="tab">Mensajes</a></li>
 	</ul>
 
 	<div class="tab-content">
@@ -129,8 +130,122 @@
 				</div>
 			</div>
 		</div>
+		<div class="tab-pane" id="mensajes">
+			<div class="row">
+				<div class="span12">
+					<div class="row">
+						<div class="span9">
+							<form class="well">
+								<h6>Total</h6>
+								<h1>{{userProfile.ptos}} ptos</h1> 
+							</form>
+							<hr></hr>
+							<p><h2>Últimas partidas</h2></p>
+							{% for p in listaPartidas %}
+								<form class="well">
+									<h4>{{p.nombrePartida}}</h4>
+									<h5>{{p.ptos}}</h5>
+									{% if p.win %}
+										<p><i class="icon-star-empty icon-white"></i></p>
+									{% endif %}
+								</form>
+							{%endfor%}
+						</div>
+						<div class="span3">
+							<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>		
 	</div>
 
+<!--div class="modal hide fade" id="myModal">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3>Crear nueva sala</h3>
+	</div>
+	<div class="modal-body">
+	
+		<form class="form-horizontal" id="creaSalaForm" action="/salas?p=1" method="post">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label" for="inputNombre">Nombre</label>
+					<div class="controls">
+						<input type="text" name="nombre" id="inputNombre">
+						<!-- <span class="help-inline">***</span> -->
+					<!--/div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputPass">Password</label>
+					<div class="controls">
+						<input type="text" name="password" id="inputPass" disabled="disabled">
+						<label class="checkbox">
+                                                    <input type="checkbox" onclick='activaPass(this);'> Activar
+                                                </label>
+					</div>
+				</div>
+                                
+                                <div class="control-group">
+                                    <label class="control-label" for="select01">Tipo de juego</label>
+                                    <div class="controls">
+                                      <select name="tipo" id="select01" onchange='changeTipo(this);'>
+                                        <option>Puntos</option>
+                                        <option>Rondas</option>
+                                      </select>
+                                      <span class="help-inline"> ¿Tienes <a href="/">dudas</a>? </span> 
+                                    </div>
+                                </div>
+                                
+                                <div class="control-group" id="Puntos">
+					<label class="control-label" for="inputPuntos">Num. de puntos</label>
+					<div class="controls">
+						<input type="text" value='0' name="puntos" id="inputPuntos">
+						<span class="help-inline" value="HOLA"></span>
+					</div>
+				</div>
+
+                                <!--<div class="control-group hide" id="Rondas">
+					<label class="control-label" for="inputRondas">Num. de rondas</label>
+					<div class="controls">
+						<input type="text" name="tema" id="inputTema">
+						<span class="help-inline">***</span> 
+					</div>
+                                </div> -->
+                                
+                                <!--div class="control-group">
+                                    <label class="control-label" for="select02">Temática</label>
+                                    <div class="controls">
+                                      <select name="tema" id="select02">
+                                        <option>Ninguna</option>
+                                        <option>Animales</option>
+                                        <option>Playa</option>
+                                      </select>
+                                    </div>
+                                </div>
+                                
+                                <!--<div class="control-group">
+					<label class="control-label" for="inputTiempo">Tiempo</label>
+					<div class="controls">
+						<input type="text" name="tiempo" id="inputTiempo">
+						<span class="help-inline">00:00:00</span>
+					</div>
+				</div>>
+                                
+				<div class="form-actions hide">
+					<button type="submit" class="btn btn-primary">Crear sala</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">Cancelar</a>
+		<a href="#" class="btn btn-primary" id="createButton">Crear sala</a>
+	</div>	
+</div-->
+	
+	
+	
 
 {% endblock %}
 
