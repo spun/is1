@@ -13,12 +13,7 @@ var BlackBoard = {
 		this.penDownPos = {};		
 
 		this.locked = false;
-		this.moves = [];
 
-		this.bufferedPath = [];
-		this.lastBufferTime = new Date().getTime();
-		this.broadcastPathIntervalID;
-		
 		this.initTools();
 		if (!this.context)
 			alert('Ocurrió un error: # No existe "context"');
@@ -130,7 +125,7 @@ function Pencil(board) {
 	this.penDownPos = {};
 	
 	this.bufferedPath = [];
-	
+	this.moves = [];
 	this.lastBufferTime = new Date().getTime();
 	this.broadcastPathIntervalID;
 
@@ -193,12 +188,13 @@ function Pencil(board) {
 			data['type'] = 'pencil';
 			data['color'] = tool.board.renderContext.strokeStyle.replace("#", "");
 			data['thick'] = tool.board.renderContext.lineWidth;
-			data['coord'] = [];
 			var c;
-			while (c = tool.bufferedPath.pop())
+			var coord = [];
+			while (c = tool.bufferedPath.shift())
 			{
-				data['coord'].push(c.posOrigen.x + "," + c.posOrigen.y + "," + c.posFinal.x + "," + c.posFinal.y);
+				coord.push(c.posOrigen.x + "," + c.posOrigen.y + "," + c.posFinal.x + "," + c.posFinal.y);
 			}
+			data['coord'] = coord.toString();
 
 			tool.board.config.sender(tool.board.config.urlDraw, JSON.stringify(data));
 			tool.bufferedPath = [];
@@ -212,26 +208,27 @@ function Pencil(board) {
 		tool.board.context.lineWidth = info.thick;
 		tool.board.context.lineCap = 'round';
 
-		for (i in info.coord)
-		{
-			var path = info.coord[i].split(",");
-			
-			posOri = {x:parseInt(path[0]), y:parseInt(path[1])};
-			position = {x:parseInt(path[2]), y:parseInt(path[3])};
-		 
-			var point = {posOrigen: posOri, posFinal: position};			
-			tool.board.moves.unshift(point);	
-			setTimeout(tool.drawPoint, (i/2)*10);
-		}
+		var path = info.coord.split(",");
+
+		for (var i = 0; i < path.length; i+=4)
+		{							
+			posOri = {x:parseInt(path[i]), y:parseInt(path[i+1])};
+			position = {x:parseInt(path[i+2]), y:parseInt(path[i+3])};
+		
+			var point = {posOrigen: posOri, posFinal: position};						
+			tool.moves.push(point);						
+
+			setTimeout(tool.drawPoint,(i/4)*10);
+		}		
 	};	
 		
 	this.drawPoint = function()	{
-		console.log("asd");
-		var datos = tool.board.moves.shift();
+		var datos = tool.moves.shift()
+
 		tool.board.context.beginPath();
 		tool.board.context.moveTo(datos.posOrigen.x, datos.posOrigen.y)
 		tool.board.context.lineTo(datos.posFinal.x, datos.posFinal.y);
-		tool.board.context.stroke();		
+		tool.board.context.stroke();				
 	};		
 };
 
