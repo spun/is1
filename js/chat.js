@@ -47,7 +47,7 @@ var ChatZone = {
 		console.log(m);
 		$("li#"+m.userKey+" .userScore").text(m.ptosUser);
 		$("li#"+m.userDibKey+" .userScore").text(m.ptosDib);
-		sendMessage("http://localhost:8080/gamebroadcast/load", +m.user);
+		self.config.sender(self.config.urlLoad , m.user);
 	}
 };
 

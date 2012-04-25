@@ -66,6 +66,7 @@ ChatZone.init({
 	history: $('#chatZone-history'),
 	form: $('#chatZone-form'),
 	urlChat: 'http://'+location.host+'/gamebroadcast/chat',
+	urlLoad: 'http://'+location.host+'/gamebroadcast/load',
 	sender: Broadcast.sendMessage
 });
 
