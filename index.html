@@ -3,14 +3,18 @@
 {% block title %}Inicio{% endblock %}
 
 {% block container %}
+	
 	<div class="row">
 		<div class="span12">
 			<h2>Inicio</h2>
+			
 			<div class="row">
 				<div class="span4">
 					<a href="/registro">
 						<div id="botonNewUser" class="botonIndex">
+						{% if not user %}
 							<img src="/img/layout/regist-large.png" alt="Registro" /><span>Nuevo usuario</span>
+						{% endif %}
 						</div>
 					</a>				
 				</div>
@@ -24,7 +28,9 @@
 				<div class="span4">
 					<a href="/administracion">
 						<div id="botonAdmin" class="botonIndex">
+							{% if user.nick == "Admin" %}
 							<img src="/img/layout/admin-large.png" alt="Administracion" /><span>Admin</span>
+							{% endif %}
 						</div>
 					</a>
 				</div>
