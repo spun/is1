@@ -38,14 +38,16 @@
 				<div class="span12">
 					<div class="row">
 						<div class="span9">
-							<label><span>Nombre de usuario:</span> </label> <input id="textNick" type="text" name="user" value="{{userProfile.nick}}" disabled="true"/>	
-							<label><span>Contraseña:</span> </label> <input id="textPass" type="password" name="contra" value="{{userProfile.password}}" disabled="disabled"/>
-							<label id="repeatpass" style="display:none"><span>Repetir contraseña:</span> </label> <input id="textPass2" style="display:none" type="password" name="contra2" value="{{userProfile.password}}"/>
-							<label><span>Correo electrónico:</span> </label> <input id="textMail" type="text" name="mail" value="{{userProfile.email}}" disabled="disabled"/>
-	
-							<br/>
-								<input id="updateProfile" type="button" class="btn btn-primary" value="Modificar perfil" onclick="ModificarPerfil()"/>
-								<input id="submitProfile" type="submit" class="btn btn-primary" style="display:none" value="Validar datos"/>	
+							<form  class="well" id="formUpdate" action="/perfil" enctype="multipart/form-data" method="post">
+								<label><span>Nombre de usuario:</span> </label> <input class="span3" id="textNick" type="text" name="user" value="{{userProfile.nick}}" disabled="true"/>	
+								<label><span>Contraseña:</span> </label> <input class="span3" id="textPass" type="password" name="contra" value="{{userProfile.password}}" disabled="disabled"/>
+								<label id="repeatpass" style="display:none"><span>Repetir contraseña:</span> </label> <input class="span3" id="textPass2" style="display:none" type="password" name="contra2" value="{{userProfile.password}}"/>
+								<label><span>Correo electrónico:</span> </label> <input class="span3" id="textMail" type="text" name="mail" value="{{userProfile.email}}" disabled="disabled"/>
+		
+								<br/>
+									<input id="updateProfile" type="button" class="btn btn-primary" value="Modificar perfil" onclick="ModificarPerfil()"/>
+									<input id="submitProfile" type="submit" class="btn btn-primary" style="display:none" value="Validar datos"/>
+							</form>
 						</div>
 						<div class="span3">
 							<br/>

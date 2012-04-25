@@ -1,7 +1,8 @@
 import os
 import webapp2
 import cgi
-
+from google.appengine.ext import db
+from google.appengine.api import images
 from google.appengine.ext.webapp import template
 import session
 from BD.clases import UserDB
