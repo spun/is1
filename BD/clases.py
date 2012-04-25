@@ -11,7 +11,8 @@ class User(db.Model):
 	email = db.EmailProperty()
 	idSala = db.StringProperty()
 	ptos = db.IntegerProperty(default=0)
-
+	avatar = db.BlobProperty()
+	
 class Sala(db.Model):
 	#autor = db.ReferenceProperty(User)
 	nombre = db.StringProperty()
