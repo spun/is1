@@ -197,6 +197,11 @@ class GameBroadcastLoad(webapp2.RequestHandler):
 			if option=="New":
 				GameDB().nuevaPalabra(game)
 				game = Game.get(game_key)
+			else:
+				GameDB().nuevaPalabra(game)
+				game = Game.get(game_key)
+				userAcertado = UserDB().getUserByNick(option)
+				GameDB().cambiaDibujante(userAcertado.idSala, userAcertado)
 			
 			if game:				
 				user = None

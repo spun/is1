@@ -3,7 +3,7 @@ Broadcast.init({
 	state: state,	// Declarado en juego.html
 	onopen: function() {
 		console.log('# Socket open');
-		Broadcast.sendMessage("http://localhost:8080/gamebroadcast/load", "None");
+		Broadcast.sendMessage("http://localhost:8080/gamebroadcast/load", "New");
 	},
 	onmessage: function(m) {
 		dat = JSON.parse(m.data);
