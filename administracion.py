@@ -15,11 +15,13 @@ class Administracion(webapp2.RequestHandler):
 		self.sess = session.Session('enginesession')
 		if self.sess.load():
 			user = UserDB().getUserByKey(self.sess.user)
-			template_values['user'] = user
-
-		path = os.path.join(os.path.dirname(__file__), 'administracion.html')
-		self.response.out.write(template.render(path, template_values))
-
+			if not user.nick == "Admin":
+				self.redirect('/')
+			template_values['user'] = user		
+			path = os.path.join(os.path.dirname(__file__), 'administracion.html')
+			self.response.out.write(template.render(path, template_values))
+		else:
+			self.redirect('/')
 	def post(self):
 		template_values = {}
 		
