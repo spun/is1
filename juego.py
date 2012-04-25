@@ -202,11 +202,6 @@ class GameBroadcastLoad(webapp2.RequestHandler):
 				userAcertado = UserDB().getUserByNick(option)
 				GameDB().cambiaDibujante(userAcertado.idSala, userAcertado)
 			
-			if game.rondas <= 2:
-				GameDB().nuevaRonda(game)
-			else:
-				self.redirect('/salas')
-			
 			if game:				
 				user = None
 				self.sess = session.Session('enginesession')

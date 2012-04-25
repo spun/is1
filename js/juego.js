@@ -48,6 +48,7 @@ Broadcast.init({
 			}
 			else
 			{
+				$(BlackBoard.canvasRender).css("borderColor", "#FF5100");
 				BlackBoard.lock(true);
 			}
 			
@@ -56,7 +57,7 @@ Broadcast.init({
 		else if (dat.type == "finish")
 		{
 			$(BlackBoard.canvasRender).css("borderColor", "#FF5100");
-			BlackBoard.lock(true);
+			//BlackBoard.lock(true);
 			Broadcast.sendMessage("http://localhost:8080/gamebroadcast/load", "New");
 		}
 	}
