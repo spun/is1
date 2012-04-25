@@ -60,16 +60,11 @@ class SalaJuego(webapp2.RequestHandler):
 				template_values['user_list']=user_list
 
 
-
 				# Si el usuario identificado esta asignado al juego
 				token = channel.create_channel(str(user.key()))
-				
-				
-	
+					
 			else:
 				self.redirect('/')
-
-
 
 
 			path = os.path.join(os.path.dirname(__file__), 'salajuego.html')
@@ -79,5 +74,17 @@ class SalaJuego(webapp2.RequestHandler):
 
 
 
-app = webapp2.WSGIApplication([('/salajuego', SalaJuego)],
+
+class SalaBroadcastChat(webapp2.RequestHandler):
+	"""This page is responsible for showing the game UI. It may also
+	create a new game or add the currently-logged in uesr to a game."""
+	
+	def post(self):
+		self.redirect('/')
+
+
+
+
+app = webapp2.WSGIApplication([('/salajuego', SalaJuego),
+								('/salabroadcast/chat',SalaBroadcastChat)],
                               debug=True)
