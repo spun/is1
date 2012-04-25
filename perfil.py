@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 import webapp2
 import cgi
@@ -8,15 +10,17 @@ import session
 from BD.clases import UserDB
 from BD.clases import PartidasJugadasDB
 from BD.clases import AmigosDB
-
-class Image(webapp2.RequestHandler):
-    def get(self):
-        usuario = db.get(self.request.get("img_id"))
-        if usuario.avatar:
-            self.response.headers['Content-Type'] = "img/user"
-            self.response.out.write(usuario.avatar)
-        else:
-           self.response.out.write("No image")
+from BD.clases import User
+           
+class Image (webapp2.RequestHandler):
+	def get(self):
+		usuario = User.get(self.request.get("img_id"))
+		
+		if usuario.avatar:
+			self.response.headers['Content-Type'] = "image/png"
+			self.response.out.write(usuario.avatar)
+		else:
+			self.error(404)
 	   
 class Perfil(webapp2.RequestHandler):
 	def get(self):
@@ -31,9 +35,8 @@ class Perfil(webapp2.RequestHandler):
 		self.sess = session.Session('enginesession')
 		if self.sess.load():
 			user = UserDB().getUserByKey(self.sess.user)
-			self.response.out.write("<div><img src='img?img_id=%s'></img>" %user.key())		
-			self.response.out.write(' %s</div>' %cgi.escape(user.nick))
 			template_values['user'] = user
+			
 			userProfile = user
 			listaAmigos = AmigosDB().ObtenerAmigos(userProfile)
 			listaPeticiones = AmigosDB().ObtenerPeticiones(userProfile)
@@ -62,7 +65,6 @@ class Perfil(webapp2.RequestHandler):
 		
 		listaPartidas = PartidasJugadasDB().ObtenerLista(userProfile)	
 		if userProfile:
-			template_values['userSession'] = user
 			template_values['userProfile'] = userProfile
 			template_values['listaPartidas'] = listaPartidas
 			template_values['listaAmigos'] = listaAmigos
@@ -74,12 +76,13 @@ class Perfil(webapp2.RequestHandler):
 			self.redirect('/')
 
 	def post(self):	
-		self.response.out.write(cgi.escape(self.request.get('photo')));
 		template_values = {}		
 		
 		self.sess = session.Session('enginesession')
 		if self.sess.load():
 			userSesion = UserDB().getUserByKey(self.sess.user)
+			template_values['user'] = userSesion
+			template_values['userProfile'] = userSesion
 			user = UserDB().getUserByNick(self.request.get('user'))
 		
 			if user:
@@ -93,14 +96,14 @@ class Perfil(webapp2.RequestHandler):
 							avatar = str(self.request.get('img')) 
 							userSesion.avatar = db.Blob(avatar)								
 							userSesion.put();
-							self.redirect('/perfil');						
+							# self.redirect('/perfil');						
 						else:
 							template_values['errorMsg'] = {
-								"title": "Ocurri? un error al modificar el usuario.",
-								"text": "La direcci?n de correo electr?nico est? siendo utilizada por otro usuario."
+								"title": "Ocurrió un error al modificar el usuario.",
+								"text": "La dirección de correo electrónico está siendo utilizada por otro usuario."
 							}
 							#Habr?a que pasar el error, pero se sale de la sesi?n
-							self.redirect('/perfil');
+							# self.redirect('/perfil');
 					else:
 						userSesion.nick = self.request.get('user');
 						userSesion.password = self.request.get('contra');
@@ -108,14 +111,14 @@ class Perfil(webapp2.RequestHandler):
 						avatar = str(self.request.get('img')) 
 						userSesion.avatar = db.Blob(avatar)							
 						userSesion.put();
-						self.redirect('/perfil');	
+						# self.redirect('/perfil');	
 				else:
 					template_values['errorMsg'] = {
-						"title": "Ocurri? un error al modificar el usuario.",
-						"text": "El nick est? siendo utilizado por otro usuario."
+						"title": "Ocurrió un error al modificar el usuario.",
+						"text": "El nick está siendo utilizado por otro usuario."
 					}
 					#Habr?a que pasar el error, pero se sale de la sesi?n					
-					self.redirect('/perfil');
+					# self.redirect('/perfil');
 			else:
 				usermail = UserDB().getUserByMail(cgi.escape(self.request.get('mail')))		
 				if usermail:
@@ -132,8 +135,8 @@ class Perfil(webapp2.RequestHandler):
 								self.redirect('/perfil');						
 							else:
 								template_values['errorMsg'] = {
-									"title": "Ocurri? un error al modificar el usuario.",
-									"text": "El nick est? siendo utilizado por otro usuario."
+									"title": "Ocurrió un error al modificar el usuario.",
+									"text": "El nick está siendo utilizado por otro usuario."
 								}
 								#Habr?a que pasar el error, pero se sale de la sesi?n							
 								self.redirect('/perfil');
@@ -147,11 +150,11 @@ class Perfil(webapp2.RequestHandler):
 							self.redirect('/perfil');									
 					else:
 						template_values['errorMsg'] = {
-							"title": "Ocurri? un error al modificar el usuario.",
-							"text": "La direcci?n de correo electr?nico est? siendo utilizada por otro usuario."
+							"title": "Ocurrió un error al modificar el usuario.",
+							"text": "La dirección de correo electrónico está siendo utilizada por otro usuario."
 						}
 						#Habr?a que pasar el error, pero se sale de la sesi?n						
-						self.redirect('/perfil');
+						# self.redirect('/perfil');
 				else:
 					userSesion.nick = self.request.get('user');
 					userSesion.password = self.request.get('contra');
@@ -159,10 +162,11 @@ class Perfil(webapp2.RequestHandler):
 					avatar = self.request.str_POST['img']
 					userSesion.avatar = db.Blob(avatar)					
 					userSesion.put();
-					self.redirect('/perfil');
+					# self.redirect('/perfil');
 
 		path = os.path.join(os.path.dirname(__file__), 'perfil.html')
-		self.response.out.write(template.render(path, template_values))					
+		self.response.out.write(template.render(path, template_values))	
+						
 app = webapp2.WSGIApplication([('/perfil', Perfil),
-			('/img/user', Image)],
+								('/imgs/user', Image)],
                               debug=True)		

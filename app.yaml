@@ -51,7 +51,10 @@ handlers:
   script: salajuego.app
 
 - url: /perfil
-  script: perfil.app
+  script: perfil.app  
+  
+- url: /imgs/user
+  script: perfil.app  
   
 - url: /.*
   script: main.app

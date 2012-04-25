@@ -44,15 +44,21 @@
 								<label><span>Contraseña:</span> </label> <input class="span3" id="textPass" type="password" name="contra" value="{{userProfile.password}}" disabled="disabled"/>
 								<label id="repeatpass" style="display:none"><span>Repetir contraseña:</span> </label> <input class="span3" id="textPass2" style="display:none" type="password" name="contra2" value="{{userProfile.password}}"/>
 								<label><span>Correo electrónico:</span> </label> <input class="span3" id="textMail" type="text" name="mail" value="{{userProfile.email}}" disabled="disabled"/>
-		
+								<br/><input type="file" name="img"/>
 								<br/>
+								
 									<input id="updateProfile" type="button" class="btn btn-primary" value="Modificar perfil" onclick="ModificarPerfil()"/>
 									<input id="submitProfile" type="submit" class="btn btn-primary" style="display:none" value="Validar datos"/>
 							</form>
 						</div>
 						<div class="span3">
-							<br/>
-							<input type="file" id="uploadPhoto" name="img" style="display:none"/>
+							<div class="span3">
+								{% if user.avatar %}
+								<img id="avatar" src="/imgs/user?img_id={{userProfile.key}}" alt="Imagen de usuario"/> 
+								{% else %}
+								<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
+								{% endif %}
+							</div>
 						</div>
 					</div>
 				</div>
