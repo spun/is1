@@ -11,7 +11,9 @@ class User(db.Model):
 	email = db.EmailProperty()
 	idSala = db.StringProperty()
 	ptos = db.IntegerProperty(default=0)
-
+	ptosPartida = db.IntegerProperty(default=0)
+	avatar = db.BlobProperty()
+	
 class Sala(db.Model):
 	#autor = db.ReferenceProperty(User)
 	nombre = db.StringProperty()
@@ -269,6 +271,13 @@ class UsersInGameDB:
 		user.ptos += ptos
 		user.put()
 		return res.ptos
+	
+	def scoreReset(self, user):
+		inGame = UsersInGame.all()
+		inGame.filter("user =", user)
+		res = inGame.get()
+		res.ptos = 0
+		res.put()
 
 	def changeState(self, user, state="jugando"):
 		inGame = UsersInGame.all()
