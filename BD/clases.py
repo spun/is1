@@ -43,6 +43,7 @@ class Game(db.Model):
 	idSala = db.StringProperty()
 	palabra = db.ReferenceProperty(Palabras)
 	dibujante = db.ReferenceProperty(User)
+	rondas = db.IntegerProperty(default=0)
 	timestamp = db.DateTimeProperty(default = datetime.datetime.now())
 	
 class UsersInGame(db.Model):
@@ -245,6 +246,10 @@ class GameDB:
 		res.dibujante = user;
 		res.put()
 
+	def nuevaRonda(self, game):
+		game = Game.get(game.key())
+		game.rondas += 1;
+		game.put()
 
 class UsersInGameDB:
 	

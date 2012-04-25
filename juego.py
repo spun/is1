@@ -188,7 +188,6 @@ class GameBroadcastLoad(webapp2.RequestHandler):
 	create a new game or add the currently-logged in uesr to a game."""
 	
 	def post(self):
-		
 		game_key = self.request.get('g')
 		option = self.request.get('d')
 		if game_key:
@@ -202,6 +201,11 @@ class GameBroadcastLoad(webapp2.RequestHandler):
 				game = Game.get(game_key)
 				userAcertado = UserDB().getUserByNick(option)
 				GameDB().cambiaDibujante(userAcertado.idSala, userAcertado)
+			
+			if game.rondas <= 2:
+				GameDB().nuevaRonda(game)
+			else:
+				self.redirect('/salas')
 			
 			if game:				
 				user = None
