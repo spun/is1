@@ -237,6 +237,13 @@ class GameDB:
 			nuevapalabra.put()
 			palabra = nuevapalabra
 		return palabra.palabra
+	
+	def cambiaDibujante(self, idSala, user):
+		game = Game.all()
+		game.filter("idSala =", idSala)
+		res = game.get()
+		res.dibujante = user;
+		res.put()
 
 
 class UsersInGameDB:
