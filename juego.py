@@ -219,10 +219,10 @@ class GameBroadcastLoad(webapp2.RequestHandler):
 					results = users_by_game.fetch(30)
 
 					#Comprobamos el tipo de juego
+					fin=False
 					miSala = SalasDB().getSalaById(idSala)
 					if miSala.tipo=="Puntos":
 						#Comprobamos si algun jugador ha llegado a la puntuacion
-						fin=False
 						for r in results:
 							if r.ptos >= miSala.numPuntos:
 								fin = True

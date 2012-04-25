@@ -211,6 +211,10 @@ class GameDB:
 		game = Game.get(game.key())
 		palabra = None
 		p = Palabras.all()
+		miSala = SalasDB().getSalaById(game.idSala)
+		if miSala.tematica!="Ninguna":
+			p.filter("tema =", miSala.tematica)
+		
 		if p.count() != 0:
 			n = random.randint(0, p.count()-1)
 			listapalabra = Palabras().all()
