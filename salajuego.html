@@ -65,34 +65,48 @@
 {% block container %}
 	<div class="row">
 		<div class="span9">
-			1
-			{% for user in user_list %}
-			<a href="/perfil?user={{user.nick}}" title="Ir al perfil de {{user.nick}}">{{user.nick}}</a>
-            {% endfor %}
+                    <form class="well">
+                        <p>Blabla</p>
+                        <p>Blabla</p>
+                        <p>Blabla</p>
+                        <p>Blabla</p>
+                        <p>Blabla</p>
+                        <p>Blabla</p>
+                        <p>Blabla</p>
+                        <p>Blabla</p>
+                        <p>Blabla</p>
+                        <p>Blabla</p>
+                        <p>Blabla</p>
+                    </form>
 		</div>
-		<div class="span3">
-			<div id="chatZone-history">
-				<ul>				
-				</ul>
-			</div>
-			<form class="form-horizontal" id="chatZone-form">
-				<fieldset>
-					<div class="input-append">
-						<input class="span" id="appendedPrependedInput" style="width: 120px" size="6" type="text"><button class="btn" type="button">></button>
-					</div>
-				</fieldset>
-			</form>	
+		<div class="span3">  
+                    <div id="chatZone-history">
+                        <form class="well">
+                            {% for user in user_list %}
+                                <p><a href="/perfil?user={{user.nick}}" title="Ir al perfil de {{user.nick}}">{{user.nick}}</a></p>
+                            {% endfor %}
+                        </form>
+                    </div>
 		</div>
 	</div>
 	
 	<div class="row">
 		<div class="span9">
-			3
+                    <form class="well form-horizontal" id="chatZone-form">
+                        <fieldset>
+                            <div class="input-append">
+                                <input class="span" id="appendedPrependedInput" style="width: 120px" size="6" type="text"><button class="btn" type="button">></button>
+                            </div>
+                        </fieldset>
+                    </form>
 		</div>
 		<div class="span3">
-			4
-			<a href="/juego?gamekey={{gamekey}}">PLAY!</a>
-			<a href="/salajuego?e=1">Salir</a>
+                    <form class="well">
+                        <div class="span3">
+                            <p><a class="btn btn-success" href="/juego?gamekey={{gamekey}}"><i class="icon-play icon-white"></i> Jugar!</a>
+                            <a class="btn btn-danger" href="/salajuego?e=1"><i class="icon-remove icon-white"></i> Salir</a></p>
+                        </div>
+                    </form>
 		</div>
 	</div>
 
