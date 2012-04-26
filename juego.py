@@ -125,7 +125,7 @@ class GameBroadcastChat(webapp2.RequestHandler):
 							"user": user.nick,
 							"word": game.palabra.palabra,
 							"ptosUser": ptosUser,
-							"ptosDib": ptosDib
+							"ptosDib": ptosDib,
 							}
 						}
 					else:
@@ -289,7 +289,8 @@ class Crono(webapp2.RequestHandler):
 				messageRaw = {
 				"type": "finish", 
 				"content": {
-					"fin": True 						
+					"fin": True,
+					"word": game.palabra.palabra,											
 					}
 				}				
 				message = json.dumps(messageRaw)
