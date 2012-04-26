@@ -112,6 +112,10 @@ class UserDB:
 		q.filter("idSala =", idSala)
 		res = q.count()		
 		return res
+	
+	def getAll(self):
+		q = User.all()
+		return q
 
 
 class SalasDB:

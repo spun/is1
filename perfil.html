@@ -44,7 +44,7 @@
 								<label><span>Contraseña:</span> </label> <input class="span3" id="textPass" type="password" name="contra" value="{{userProfile.password}}" disabled="disabled"/>
 								<label id="repeatpass" style="display:none"><span>Repetir contraseña:</span> </label> <input class="span3" id="textPass2" style="display:none" type="password" name="contra2" value="{{userProfile.password}}"/>
 								<label><span>Correo electrónico:</span> </label> <input class="span3" id="textMail" type="text" name="mail" value="{{userProfile.email}}" disabled="disabled"/>
-								<br/><input type="file" name="img"/>
+								<br/><label><span>Cambiar foto:</span> </label> <input type="file" name="img"/>
 								<br/>
 								
 									<input id="updateProfile" type="button" class="btn btn-primary" value="Modificar perfil" onclick="ModificarPerfil()"/>
@@ -54,7 +54,7 @@
 						<div class="span3">
 							<div class="span3">
 								{% if user.avatar %}
-								<img id="avatar" src="/imgs/user?img_id={{userProfile.key}}" alt="Imagen de usuario"/> 
+								<img id="avatar" src="/imgs/user?img_id={{userProfile.key}}" width="200" height="200" alt="Imagen de usuario"/> 
 								{% else %}
 								<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
 								{% endif %}
@@ -102,7 +102,11 @@
 							{% endif %}
 						</div>
 						<div class="span3">
-							<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
+								{% if user.avatar %}
+								<img id="avatar" src="/imgs/user?img_id={{userProfile.key}}" width="200" height="200" alt="Imagen de usuario"/> 
+								{% else %}
+								<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
+								{% endif %}
 						</div>
 					</div>
 				</div>
@@ -130,35 +134,49 @@
 							{%endfor%}
 						</div>
 						<div class="span3">
-							<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
+								{% if user.avatar %}
+								<img id="avatar" src="/imgs/user?img_id={{userProfile.key}}" width="200" height="200" alt="Imagen de usuario"/> 
+								{% else %}
+								<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
+								{% endif %}
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="tab-pane" id="mensajes">
-			<div class="row">
-				<div class="span12">
-					<div class="row">
-						<div class="span9">
-							<form class="well">
-								<h6>Total</h6>
-								<h1>{{userProfile.ptos}} ptos</h1> 
-							</form>
-							<hr></hr>
-							<p><h2>Últimas partidas</h2></p>
-							{% for p in listaPartidas %}
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#received" data-toggle="tab">Recibidos</a></li>
+				<li><a href="#sent" data-toggle="tab">Enviados</a></li>
+			</ul>
+				<div class="row">
+					<div class="span12">
+						<div class="row">
+							<div class="span9">
+								<p><h2>Enviar Mensaje</h2></p>
 								<form class="well">
-									<h4>{{p.nombrePartida}}</h4>
-									<h5>{{p.ptos}}</h5>
-									{% if p.win %}
-										<p><i class="icon-star-empty icon-white"></i></p>
-									{% endif %}
+									<h6>Aquí deben aparecer los amigos</h6>
+									<br/>
+										{% for p in listaUsers %}
+												<h3><a href="/perfil?user={{p.nick}}">{{p.nick}}</a>
+												<a class="btn btn-danger btn-mini" href="/perfil?user={{userProfile.nick}}&eliminar={{p.nick}}"><i class="icon-remove-sign icon-white"></i></a></h3>
+										{%endfor%}								
+									<form id="sendMessage" method="post" onsubmit="">
+										<textarea rows="5" cols="1"></textarea>
+										<br/>
+										<input type="submit" value="Enviar"/>
+										<input type="reset" value="Borrar"/>
+									</form>
 								</form>
-							{%endfor%}
-						</div>
-						<div class="span3">
-							<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
+								<hr></hr>
+							</div>
+							<div class="span3">
+									{% if user.avatar %}
+									<img id="avatar" src="/imgs/user?img_id={{userProfile.key}}" width="200" height="200" alt="Imagen de usuario"/> 
+									{% else %}
+									<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
+									{% endif %}
+							</div>
 						</div>
 					</div>
 				</div>
