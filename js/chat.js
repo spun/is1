@@ -45,8 +45,8 @@ var ChatZone = {
 		}).prependTo(li);
 		self.config.history.find("ul").prop({ scrollTop:self.config.history.find("ul").prop("scrollHeight") });
 		console.log(m);
-		$("li#"+m.userKey+" .userScore").text(m.ptosUser);
-		$("li#"+m.userDibKey+" .userScore").text(m.ptosDib);
+		$("span#"+m.userKey).text(m.ptosUser);
+		$("span#"+m.userDibKey).text(m.ptosDib);
 		self.config.sender(self.config.urlLoad , m.user);
 	}
 };
