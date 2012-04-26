@@ -21,7 +21,7 @@ class Registro(webapp2.RequestHandler):
 			if self.sess.load():
 				user = UserDB().getUserByKey(self.sess.user)
 				template_values['user'] = user
-				#self.redirect('/')
+				self.redirect('/')
 			path = os.path.join(os.path.dirname(__file__), 'registro.html')
 			self.response.out.write(template.render(path, template_values))
 			

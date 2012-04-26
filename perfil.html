@@ -12,7 +12,7 @@
 		function ModificarPerfil()
 		{
 			
-			document.getElementById("textNick").disabled = false;
+			//document.getElementById("textNick").disabled = false;
 			document.getElementById("textPass").disabled = false;
 			document.getElementById("updateProfile").style.display = "none";
 			document.getElementById("submitProfile").style.display = "";
@@ -20,6 +20,7 @@
 			document.getElementById("textPass2").style.display = "";
 			document.getElementById("textMail").disabled = false;
 			document.getElementById("uploadPhoto").style.display = "";
+			document.getElementById("change").style.display = "";
 		}
 	</script>
 {% endblock %}
@@ -44,11 +45,15 @@
 								<label><span>Contraseña:</span> </label> <input class="span3" id="textPass" type="password" name="contra" value="{{userProfile.password}}" disabled="disabled"/>
 								<label id="repeatpass" style="display:none"><span>Repetir contraseña:</span> </label> <input class="span3" id="textPass2" style="display:none" type="password" name="contra2" value="{{userProfile.password}}"/>
 								<label><span>Correo electrónico:</span> </label> <input class="span3" id="textMail" type="text" name="mail" value="{{userProfile.email}}" disabled="disabled"/>
-								<br/><label><span>Cambiar foto:</span> </label> <input type="file" name="img"/>
+								<br/><label id="change" style="display:none"><span >Cambiar foto:</span> </label> <input type="file" id="uploadPhoto" style="display:none" name="img"/>
 								<br/>
 								
-									<input id="updateProfile" type="button" class="btn btn-primary" value="Modificar perfil" onclick="ModificarPerfil()"/>
-									<input id="submitProfile" type="submit" class="btn btn-primary" style="display:none" value="Validar datos"/>
+									{% if user %}
+										{% if user == userProfile %}
+											<input id="updateProfile" type="button" class="btn btn-primary" value="Modificar perfil" onclick="ModificarPerfil()"/>
+											<input id="submitProfile" type="submit" class="btn btn-primary" style="display:none" value="Validar datos"/>
+										{% endif %}
+									{% endif %}
 							</form>
 						</div>
 						<div class="span3">
