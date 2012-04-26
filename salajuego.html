@@ -83,7 +83,6 @@
 			},
 			onmessage: function(m) {
 				dat = JSON.parse(m.data);
-				console.log(dat);
 				ChatZone.receiveMessage(dat.content);		
 			}				
 		});
@@ -91,7 +90,7 @@
 		ChatZone.init({
 			history: $('#chatZone-history'),
 			form: $('#chatZone-form'),
-			urlChat: 'http://'+location.host+'/salaBroadcast/chat',
+			urlChat: 'http://'+location.host+'/salabroadcast/chat',
 			sender: Broadcast.sendMessage
 		});		
 		

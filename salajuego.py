@@ -1,5 +1,7 @@
 import os
 import webapp2
+import json
+import cgi
 
 from google.appengine.ext.webapp import template
 from google.appengine.api import channel
@@ -71,6 +73,8 @@ class SalaJuego(webapp2.RequestHandler):
 
 				# Si el usuario identificado esta asignado al juego
 				token = channel.create_channel(str(user.key()))
+				template_values['token'] = token
+				template_values['game_key'] = sala.idSala
 					
 			else:
 				self.redirect('/')
@@ -87,9 +91,32 @@ class SalaJuego(webapp2.RequestHandler):
 class SalaBroadcastChat(webapp2.RequestHandler):
 	"""This page is responsible for showing the game UI. It may also
 	create a new game or add the currently-logged in uesr to a game."""
-	
+
 	def post(self):
-		self.redirect('/')
+		
+		game_key = self.request.get('g')		
+		if game_key:
+			sala = SalasDB().getSalaById(game_key)
+			if sala:
+				user = None
+				self.sess = session.Session('enginesession')
+				if self.sess.load():
+					user = UserDB().getUserByKey(self.sess.user)
+				
+				users = UserDB()
+				user_list = users.getUsersBySala(sala.idSala)
+				
+				messageRaw = {
+					"type": "chat", 
+					"content": {
+						"messaje": cgi.escape(self.request.get('d')),
+						"user": user.nick							
+						}
+					}				
+				message = json.dumps(messageRaw)
+				
+				for r in user_list:	
+					channel.send_message(str(r.key()), message);
 
 
 
