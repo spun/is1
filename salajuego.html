@@ -59,6 +59,22 @@
 		#chatZone-form #appendedPrependedInput {
 			width: 128px;
 		}
+        
+        
+		#playerContainer {
+			border-top: 1px solid silver;
+            border-bottom: 1px solid silver;
+			height: auto;
+            margin: 0px 0px 2px 0px;
+		}
+        
+        #playerContainer:hover{
+			border-top: 1px solid silver;
+            border-bottom: 1px solid silver;
+			height: auto;
+            margin: 0px 0px 2px 0px;
+            background-color: #E0ECF8;
+		}
 	</style>
 {% endblock %}
 
@@ -108,6 +124,7 @@
         <div id="salaJuegoUsers">
             {% for user in user_list %}
                 <div id="playerContainer">
+                    
                     <div id="playerAvatar"><img src="/img/Salas/triforce.jpg" alt="Anterior" /></div>
                     <div id="playerDatos">
                         <a href="/perfil?user={{user.nick}}" title="Ir al perfil de {{user.nick}}">{{user.nick}}</a>
@@ -129,9 +146,30 @@
 {% block container %}
 	<div class="row">
 		<div class="span9">
-			1
 			{% for user in user_list %}
-			<a href="/perfil?user={{user.nick}}" title="Ir al perfil de {{user.nick}}">{{user.nick}}</a>
+                <div id="playerContainer">
+                    <div class="row">
+                        <div class="span1">
+                            {% if user.avatar %}
+                            <img id="avatar" src="/imgs/user?img_id={{user.key}}" width="22" height="22" alt="Imagen de usuario"/> 
+                            {% else %}
+                            <img id="avatar" src="/img/layout/default-user.jpg" width="28" height="28" alt="Imagen de usuario"/> 
+                            {% endif %}
+                        </div>
+                        <div class="span2">
+                            <a href="/perfil?user={{user.nick}}" title="Ir al perfil de {{user.nick}}"><h3>{{user.nick}}</h3></a>
+                        </div>
+                        <div class="span6">
+                            <div class="btn-group pull-right">
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                  <li><a href="/perfil?user={{user.nick}}&amistad=0"><i class="icon-heart"></i> Amistad</a></li>
+                                  <li><a href="#"><i class="icon-envelope"></i> Mens. Privado</a></li>
+                                </ul>
+                            </div>                          
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
 		</div>
 		<div class="span3">
@@ -160,9 +198,12 @@
 			</form>
 		</div>
 		<div class="span3">
-			4
-			<a href="/juego?gamekey={{gamekey}}">PLAY!</a>
-			<a href="/salajuego?e=1">Salir</a>
+            <form class="well">
+                <div class="span3">
+                    <a class="btn btn-success" href="/juego?gamekey={{gamekey}}"><i class="icon-play icon-white"></i> Jugar!</a>
+                    <a class="btn btn-danger" href="/salajuego?e=1"><i class="icon-remove icon-white"></i> Salir</a>
+                </div>
+            </form>
 		</div>
 	</div>
 
