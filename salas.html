@@ -167,6 +167,40 @@
                     </div>
                 </div>
                 <div class="row">
+                        <div class="span10 offset1">
+                                <div class="accordion" id="accordion2">
+                                        {% for sala in salas_list %}
+                                        <div class="accordion-group">
+                                                <div class="accordion-heading" style="background-color: #E6E6E6;">
+                                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{sala.key}}">
+                                                        {{sala.nombre}}
+                                                        <i class="icon-plus-sign pull-right"></i>
+                                                        {% if sala.password %}
+                                                        <i class="icon-eye-close pull-right"></i>
+                                                        {% endif %}
+                                                        </a>
+                                                </div>
+                                                <div id="collapse{{sala.key}}" class="accordion-body collapse" style="height: 0px; ">
+                                                        <div class="accordion-inner">
+                                                                <div class="span2"><p><i class="icon-star"></i><a href="/perfil?user={{sala.autor}}"> {{sala.autor}}</a></p></div>
+                                                                <div class="span2"><p><i class="icon-time"></i> {{sala.fechaCrea.hour}}:{{sala.fechaCrea.minute}}</p></div>
+                                                                <div class="span2"><p><i class="icon-flag"></i> {{sala.tipo}}</p></div>
+                                                                <div class="span2"><p><i class="icon-user"></i> {{sala.players}}/10</p></div>
+                                                                {% if user %}
+                                                                    {% if sala.password %}
+                                                                        <p><a class="btn btn-success" onclick='almacenaDatos("{{sala.password}}", "{{sala.idSala}}");' data-toggle="modal" href="#passModal"><i class="icon-arrow-right icon-white"></i> Entrar </a></p>
+                                                                    {% else %}
+                                                                        <p><a class="btn btn-success" href="/salajuego?id={{sala.idSala}}"><i class="icon-arrow-right icon-white"></i> Entrar </a></p>
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                        </div>
+                                                </div>
+                                        </div>
+                                        {% endfor %}				
+                                </div>
+                        </div>
+                </div>
+                <div class="row">
                     <div class="span12 offset5">
                         <div class="pagination">
                             <ul>
@@ -200,40 +234,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                        <div class="span10 offset1">
-                                <div class="accordion" id="accordion2">
-                                        {% for sala in salas_list %}
-                                        <div class="accordion-group">
-                                                <div class="accordion-heading" style="background-color: #E6E6E6;">
-                                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{sala.key}}">
-                                                        {{sala.nombre}}
-                                                        <i class="icon-plus-sign pull-right"></i>
-                                                        {% if sala.password %}
-                                                        <i class="icon-eye-close pull-right"></i>
-                                                        {% endif %}
-                                                        </a>
-                                                </div>
-                                                <div id="collapse{{sala.key}}" class="accordion-body collapse" style="height: 0px; ">
-                                                        <div class="accordion-inner">
-                                                                <div class="span2"><p><i class="icon-star"></i><a href="/perfil?user={{sala.autor}}"> {{sala.autor}}</a></p></div>
-                                                                <div class="span2"><p><i class="icon-time"></i> {{sala.fechaCrea.hour}}:{{sala.fechaCrea.minute}}</p></div>
-                                                                <div class="span2"><p><i class="icon-flag"></i> {{sala.tipo}}</p></div>
-                                                                <div class="span2"><p><i class="icon-user"></i> {{sala.players}}/10</p></div>
-                                                                {% if user %}
-                                                                    {% if sala.password %}
-                                                                        <p><a class="btn btn-success" onclick='almacenaDatos("{{sala.password}}", "{{sala.idSala}}");' data-toggle="modal" href="#passModal"><i class="icon-arrow-right icon-white"></i> Entrar </a></p>
-                                                                    {% else %}
-                                                                        <p><a class="btn btn-success" href="/salajuego?id={{sala.idSala}}"><i class="icon-arrow-right icon-white"></i> Entrar </a></p>
-                                                                    {% endif %}
-                                                                {% endif %}
-                                                        </div>
-                                                </div>
-                                        </div>
-                                        {% endfor %}				
-                                </div>
-                        </div>
-                </div>		
         </div>
 </div>
 
