@@ -54,7 +54,10 @@ handlers:
   script: perfil.app  
   
 - url: /imgs/user
-  script: perfil.app  
+  script: perfil.app
+  
+- url: /reglas
+  script: reglas.app
   
 - url: /.*
   script: main.app

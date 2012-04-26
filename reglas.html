@@ -1,0 +1,35 @@
+{% extends "templates/pattern.html" %}
+
+{% block title %}Salas{% endblock %}
+
+{% block script %}
+	
+{% endblock %}
+
+{% block container %}
+    <h1>Reglas</h1>
+    <hr></hr>
+    <div class="row">
+        <div class="span12">
+            <form class="well">
+                <h3>Puntos</h3>
+                <p><i class="icon-time"></i><b> Tiempo ronda:</b> 1:30 min</p>
+                <p><i class="icon-forward"></i><b> Turnos:</b> Dibuja el que acierta</p>
+                <p><i class="icon-star"></i><b> Puntos:</b> Definidos por el usuario</p>
+                <p><i class="icon-repeat"></i><b> Rondas:</b> Sin límite</p>
+                <p></i><b>Descripción:</b></p>
+                <p>El objetivo de la partida es alcanzar el número de puntos establecido por el usuario.</p>
+            </form>
+            <form class="well">
+                <h3>Rondas</h3>
+                <p><i class="icon-time"></i><b> Tiempo ronda:</b> 1:30 min</p>
+                <p><i class="icon-forward"></i><b> Turnos:</b> Dibujado por orden</p>
+                <p><i class="icon-star"></i><b> Puntos:</b> Sin límite</p>
+                <p><i class="icon-repeat"></i><b> Rondas:</b> Definidas por el usuario</p>
+                <p></i><b>Descripción:</b></p>
+                <p>El objetivo de la partida es alcanzar el máximo número de puntos en el número rondas establecidas.</p>
+            </form>
+        </div>        
+    </div>
+
+{% endblock %}
