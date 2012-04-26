@@ -9,6 +9,7 @@ from BD.clases import SalasDB
 from BD.clases import UserDB
 from BD.clases import GameDB
 from BD.clases import UsersInGameDB
+from BD.clases import Palabras
 import urllib2
 
 class Salas(webapp2.RequestHandler):
@@ -55,8 +56,14 @@ class Salas(webapp2.RequestHandler):
 					sala.put()
 				i+=1
 				
+			#Listamos los temas de palabras
+			listaT = []
+			listaTemas = Palabras.all()
+			for tema in listaTemas:
+				listaT.append(tema.tema)
+				
 			template_values['salas_list'] = res2
-			
+			template_values['temas_list'] = listaT
 			template_values['numSalas']=SalasDB().getNumSalas()
 			template_values['pags']= numPags
 			template_values['pag']=self.request.get('p')

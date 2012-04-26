@@ -298,7 +298,7 @@
                                         <option>Puntos</option>
                                         <option>Rondas</option>
                                       </select>
-                                      <span class="help-inline"> ¿Tienes <a href="/">dudas</a>? </span> 
+                                      <span class="help-inline"> ¿Tienes <a href="/reglas">dudas</a>? </span> 
                                     </div>
                                 </div>
                                 
@@ -322,9 +322,9 @@
                                     <label class="control-label" for="select02">Temática</label>
                                     <div class="controls">
                                       <select name="tema" id="select02">
-                                        <option>Ninguna</option>
-                                        <option>Animales</option>
-                                        <option>Playa</option>
+                                        {% for t in temas_list %}
+                                        <option>{{t}}</option>
+                                        {% endfor %}
                                       </select>
                                     </div>
                                 </div>
