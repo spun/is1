@@ -48,7 +48,7 @@
                                 }
                                 else
                                 {
-                                    alert(mipass+", "+realpass);
+                                    $("#passError").text("Password incorrecto")
                                 }
 			});
 		});
@@ -252,6 +252,7 @@
                     <label class="control-label" for="inputPass">Password</label>
                     <div class="controls">
                             <input type="text" name="password" id="inputPassword">
+                            <span class="help-inline" id="passError"></span>
                     </div>
                 </div>               
             </fieldset>
