@@ -27,7 +27,7 @@ class GamePage(webapp2.RequestHandler):
 		if self.sess.load():
 			user = UserDB().getUserByKey(self.sess.user)
 			template_values['user'] = user
-			
+
 		#path = os.path.join(os.path.dirname(__file__), 'juego.html')
 		#self.response.out.write(template.render(path, template_values))
 
@@ -220,12 +220,14 @@ class GameBroadcastLoad(webapp2.RequestHandler):
 
 					#Comprobamos el tipo de juego
 					fin=False
+					empate=False
 					miSala = SalasDB().getSalaById(idSala)
 					if miSala.tipo=="Puntos":
 						#Comprobamos si algun jugador ha llegado a la puntuacion
 						for r in results:
 							if r.ptos >= miSala.numPuntos:
 								fin = True
+								empate = True
 					else:
 						if miSala.tipo=="Rondas":
 							na=0
@@ -251,12 +253,17 @@ class GameBroadcastLoad(webapp2.RequestHandler):
 									}
 								}	
 						else:
-							messageRaw = {
-							"type": "finPartida", 
-							"content": {
-								"Fin": True
-								}
-							}								
+								if r.ptos >= miSala.numPuntos:
+										if empate==False:
+												win = r.user.nick+" ha ganado la partida"
+										else:
+												win = "Empate"
+								messageRaw = {
+								"type": "finPartida", 
+								"content": {
+									"Winner": win
+									}
+								}								
 						message = json.dumps(messageRaw)	
 						channel.send_message(str(r.key()), message)
 						

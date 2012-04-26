@@ -62,7 +62,8 @@ Broadcast.init({
 		}
 		else if (dat.type == "finPartida")
 		{
-			window.location.replace("/salas");
+				$('#modalFin').modal('show')
+				$("span#winner").text(dat.content.Winner)
 		}
 	}
 });

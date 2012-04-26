@@ -128,6 +128,12 @@
 	<script type="text/javascript" src='js/blackboard.js'></script>
 	<script type="text/javascript" src='js/chat.js'></script>
 	<script type="text/javascript" src='js/juego.js'></script>
+	<script>
+			$('#modalFin').on('hidden', function () {
+				window.location.replace("/salas");
+			})
+			
+	</script>
 	
 {% endblock %}
 
@@ -197,6 +203,19 @@
 				</div>
 			</div>
 
+		</div>
+	</div>
+
+	<div class="modal hide fade" id="modalFin">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">x</button>
+			<h3>Tenemos un vencedor</h3>
+		</div>
+		<div class="modal-body">
+			<h1><span id="winner"></span></h1>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal" id="return">Volver</a>
 		</div>
 	</div>
 {% endblock %}
