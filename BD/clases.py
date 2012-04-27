@@ -57,6 +57,11 @@ class Amigos(db.Model):
 	amigo = db.ReferenceProperty(User)
 	aceptado = db.BooleanProperty(default = False)
 
+class Mensaje(db.Model):
+	emisor = db.StringProperty()
+	receptor = db.StringProperty()
+	mensaje = db.StringProperty()
+	
 ########### METODOS ################
 
 class UserDB:
@@ -427,3 +432,19 @@ class AmigosDB:
 			return True
 		else:
 			return False
+
+class MensajesDB:
+	def Send(self, e, r, m):
+		msj = Mensajes()
+		msj.emisor = e
+		msj.receptor = r
+		msj.mensaje = m
+		msj.put()
+		
+	def Get(self, user):
+		msj = Mensajes.all()
+		msj.filter("emisor =", user)
+		results = msj.get()
+		
+		return results
+		

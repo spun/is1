@@ -150,31 +150,40 @@
 			</div>
 		</div>
 		<div class="tab-pane" id="mensajes">
-			<ul class="nav nav-tabs">
-				<li class="active"><a href="#received" data-toggle="tab">Recibidos</a></li>
-				<li><a href="#sent" data-toggle="tab">Enviados</a></li>
-			</ul>
-				<div class="row">
-					<div class="span12">
-						<div class="row">
-							<div class="span9">
-								<p><h2>Enviar Mensaje</h2></p>
-								<form class="well">
+			<div class="row">
+				<div class="span12">
+					<div class="row">
+						<div class="span9">
+							<p><h2>Mensajes recibidos</h2></p>
+								<!--form class="well">
 									<h6>Aquí deben aparecer los amigos</h6>
 									<br/>
 										{% for p in listaUsers %}
 												<h3><a href="/perfil?user={{p.nick}}">{{p.nick}}</a>
 												<a class="btn btn-danger btn-mini" href="/perfil?user={{userProfile.nick}}&eliminar={{p.nick}}"><i class="icon-remove-sign icon-white"></i></a></h3>
 										{%endfor%}								
-									<form id="sendMessage" method="post" onsubmit="">
-										<textarea rows="5" cols="1"></textarea>
-										<br/>
-										<input type="submit" value="Enviar"/>
-										<input type="reset" value="Borrar"/>
-									</form>
-								</form>
+
+								</form-->
 								<hr></hr>
-							</div>
+						</div>
+						</hr>
+						<div class="span9">
+							<p><h2>Enviar mensaje</h2></p>
+							<form id="sendMessage" action="/perfil" method="post" onsubmit="">
+								<select>
+								{% for p in listaUsers %}
+									{% if p.nick != userProfile.nick %}
+										<option value="{{p.nick}}">{{p.nick}}</option>
+									{% endif %}
+								{%endfor%}
+								</select>
+								<br/>
+								<textarea rows="5" cols="1"></textarea>
+								<br/>
+								<input type="submit" value="Enviar"/>
+								<input type="reset" value="Borrar"/>
+							</form>
+						</div>
 							<div class="span3">
 									{% if user.avatar %}
 									<img id="avatar" src="/imgs/user?img_id={{userProfile.key}}" width="200" height="200" alt="Imagen de usuario"/> 
