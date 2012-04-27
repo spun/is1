@@ -192,7 +192,15 @@ class Perfil(webapp2.RequestHandler):
 			self.response.out.write(template.render(path, template_values))			
 					
 
+
+class PerfilEnvio(webapp2.RequestHandler):
+	def get(self):
+		self.response.out.write("Get");
+	def post(self):
+		self.response.out.write("post");
+
 						
 app = webapp2.WSGIApplication([('/perfil', Perfil),
-								('/imgs/user', Image)],
+								('/imgs/user', Image),
+								('/mens/envio', PerfilEnvio)],
                               debug=True)		
