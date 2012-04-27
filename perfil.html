@@ -22,6 +22,12 @@
 			document.getElementById("uploadPhoto").style.display = "";
 			document.getElementById("change").style.display = "";
 		}
+		
+		function ObtenerReceptor(recep)
+		{
+			var x=recep.options[recep.selectedIndex].text;
+			document.getElementById("receptor").value = x;
+		}
 	</script>
 {% endblock %}
 
@@ -31,7 +37,11 @@
 		<li class="active"><a href="#perfil" data-toggle="tab">Perfil</a></li>
 		<li><a href="#amigos" data-toggle="tab">Amigos</a></li>
 		<li><a href="#puntuaciones" data-toggle="tab">Puntuaciones</a></li>
-		<li><a href="#mensajes" data-toggle="tab">Mensajes</a></li>
+		{% if user %}
+			{% if user == userProfile %}
+				<li><a href="#mensajes" data-toggle="tab">Mensajes</a></li>
+			{% endif %}
+		{% endif %}
 	</ul>
 
 	<div class="tab-content">
@@ -148,54 +158,61 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="tab-pane" id="mensajes">
-			<div class="row">
-				<div class="span12">
+		</div>	
+				<div class="tab-pane" id="mensajes">
 					<div class="row">
-						<div class="span9">
-							<p><h2>Mensajes recibidos</h2></p>
-								<!--form class="well">
-									<h6>Aquí deben aparecer los amigos</h6>
-									<br/>
-										{% for p in listaUsers %}
-												<h3><a href="/perfil?user={{p.nick}}">{{p.nick}}</a>
-												<a class="btn btn-danger btn-mini" href="/perfil?user={{userProfile.nick}}&eliminar={{p.nick}}"><i class="icon-remove-sign icon-white"></i></a></h3>
-										{%endfor%}								
-
-								</form-->
-								<hr></hr>
-						</div>
-						</hr>
-						<div class="span9">
-							<p><h2>Enviar mensaje</h2></p>
-							<form id="sendMessage" action="/perfil" method="post" onsubmit="">
-								<select>
-								{% for p in listaUsers %}
-									{% if p.nick != userProfile.nick %}
-										<option value="{{p.nick}}">{{p.nick}}</option>
-									{% endif %}
-								{%endfor%}
-								</select>
-								<br/>
-								<textarea rows="5" cols="1"></textarea>
-								<br/>
-								<input type="submit" value="Enviar"/>
-								<input type="reset" value="Borrar"/>
-							</form>
-						</div>
-							<div class="span3">
-									{% if user.avatar %}
-									<img id="avatar" src="/imgs/user?img_id={{userProfile.key}}" width="200" height="200" alt="Imagen de usuario"/> 
-									{% else %}
-									<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
-									{% endif %}
+						<div class="span12">
+							<div class="row">
+								<div class="span9">
+									<p><h2>Mensajes recibidos</h2></p>
+										<form class="well">
+												{% for p in listaMensajes %}
+													{% if p.receptor == userProfile.nick %}
+														<div>
+															<h6>Mensaje de: {{p.emisor}}</h6>
+															<br/>
+															<textarea rows="5" cols="1" name="texto" disabled="disabled"> {{p.mensaje}}</textarea>
+														</div>
+														<br/>
+													{% endif %}
+												{%endfor%}								
+										</form>
+										<hr></hr>
+								</div>
+									<div class="span3">
+											{% if user.avatar %}
+											<img id="avatar" src="/imgs/user?img_id={{userProfile.key}}" width="200" height="200" alt="Imagen de usuario"/> 
+											{% else %}
+											<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
+											{% endif %}
+									</div>
+														
+								</hr>
+								<div class="span9">
+									<p><h2>Enviar mensaje</h2></p>
+										<form id="sendMessage" action="/mens/envio" method="post">
+											<select onchange="ObtenerReceptor(this)">
+											
+											{% for p in listaUsers %}
+												{% if p.nick != userProfile.nick %}
+													<option id="opcion" value="{{p.nick}}">{{p.nick}}</option>	
+													
+												{% endif %}
+											{%endfor%}
+											</select>
+											<br/>
+											<input type="text" id="receptor" style="display:none" name="receptor"/>
+											<textarea rows="5" cols="1" name="texto"></textarea>
+											<br/>
+											<input type="submit" value="Enviar"/>
+											<input type="reset" value="Borrar"/>
+										</form>
+									
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>		
 	</div>
 
 <!--div class="modal hide fade" id="myModal">

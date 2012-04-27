@@ -11,6 +11,7 @@ from BD.clases import UserDB
 from BD.clases import PartidasJugadasDB
 from BD.clases import AmigosDB
 from BD.clases import User
+from BD.clases import MensajesDB
            
 class Image (webapp2.RequestHandler):
 	def get(self):
@@ -31,6 +32,7 @@ class Perfil(webapp2.RequestHandler):
 		listaAmigos = None
 		listaPeticiones = None
 		listaUsers = None
+		listaMensajes = None
 		isAmigo = False;
 		
 		self.sess = session.Session('enginesession')
@@ -42,6 +44,7 @@ class Perfil(webapp2.RequestHandler):
 			listaAmigos = AmigosDB().ObtenerAmigos(userProfile)
 			listaPeticiones = AmigosDB().ObtenerPeticiones(userProfile)
 			listaUsers = UserDB().getAll()
+			listaMensajes = MensajesDB().Get()
 			if self.request.get('user'):
 				if self.request.get('amistad'):
 					amigoObjetivo = UserDB().getUserByNick(cgi.escape(self.request.get('user')))
@@ -73,6 +76,7 @@ class Perfil(webapp2.RequestHandler):
 			template_values['listaPeticiones'] = listaPeticiones
 			template_values['isAmigo'] = isAmigo
 			template_values['listaUsers'] = listaUsers
+			template_values['listaMensajes'] = listaMensajes
 			path = os.path.join(os.path.dirname(__file__), 'perfil.html')
 			self.response.out.write(template.render(path, template_values))
 		else:
@@ -86,6 +90,7 @@ class Perfil(webapp2.RequestHandler):
 		listaAmigos = None
 		listaPeticiones = None
 		listaUsers = None
+		listaMensajes = None
 		isAmigo = False;
 		self.sess = session.Session('enginesession')
 		if self.sess.load():
@@ -98,6 +103,7 @@ class Perfil(webapp2.RequestHandler):
 			listaAmigos = AmigosDB().ObtenerAmigos(userProfile)
 			listaPeticiones = AmigosDB().ObtenerPeticiones(userProfile)	
 			listaUsers = UserDB().getAll()
+			listaMensajes = MensajesDB().Get()
 			if user:
 				if user.nick == userSesion.nick:
 					mail = UserDB().getUserByMail(cgi.escape(self.request.get('mail')))		
@@ -188,16 +194,22 @@ class Perfil(webapp2.RequestHandler):
 			template_values['listaPeticiones'] = listaPeticiones
 			template_values['isAmigo'] = isAmigo
 			template_values['listaUsers'] = listaUsers
+			template_values['listaMensajes'] = listaMensajes
 			path = os.path.join(os.path.dirname(__file__), 'perfil.html')
 			self.response.out.write(template.render(path, template_values))			
 					
 
 
 class PerfilEnvio(webapp2.RequestHandler):
-	def get(self):
-		self.response.out.write("Get");
+
 	def post(self):
-		self.response.out.write("post");
+		template_values = {}				
+		self.sess = session.Session('enginesession')
+		if self.sess.load():
+			userSesion = UserDB().getUserByKey(self.sess.user)
+			mensaje = MensajesDB()
+			mensaje.Send(userSesion.nick, cgi.escape(self.request.get('receptor')), cgi.escape(self.request.get('texto')))
+			self.redirect('/perfil');
 
 						
 app = webapp2.WSGIApplication([('/perfil', Perfil),

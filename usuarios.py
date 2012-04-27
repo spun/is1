@@ -92,6 +92,7 @@ class Login(webapp2.RequestHandler):
 		if self.sess.load():
 			user = UserDB().getUserByKey(self.sess.user)
 			template_values['user'] = user
+			self.redirect('/')
 		
 		path = os.path.join(os.path.dirname(__file__), 'login.html')
 		self.response.out.write(template.render(path, template_values))

@@ -435,16 +435,12 @@ class AmigosDB:
 
 class MensajesDB:
 	def Send(self, e, r, m):
-		msj = Mensajes()
+		msj = Mensaje()
 		msj.emisor = e
 		msj.receptor = r
 		msj.mensaje = m
 		msj.put()
 		
-	def Get(self, user):
-		msj = Mensajes.all()
-		msj.filter("emisor =", user)
-		results = msj.get()
-		
-		return results
+	def Get(self):
+		return Mensaje.all()
 		
