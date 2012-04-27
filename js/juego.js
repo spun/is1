@@ -59,6 +59,7 @@ Broadcast.init({
 			$(BlackBoard.canvasRender).css("borderColor", "#FF5100");
 			//BlackBoard.lock(true);
 			Broadcast.sendMessage("http://localhost:8080/gamebroadcast/load", "New");
+			ChatZone.reportTimeEnd(dat.content);
 		}
 		else if (dat.type == "finPartida")
 		{

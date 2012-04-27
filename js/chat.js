@@ -27,6 +27,7 @@ var ChatZone = {
 		}).appendTo(self.config.history.find("ul"));
 		
 		$("<span></span>", {
+			class: "userMsj",
 			text: m.user+": "							
 		}).prependTo(li);
 		
@@ -36,17 +37,31 @@ var ChatZone = {
 	reportWinner: function(m) {
 		var self = ChatZone;
 		var li = $("<li></li>", {
-			text: " ha acertado la palabra. \nLa palabra era "+m.word+"."
+			class: "report",
+			html: " ha acertado la palabra. <br/>La palabra era:<br/> <p class='repWord'>"+m.word+"</p>"
 			
 		}).appendTo(self.config.history.find("ul"));
 		
 		$("<span></span>", {
-			text: "## "+m.user							
+			class:  'repUser',
+			text: m.user							
 		}).prependTo(li);
 		self.config.history.find("ul").prop({ scrollTop:self.config.history.find("ul").prop("scrollHeight") });
-		console.log(m);
 		$("span#"+m.userKey).text(m.ptosUser);
 		$("span#"+m.userDibKey).text(m.ptosDib);
+		
+		self.config.sender(self.config.urlLoad , m.user);
+	},
+	
+	reportTimeEnd: function(m) {
+		var self = ChatZone;
+		var li = $("<li></li>", {
+			class: "report",
+			html: "Nadie ha acertado la palabra. <br/>La palabra era:<br/> <p class='repWord'>"+m.word+"</p>"
+			
+		}).appendTo(self.config.history.find("ul"));
+
+		self.config.history.find("ul").prop({ scrollTop:self.config.history.find("ul").prop("scrollHeight") });
 		self.config.sender(self.config.urlLoad , m.user);
 	}
 };

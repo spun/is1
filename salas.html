@@ -322,9 +322,9 @@
                                     <label class="control-label" for="select02">Temática</label>
                                     <div class="controls">
                                       <select name="tema" id="select02">
-                                        <option>Ninguna</option>
-                                        <option>Animales</option>
-                                        <option>Playa</option>
+                                        {% for t in temas_list %}
+                                        <option>{{t}}</option>
+                                        {% endfor %}
                                       </select>
                                     </div>
                                 </div>

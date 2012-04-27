@@ -61,20 +61,25 @@ var BlackBoard = {
 		this.tools.pencil = new Pencil(BlackBoard);
 		this.tools.rectangle = new Rectangle(this);
 		this.tool = this.tools.pencil;
+		$(this.canvasRender).addClass("pencil");
 	},
 	
 	setTool: function(toolName) {
 		this.tool = this.tools[toolName];
+		$(this.canvasRender).removeClass(function() {
+			return $(this).attr('class');
+        });
+		$(this.canvasRender).addClass(toolName);
 	},
 	
 	bindEvents: function() {
 		var self = BlackBoard;
 
-		this.canvasRender.addEventListener('mousedown', function(e) {self.ev_canvas(e); return false;}, false);
-		this.canvasRender.addEventListener('mouseup', self.ev_canvas, false);
-		this.canvasRender.addEventListener('mouseleave', self.ev_canvas, false);
+		$(this.canvasRender).on('mousedown', function(e) {self.ev_canvas(e); return false;});
+		$(this.canvasRender).on('mouseup', self.ev_canvas);
+		$(this.canvasRender).on('mouseleave', self.ev_canvas);
 
-		this.canvasRender.addEventListener('mousemove', self.ev_canvas, false);
+		$(this.canvasRender).on('mousemove', self.ev_canvas);
 	},
 	
 	ev_canvas: function(ev) {

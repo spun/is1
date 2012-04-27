@@ -59,6 +59,44 @@
 		#chatZone-form #appendedPrependedInput {
 			width: 128px;
 		}
+        
+        
+		#playerContainer {
+			border: 1px solid silver;
+			height: auto;
+            margin: 0px 0px 2px 0px;
+            width: 85px;
+            float: left;
+            margin: 0 10px 20px 10px;
+            padding: 8px;
+		}
+		
+		#playerContainer img{
+            width: 85px;
+            height: 85px;
+            margin-bottom: 10px;
+		}
+        
+        #playerContainer:hover{
+			border-top: 1px solid silver;
+            border-bottom: 1px solid silver;
+			height: auto;
+            background-color: #E0ECF8;
+            
+		}
+		
+		.playerContainerNick {
+			float: left;
+			font-weight: bold;
+			width: 60px;
+			overflow: hidden;
+		}
+		
+		.dropdown-menu {
+			index-z: 99;
+		}
+		
+		
 	</style>
 {% endblock %}
 
@@ -83,7 +121,6 @@
 			},
 			onmessage: function(m) {
 				dat = JSON.parse(m.data);
-				console.log(dat);
 				ChatZone.receiveMessage(dat.content);		
 			}				
 		});
@@ -91,7 +128,7 @@
 		ChatZone.init({
 			history: $('#chatZone-history'),
 			form: $('#chatZone-form'),
-			urlChat: 'http://'+location.host+'/salaBroadcast/chat',
+			urlChat: 'http://'+location.host+'/salabroadcast/chat',
 			sender: Broadcast.sendMessage
 		});		
 		
@@ -108,8 +145,10 @@
     <div id="salaJuegoContent">
         <div id="salaJuegoUsers">
             {% for user in user_list %}
-                <div id="playerContainer">
-                    <div id="playerAvatar"><img src="/img/Salas/triforce.jpg" alt="Anterior" /></div>
+                <div id="playerContainer">                    
+                    <div id="playerAvatar">
+						<img src="/img/Salas/triforce.jpg" alt="Anterior" />
+					</div>
                     <div id="playerDatos">
                         <a href="/perfil?user={{user.nick}}" title="Ir al perfil de {{user.nick}}">{{user.nick}}</a>
                         <p><b>Ptos:</b> -----</p>
@@ -130,9 +169,22 @@
 {% block container %}
 	<div class="row">
 		<div class="span9">
-			1
 			{% for user in user_list %}
-			<a href="/perfil?user={{user.nick}}" title="Ir al perfil de {{user.nick}}">{{user.nick}}</a>
+                <div id="playerContainer">
+					{% if user.avatar %}
+						<img id="avatar" src="/imgs/user?img_id={{user.key}}" alt="Imagen de usuario"/> 
+					{% else %}
+						<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
+					{% endif %}
+					<a href="/perfil?user={{user.nick}}" title="Ir al perfil de {{user.nick}}" class="playerContainerNick">{{user.nick}}</a>
+					<div class="btn-group pull-right">
+						<a class="btn btn-mini dropdown-toggle pull-right" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a target="_blank" href="/perfil?user={{user.nick}}&amistad=0"><i class="icon-heart"></i> Amistad</a></li>
+							<li><a href="#"><i class="icon-envelope"></i> Mens. Privado</a></li>
+						</ul>
+					</div> 
+                </div>
             {% endfor %}
 		</div>
 		<div class="span3">
@@ -161,9 +213,8 @@
 			</form>
 		</div>
 		<div class="span3">
-			4
-			<a href="/juego?gamekey={{gamekey}}">PLAY!</a>
-			<a href="/salajuego?e=1">Salir</a>
+			<a class="btn btn-success" href="/juego?gamekey={{gamekey}}"><i class="icon-play icon-white"></i> Jugar!</a>
+			<a class="btn btn-danger" href="/salajuego?e=1"><i class="icon-remove icon-white"></i> Salir</a>
 		</div>
 	</div>
 
