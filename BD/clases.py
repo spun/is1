@@ -427,6 +427,7 @@ class AmigosDB:
 		q = Amigos.all()
 		q.filter("user =", amigo)
 		q.filter("amigo =", user)
+		q.filter("aceptado =", True)
 		res = q.count()
 		if res>0:
 			return True

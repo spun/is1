@@ -36,7 +36,9 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#perfil" data-toggle="tab">Perfil</a></li>
 		<li><a href="#amigos" data-toggle="tab">Amigos</a></li>
-		<li><a href="#puntuaciones" data-toggle="tab">Puntuaciones</a></li>
+		{% if isAmigo%}
+				<li><a href="#puntuaciones" data-toggle="tab">Puntuaciones</a></li>
+		{% endif %}
 		{% if user %}
 			{% if user == userProfile %}
 				<li><a href="#mensajes" data-toggle="tab">Mensajes</a></li>

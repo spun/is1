@@ -216,12 +216,12 @@ function DetenerCrono (){
   
 function InicializarCrono () {  
 	//inicializa contadores globales  
-	decimas = 9 
+	decimas = 0 
 	segundos = 29  
-	minutos = 0  
+	minutos = 1  
 	  
 	//pone a cero los marcadores  
-	document.crono.display.value = '00:30:00'  
+	document.crono.display.value = '01:30:00'  
 }  
   
 function MostrarCrono () {  
