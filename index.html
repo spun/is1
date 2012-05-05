@@ -13,7 +13,6 @@
 		<div class="span11 offset1">					
 			<div class="row-fluid">
 				<h3>Usuarios</h3><br/>
-				{% if not user %}
 					<div class="span3">
 						<h4>Registro</h4>
 						<p>Pagina donde donde poder crear nuevos usuarios</p>
@@ -25,15 +24,12 @@
 						<p>Pagina donde poder autentificarte como usuario registrado de la web</p>
 						<p><a class="btn btn-info btn-mini" href="/login">Ir a login »</a></p>
 					</div><!--/span-->
-				{% endif %}
-				
-				{% if user %}
+
 					<div class="span3">
 						<h4>Perfil</h4>
 						<p>Pagina donde puedes ver tus propios datos los datos publicos de los demas jugadores falta una o por ahi en medio</p>
 						<p><a class="btn btn-success btn-mini" href="/perfil">Ir a perfil »</a></p>
 					</div><!--/span-->
-				{% endif %}
 			</div><br/>
 			
 			<div class="row-fluid">
@@ -49,19 +45,16 @@
 					<p><a class="btn btn-danger btn-mini" href="/salas">Ir a salas »</a></p>
 				</div><!--/span-->
 			</div><br/><br/>
-			
-			{% if user %}
-				{%if user.nick == "Admin" %}
-					<div class="row-fluid">
-						<h3>Administracion</h3><br/>
-						<div class="span3">
-							<h4>Administracion</h4>
-							<p>Administracion: Pagina donde poder añadir nuevos conjuntos de palabras y temas</p>
-							<p><a class="btn btn-inverse btn-mini" href="/administracion">Ir a administación »</a></p>
-						</div><!--/span-->				
-					</div>			
-				{% endif %}
-			{% endif %}
+	
+			<div class="row-fluid">
+				<h3>Administracion</h3><br/>
+				<div class="span3">
+					<h4>Administracion</h4>
+					<p>Administracion: Pagina donde poder añadir nuevos conjuntos de palabras y temas</p>
+					<p><a class="btn btn-inverse btn-mini" href="/administracion">Ir a administación »</a></p>
+				</div><!--/span-->				
+			</div>			
+
 			
 			
 <!--

@@ -4,10 +4,22 @@
 
 {% block script %}
 	<script>
-		$('#myTab').tab('show')
-		$(function () {
-			$('.tabs a:last').tab('show')
-		})
+		var param = location.hash;
+
+		$("#myTabs a").each(function() {
+			console.log($(this).attr('href'))
+			if($(this).attr('href') == param)
+			{
+				$(this).tab('show');
+			}
+		});
+
+
+		$('#myTab a').click(function(e){
+			e.preventDefault();
+			$(this).tab('show');
+		});
+
 		
 		function ModificarPerfil()
 		{
@@ -33,11 +45,15 @@
 
 
 {% block container %}
-	<ul class="nav nav-tabs">
+	<ul class="nav nav-tabs" id="myTabs">
 		<li class="active"><a href="#perfil" data-toggle="tab">Perfil</a></li>
 		<li><a href="#amigos" data-toggle="tab">Amigos</a></li>
-		{% if isAmigo%}
-				<li><a href="#puntuaciones" data-toggle="tab">Puntuaciones</a></li>
+		{% if user == userProfile %}
+			<li><a href="#puntuaciones" data-toggle="tab">Puntuaciones</a></li>
+		{% else %}
+			{% if isAmigo %}
+					<li><a href="#puntuaciones" data-toggle="tab">Puntuaciones</a></li>
+			{% endif %}
 		{% endif %}
 		{% if user %}
 			{% if user == userProfile %}
