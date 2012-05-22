@@ -60,7 +60,8 @@ class Salas(webapp2.RequestHandler):
 			listaT = []
 			listaTemas = Palabras.all()
 			for tema in listaTemas:
-				listaT.append(tema.tema)
+				if tema.tema not in listaT:
+					listaT.append(tema.tema)
 				
 			template_values['salas_list'] = res2
 			template_values['temas_list'] = listaT
