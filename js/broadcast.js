@@ -18,10 +18,8 @@ var Broadcast = {
 			self.config.onmessage(m);
 		};
 		this.socket.onerror = function() {
-			console.log('# Socket error');
 		};
 		this.socket.onclose = function() {
-			console.log('# Socket closed');
 		};		
 	},
 	

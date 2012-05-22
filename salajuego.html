@@ -117,7 +117,6 @@
 		Broadcast.init({
 			state: state,	// Declarado en juego.html
 			onopen: function() {
-				console.log('# Socket open');
 			},
 			onmessage: function(m) {
 				dat = JSON.parse(m.data);

@@ -2,8 +2,7 @@
 Broadcast.init({
 	state: state,	// Declarado en juego.html
 	onopen: function() {
-		console.log('# Socket open');
-		Broadcast.sendMessage("http://localhost:8080/gamebroadcast/load", "New");
+		Broadcast.sendMessage('http://'+location.host+'/gamebroadcast/load', "New");
 	},
 	onmessage: function(m) {
 		dat = JSON.parse(m.data);
@@ -21,7 +20,6 @@ Broadcast.init({
 		}
 		else if(dat.type == "infoGame")
 		{
-			//console.log(dat);
 			BlackBoard.context.clearRect(0, 0, 600, 500);
 			if(dat.content.drawing == true)
 			{
@@ -57,8 +55,8 @@ Broadcast.init({
 		else if (dat.type == "finish")
 		{
 			$(BlackBoard.canvasRender).css("borderColor", "#FF5100");
-			//BlackBoard.lock(true);
-			Broadcast.sendMessage("http://localhost:8080/gamebroadcast/load", "New");
+			BlackBoard.lock(true);
+			Broadcast.sendMessage('http://'+location.host+'/gamebroadcast/load', "New");
 			ChatZone.reportTimeEnd(dat.content);
 		}
 		else if (dat.type == "finPartida")

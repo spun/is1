@@ -12,7 +12,7 @@ var BlackBoard = {
 		this.isPenDown = false;
 		this.penDownPos = {};		
 
-		this.locked = false;
+		this.locked = true;
 
 		this.initTools();
 		if (!this.context)
@@ -75,16 +75,18 @@ var BlackBoard = {
 	bindEvents: function() {
 		var self = BlackBoard;
 
-		$(this.canvasRender).on('mousedown', function(e) {self.ev_canvas(e); return false;});
-		$(this.canvasRender).on('mouseup', self.ev_canvas);
-		$(this.canvasRender).on('mouseleave', self.ev_canvas);
+		this.canvasRender.addEventListener('mousedown', function(e) {self.ev_canvas(e); return false;} ,false);
+this.canvasRender.addEventListener('mouseup', self.ev_canvas ,false);
+this.canvasRender.addEventListener('mouseleave', self.ev_canvas ,false);
+this.canvasRender.addEventListener('mousemove', self.ev_canvas ,false);
+		//$(this.canvasRender).on('mouseup', self.ev_canvas);
+		//$(this.canvasRender).on('mouseleave', self.ev_canvas);
 
-		$(this.canvasRender).on('mousemove', self.ev_canvas);
+		//$(this.canvasRender).on('mousemove', self.ev_canvas);
 	},
 	
 	ev_canvas: function(ev) {
 		var self = BlackBoard;
-		
 		if (ev.layerX || ev.layerX == 0) { // Firefox
 			ev._x = ev.layerX;
 			ev._y = ev.layerY;
@@ -92,6 +94,7 @@ var BlackBoard = {
 			ev._x = ev.offsetX;
 			ev._y = ev.offsetY;
 		}
+
 
 		// Call the event handler of the tool.
 		var func = self.tool[ev.type];
