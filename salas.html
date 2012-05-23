@@ -185,12 +185,16 @@
                                                                 <div class="span2"><p><i class="icon-star"></i><a href="/perfil?user={{sala.autor}}"> {{sala.autor}}</a></p></div>
                                                                 <div class="span2"><p><i class="icon-time"></i> {{sala.fechaCrea.hour}}:{{sala.fechaCrea.minute}}</p></div>
                                                                 <div class="span2"><p><i class="icon-flag"></i> {{sala.tipo}}</p></div>
-                                                                <div class="span2"><p><i class="icon-user"></i> {{sala.players}}/10</p></div>
+                                                                <div class="span2"><p><i class="icon-user"></i> {{sala.players}}/{{sala.numPlayers}}</p></div>
                                                                 {% if user %}
                                                                     {% if sala.password %}
                                                                         <p><a class="btn btn-success" onclick='almacenaDatos("{{sala.password}}", "{{sala.idSala}}");' data-toggle="modal" href="#passModal"><i class="icon-arrow-right icon-white"></i> Entrar </a></p>
                                                                     {% else %}
-                                                                        <p><a class="btn btn-success" href="/salajuego?id={{sala.idSala}}"><i class="icon-arrow-right icon-white"></i> Entrar </a></p>
+                                                                        {% if sala.players < sala.numPlayers %}
+                                                                            <p><a class="btn btn-success" href="/salajuego?id={{sala.idSala}}"><i class="icon-arrow-right icon-white"></i> Entrar </a></p>
+                                                                            {% else %}
+                                                                            <p>Partida completa</p>
+                                                                        {% endif %}
                                                                     {% endif %}
                                                                 {% endif %}
                                                         </div>
@@ -286,23 +290,23 @@
 					<div class="controls">
 						<input type="text" name="password" id="inputPass" disabled="disabled">
 						<label class="checkbox">
-                                                    <input type="checkbox" onclick='activaPass(this);'> Activar
-                                                </label>
+                            <input type="checkbox" onclick='activaPass(this);'> Activar
+                        </label>
 					</div>
 				</div>
                                 
-                                <div class="control-group">
-                                    <label class="control-label" for="select01">Tipo de juego</label>
-                                    <div class="controls">
-                                      <select name="tipo" id="select01" onchange='changeTipo(this);'>
-                                        <option>Puntos</option>
-                                        <option>Rondas</option>
-                                      </select>
-                                      <span class="help-inline"> ¿Tienes <a href="/reglas">dudas</a>? </span> 
-                                    </div>
-                                </div>
+                <div class="control-group">
+                    <label class="control-label" for="select01">Tipo de juego</label>
+                    <div class="controls">
+                      <select name="tipo" id="select01" onchange='changeTipo(this);'>
+                        <option>Puntos</option>
+                        <option>Rondas</option>
+                      </select>
+                      <span class="help-inline"> ¿Tienes <a href="/reglas">dudas</a>? </span> 
+                    </div>
+                </div>
                                 
-                                <div class="control-group" id="Puntos">
+                <div class="control-group" id="Puntos">
 					<label class="control-label" for="inputPuntos">Num. de puntos</label>
 					<div class="controls">
 						<input type="text" value='150' name="puntos" id="inputPuntos">
@@ -318,17 +322,17 @@
 					</div>
                                 </div> -->
                                 
-                                <div class="control-group">
-                                    <label class="control-label" for="select02">Temática</label>
-                                    <div class="controls">
-                                      <select name="tema" id="select02">
-					<option>Ninguna</option>
-                                        {% for t in temas_list %}
-                                        <option>{{t}}</option>
-                                        {% endfor %}
-                                      </select>
-                                    </div>
-                                </div>
+                <div class="control-group">
+                    <label class="control-label" for="select02">Temática</label>
+                    <div class="controls">
+                      <select name="tema" id="select02">
+                        <option>Ninguna</option>
+                        {% for t in temas_list %}
+                        <option>{{t}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                </div>
                                 
                                 <!--<div class="control-group">
 					<label class="control-label" for="inputTiempo">Tiempo</label>
@@ -337,6 +341,22 @@
 						<span class="help-inline">00:00:00</span>
 					</div>
 				</div>-->
+                <div class="control-group">
+                    <label class="control-label" for="select03">Número de jugadores</label>
+                    <div class="controls">
+                      <select class="span1" name="players" id="select03">
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                      </select>
+                    </div>
+                </div>
                                 
 				<div class="form-actions hide">
 					<button type="submit" class="btn btn-primary">Crear sala</button>

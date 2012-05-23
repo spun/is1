@@ -83,6 +83,7 @@ class Salas(webapp2.RequestHandler):
 				partyPass=None
 				tipo=None
 				puntos = 0
+				numPlayers = 0
 				#Creamos una nueva sala	
 				salas=SalasDB()			
 				nombre=self.request.get('nombre')
@@ -96,8 +97,9 @@ class Salas(webapp2.RequestHandler):
 					tipo="Rondas"
 					
 				tematica = self.request.get('tema')
+				numPlayers = int(self.request.get('players'))
 				
-				salas.AddSala(nombre, autor, tipo, puntos, partyPass, tematica)
+				salas.AddSala(nombre, autor, tipo, puntos, partyPass, tematica, numPlayers)
 				#Insertamos al usuario que creo la sala en esta
 				miSala=SalasDB().getSalaByAutor(user.nick)
 				user.idSala=miSala[0].idSala
