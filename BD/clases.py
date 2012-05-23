@@ -22,7 +22,7 @@ class Sala(db.Model):
 	estado = db.StringProperty()
 	idSala = db.StringProperty()
 	players = db.StringProperty()
-	numPlayers = db.IntegerProperty(default=2)
+	numPlayers = db.StringProperty()
 	tipo = db.StringProperty()
 	numPuntos = db.IntegerProperty(default=150)
 	password = db.StringProperty()

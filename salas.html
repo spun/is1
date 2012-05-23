@@ -199,9 +199,9 @@
                                                                     {% if sala.password %}
                                                                         <p><a class="btn btn-success" onclick='almacenaDatos("{{sala.password}}", "{{sala.idSala}}");' data-toggle="modal" href="#passModal"><i class="icon-arrow-right icon-white"></i> Entrar </a></p>
                                                                     {% else %}
-                                                                        {% if sala.players < sala.numPlayers %}
+                                                                        {% if sala.players != sala.numPlayers %}
                                                                             <p><a class="btn btn-success" href="/salajuego?id={{sala.idSala}}"><i class="icon-arrow-right icon-white"></i> Entrar </a></p>
-                                                                            {% else %}
+                                                                        {% else %}
                                                                             <p>Partida completa</p>
                                                                         {% endif %}
                                                                     {% endif %}
