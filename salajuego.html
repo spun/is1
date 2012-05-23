@@ -61,7 +61,7 @@
 		}
         
         
-		#playerContainer {
+		.playerContainer {
 			border: 1px solid silver;
 			height: auto;
             margin: 0px 0px 2px 0px;
@@ -71,13 +71,13 @@
             padding: 8px;
 		}
 		
-		#playerContainer img{
+		.playerContainer img{
             width: 85px;
             height: 85px;
             margin-bottom: 10px;
 		}
         
-        #playerContainer:hover{
+        .playerContainer:hover{
 			border-top: 1px solid silver;
             border-bottom: 1px solid silver;
 			height: auto;
@@ -120,7 +120,22 @@
 			},
 			onmessage: function(m) {
 				dat = JSON.parse(m.data);
-				ChatZone.receiveMessage(dat.content);		
+                if(dat.type == "chat")
+                {
+                    ChatZone.receiveMessage(dat.content);
+                }
+                else if(dat.type == "sala")
+                {
+                   	var li = $("<div></div>", {
+                    id: dat.content.userNick,
+                    class: "playerContainer",
+                    html: "{% if user.avatar %}<img id='avatar' src='/imgs/user?img_id="+dat.content.userKey+"' alt='Imagen de usuario'/> {% else %} <img id='avatar' src='/img/layout/default-user.jpg' alt='Imagen de usuario'/> {% endif %} <a href='/perfil?user="+dat.content.userNick+"' title='Ir al perfil de "+dat.content.userNick+"' class='playerContainerNick'>"+dat.content.userNick+"</a><div class='btn-group pull-right'><a class='btn btn-mini dropdown-toggle pull-right' data-toggle='dropdown' href='#'><span class='caret'></span></a><ul class='dropdown-menu'><li><a target='_blank' href='/perfil?user="+dat.content.userNick+"#amigos'><i class='icon-heart'></i> Amistad</a></li><li><a target='_blank' href='/perfil#mensajes'><i class='icon-envelope'></i> Msj. Privado</a></li></ul></div>" 
+                    }).appendTo("#playersBox");
+                }
+                else if(dat.type == "salaExit")
+                {
+                    $("#"+dat.content.userNick).remove();
+                }
 			}				
 		});
 
@@ -138,38 +153,11 @@
 
 {% endblock %}
 
-
-{% block content %}
-
-    <div id="salaJuegoContent">
-        <div id="salaJuegoUsers">
-            {% for user in user_list %}
-                <div id="playerContainer">                    
-                    <div id="playerAvatar">
-						<img src="/img/Salas/triforce.jpg" alt="Anterior" />
-					</div>
-                    <div id="playerDatos">
-                        <a href="/perfil?user={{user.nick}}" title="Ir al perfil de {{user.nick}}">{{user.nick}}</a>
-                        <p><b>Ptos:</b> -----</p>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-        
-        <div id="salaJuegoChat">
-    
-        </div>
-    
-        <div id="salaJuegoChatIn"></div>
-        <div id="salaPlay"><p><a href="/juego?gamekey={{gamekey}}">PLAY!</a></p><p><a href="/salajuego?e=1">Salir</a></p></div>
-    </div>
-{% endblock %}
-
 {% block container %}
 	<div class="row">
-		<div class="span9">
+		<div class="span9" id="playersBox">
 			{% for user in user_list %}
-                <div id="playerContainer">
+                <div class="playerContainer" id="{{user.nick}}">
 					{% if user.avatar %}
 						<img id="avatar" src="/imgs/user?img_id={{user.key}}" alt="Imagen de usuario"/> 
 					{% else %}
@@ -213,7 +201,7 @@
 		</div>
 		<div class="span3">
 			<a class="btn btn-success" href="/juego?gamekey={{gamekey}}"><i class="icon-play icon-white"></i> Jugar!</a>
-			<a class="btn btn-danger" href="/salajuego?e=1"><i class="icon-remove icon-white"></i> Salir</a>
+			<a id="btSalir" class="btn btn-danger" href="/salajuego?e=1"><i class="icon-remove icon-white"></i> Salir</a>
 		</div>
 	</div>
 
