@@ -61,6 +61,9 @@ handlers:
   
 - url: /reglas
   script: reglas.app
+
+- url: /ayuda
+  script: ayuda.app
   
 - url: /.*
   script: main.app
