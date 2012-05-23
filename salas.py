@@ -39,9 +39,13 @@ class Salas(webapp2.RequestHandler):
 				
 			salas=SalasDB()		
 			
-			if self.request.get('salaText'):
-				cadena= urllib2.unquote(self.request.get('salaText'))
-				res=salas.ListarBusqueda(cadena)
+			if self.request.get('salaText') and self.request.get('param') != "Todas":
+				parametro = self.request.get('param')
+				parametro = parametro.lower()
+				parametro = urllib2.unquote(parametro)
+				textoBuscar = self.request.get('salaText')
+				cadena= urllib2.unquote(textoBuscar)
+				res=salas.ListarBusqueda(parametro, cadena)
 				numPags=1
 			else:
 				res=salas.ListarSalas()
@@ -141,9 +145,6 @@ class BuscadorSalas(webapp2.RequestHandler):
 					}
 				}
 			
-		
-
-		
 		message = json.dumps(messageRaw)
 		self.response.out.write(message)	
 		

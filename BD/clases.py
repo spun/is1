@@ -147,9 +147,9 @@ class SalasDB:
 		res=sala.fetch(100)
 		return res
 	
-	def ListarBusqueda(self, texto):
+	def ListarBusqueda(self, param, texto):
 		sala=Sala.all()
-		sala.filter("nombre =", texto)
+		sala.filter(param+" =", texto)
 		res=sala.fetch(100)
 		return res
 

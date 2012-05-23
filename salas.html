@@ -153,12 +153,21 @@
         <div class="span12">
                 <div class="row">
                     <div class="span12">
-                        <form class="well form-search" id="BuscaSalaForm" action="/salas?p=1" method="get">
+                        <form class="well form-search" id="BuscaSalaForm" action="/salas?p=1" method="get"> 
                             <div class="controls pull-right">
                                 <div class="input-append">
                                     <input type="hidden" value="1" name="p" />
-                                    <input class="span2" name="salaText" id="appendedInputButton" size="16" type="text"><button class="btn" type="submit">Buscar</button>
+                                    <input class="span2" name="salaText" id="appendedInputButton" size="16" type="text">
+                                    <button class="btn" type="submit">Buscar</button>
                                 </div>
+                            </div>
+                             <div class="controls pull-right">
+                                <select class="span1" name="param" id="select04">
+                                    <option>Todas</option>
+                                    <option>Nombre</option>
+                                    <option>Autor</option>
+                                    <option>Tipo</option>
+                                </select>
                             </div>
                             {% if user %}
                                 <a class="btn btn-inverse" data-toggle="modal" href="#myModal" ><i class="icon-plus icon-white"></i> Crear Sala</a>
