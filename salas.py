@@ -50,15 +50,18 @@ class Salas(webapp2.RequestHandler):
 			else:
 				res=salas.ListarSalas()
 			#Listamos las salas que hay por acada pagina
-			i=0
 			res2 =[]
-			for sala in res:
-				if i>=(int(self.request.get('p'))-1)*8 and i<(int(self.request.get('p')))*8:
-					res = UserDB().getUsersBySala(sala.idSala)
-					sala.players = str(res.count())
-					res2.append(sala)
-					sala.put()
-				i+=1
+			i=0
+			if int(self.request.get('p')) <= numPags:
+				for sala in res:
+					if i>=(int(self.request.get('p'))-1)*8 and i<(int(self.request.get('p')))*8:
+						res = UserDB().getUsersBySala(sala.idSala)
+						sala.players = str(res.count())
+						res2.append(sala)
+						sala.put()
+					i+=1
+			else:
+				self.redirect("/salas?p=1")
 				
 			#Listamos los temas de palabras
 			listaT = []
