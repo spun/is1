@@ -28,6 +28,31 @@ class SalaJuego(webapp2.RequestHandler):
 			
 			#Si el usuario le da al boton de salir, eliminamos su asociacion con la sala
 			if self.request.get('e', default_value='0')!='0':
+				#Le decimos al resto de jugadores que se ha ido
+				game_key = user.idSala
+				if game_key:
+					sala = SalasDB().getSalaById(game_key)
+					if sala:
+						user = None
+						self.sess = session.Session('enginesession')
+						if self.sess.load():
+							user = UserDB().getUserByKey(self.sess.user)
+						
+							users = UserDB()
+							user_list = users.getUsersBySala(sala.idSala)
+							if UserDB().userExistsInSala(sala.idSala, user.nick):
+									messageRaw = {
+										"type": "salaExit", 
+										"content": {
+											"userKey": str(user.key()),
+											"userNick": user.nick							
+											}
+										}				
+									message = json.dumps(messageRaw)
+									
+									for r in user_list:	
+										channel.send_message(str(r.key()), message);
+				#Eliminamos al usuario de la sala
 				user2 = UserDB().getUserByNick(user.nick)
 				UsersInGameDB().deleteUserInGame(user2)
 				numUsers = UserDB().getUsersBySala(user.idSala)
@@ -38,7 +63,8 @@ class SalaJuego(webapp2.RequestHandler):
 					GameDB().deleteGame(user.idSala)
 				#Asignamos none a la sala del usuario
 				user.idSala="None"
-				user.put()
+				user.put()			
+				
 				#Redirigimos al inicio
 				self.redirect('/')
 			
@@ -46,6 +72,31 @@ class SalaJuego(webapp2.RequestHandler):
 			#Comprobamos si la sala existe
 			sala = SalasDB().getSalaById(self.request.get('id'))
 			if sala:
+				#Actualizamos la vista del resto de usuarios
+				game_key = sala.idSala
+				if game_key:
+					sala = SalasDB().getSalaById(game_key)
+					if sala:
+						user = None
+						self.sess = session.Session('enginesession')
+						if self.sess.load():
+							user = UserDB().getUserByKey(self.sess.user)
+						
+							users = UserDB()
+							user_list = users.getUsersBySala(sala.idSala)
+							if not UserDB().userExistsInSala(sala.idSala, user.nick):
+									messageRaw = {
+										"type": "sala", 
+										"content": {
+											"userKey": str(user.key()),
+											"userNick": user.nick							
+											}
+										}				
+									message = json.dumps(messageRaw)
+									
+									for r in user_list:	
+										channel.send_message(str(r.key()), message);
+							
 				#Si el usuario aun no esta asociado a las sala lo asociamos
 				if user and user.idSala=="None" and UsersInGameDB().UserExist(user)==False:
 					user.idSala=self.request.get('id')
@@ -93,7 +144,6 @@ class SalaBroadcastChat(webapp2.RequestHandler):
 	create a new game or add the currently-logged in uesr to a game."""
 
 	def post(self):
-		
 		game_key = self.request.get('g')		
 		if game_key:
 			sala = SalasDB().getSalaById(game_key)

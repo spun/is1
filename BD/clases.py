@@ -112,6 +112,16 @@ class UserDB:
 		q = User.all()
 		q.filter("idSala =", idSala)
 		return q
+	
+	def userExistsInSala(self, idSala, nick):
+		q = User.all()
+		q.filter("nick =", nick)
+		q.filter("idSala =", idSala)
+		res = q.count()
+		if res>0:
+			return True
+		else:
+			return False		
 
 	def getNumUsersBySala(self, idSala):
 		q = User.all()
