@@ -1,0 +1,52 @@
+﻿{% extends "templates/pattern.html" %}
+
+{% block title %}Ayuda{% endblock %}
+
+{% block script %}
+	
+{% endblock %}
+
+{% block container %}
+    <h1>Ayuda</h1>
+    <hr></hr>
+    <div class="row">
+        <div class="span12">
+            <form class="well">
+                <h3>Primeros pasos</h3>
+                <p>Antes de comenzar a jugar a PictiOnline debes ser usuario registrado. Para poder realizar el registro utiliza el enlace "Registrarse" situado 
+				en la parte superir derecha de la página.</p>
+				<br/>
+				<img src="/img/navegacion.png" width="1000px" />
+				<br/><br/>
+				<p> Una vez registrado, puedes iniciar sesión con el enlace "Entrar", situado a la derecha de el de registro, donde se te solicitará el nombre de usuario
+				y contraseña con el que se realzó el registro. Tras haber iniciado sesión la barra de navegación cambiará y aparecerá tu nombre de usuario. Pinchando
+				en él podrás tanto cerrar sesión como acceder a tu perfil para visualizar tus datos, modificarlos, enviar mensajes, etc...</p>
+				<br/><img src="/img/perf.png" />
+				<br/><br/>
+				<p> Al estar logueado ya podrás acceder también a las funcionalidades del juego </p>
+            </form>
+            <form class="well">
+                <h3>Salas</h3>
+				<p> Para poder empezar a jugar a PictiOnline debes acceder a una sala desde el enlace que hay en la parte superior de la web o bien desde la página de
+				inicio. Una vez dentro podrás o bien entrar a una sala existente con más jugadores o crear una propia con las opciones que más te gusten.</p>
+				<p>Una vez dentro de una sala, sólo hay que esperar a que estén los jugadores dentro de la sala y darle al botón de "Jugar" </p>
+            </form>
+			<form class="well">
+                <h3>Juego</h3>
+				<p> En la pantalla de juego distinguimos tres paneles: izquierda, central y derecha.</p>				
+				<p>El panel izquierdo muestra la palabra a dibujar si es el turno del dibujante. En caso de que sea turno de adivinar la palabra aparecera como
+				subrayados. También se muestra el número de jugadores con sus respectivas puntuaciones y el temporizador.</p>
+				<p> El panel centrasl es el de dibujado. Cuando es el turno del dibujante será de color verde, mientras que cuando sea el turno de adivinar el cuadro
+				será de color rojo y no se podrá dibujar.</p>
+				<p> En la parte inferior del panel se puede elegir distintas formas de dibujado (cuadro o pincel), colores y grosor del pincel.
+				<br/>
+				<img src="/img/paneldibujo.png" width="500px" height="500px"/>
+				<br/><br/>
+				<p> El panel derecho es el que muestra una ventana de chat, donde se mostrarán los mensajes que envían los usuarios. Si un usuario escribe la palabra
+				correcta se puntúa la jugada y cambian los turnos de dibujante y de adivinar hasta terminar la partida </p>
+				<p> Se puede acceder a las reglas del juego desde el enlace de la parte superior de la web. </p> 
+            </form>
+        </div>        
+    </div>
+
+{% endblock %}
