@@ -167,22 +167,24 @@ class GameBroadcastDraw(webapp2.RequestHandler):
 				if self.sess.load():
 					user = UserDB().getUserByKey(self.sess.user)
 				
-				users_by_game = UsersInGame.all()
-				users_by_game.filter("game =", game)
-				users_by_game.filter("user !=", user.key())
+					if user.key() == game.dibujante.key(): 
+						users_by_game = UsersInGame.all()
+						users_by_game.filter("game =", game)
+						users_by_game.filter("user !=", user.key())
 
-				results = users_by_game.fetch(30)
+						results = users_by_game.fetch(30)
 
-				messageRaw = {
-				"type": "draw", 
-				"content": {
-					"data": cgi.escape(self.request.get('d'))						
-					}
-				}				
-				message = json.dumps(messageRaw)
-				
-				for r in results:		
-					channel.send_message(str(r.key()), message)
+						messageRaw = {
+						"type": "draw", 
+						"content": {
+							"data": cgi.escape(self.request.get('d'))						
+							},
+							"drawer": str(game.dibujante.key())
+						}				
+						message = json.dumps(messageRaw)
+						
+						for r in results:		
+							channel.send_message(str(r.key()), message)
 
 
 class GameBroadcastLoad(webapp2.RequestHandler):
