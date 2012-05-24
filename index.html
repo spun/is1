@@ -15,11 +15,11 @@
 			{% for n in listaNoticias %}		
 				<div class="accordion-group">		
 					<div class="accordion-heading">
-						<a class="accordion-content-noticia accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+						<a class="accordion-content-noticia accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{n.key}}">
 						{{n.titular}}<span class="pull-right">{{n.fechahora}}</span>
 						</a>
 					</div>
-					<div id="collapseOne" class="accordion-body collapse" style="height: 0px; ">
+					<div id="{{n.key}}" class="accordion-body collapse" style="height: 0px; ">
 						<div class="accordion-inner">
 							{{n.cuerpo}}
 						</div>

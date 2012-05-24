@@ -217,21 +217,23 @@
 {% block container %}
 	<div class="row">
 		<div class="span9" id="playersBox">
-			{% for user in user_list %}
-                <div class="playerContainer" id="{{user.nick}}">
-					{% if user.avatar %}
-						<img id="avatar" src="/imgs/user?img_id={{user.key}}" alt="Imagen de usuario"/> 
+			{% for u in user_list %}
+                <div class="playerContainer" id="{{u.nick}}">
+					{% if u.avatar %}
+						<img id="avatar" src="/imgs/user?img_id={{u.key}}" alt="Imagen de usuario"/> 
 					{% else %}
 						<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
 					{% endif %}
-					<a href="/perfil?user={{user.nick}}" title="Ir al perfil de {{user.nick}}" class="playerContainerNick">{{user.nick}}</a>
-					<div class="btn-group pull-right">
-						<a class="btn btn-mini dropdown-toggle pull-right" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+					<a href="/perfil?user={{u.nick}}" title="Ir al perfil de {{u.nick}}" class="playerContainerNick">{{u.nick}}</a>
+					<div class="btn-group pull-right">						
+						<a class="btn btn-mini dropdown-toggle pull-right {% if u.key == user.key %}disabled{% endif %}	" data-toggle="dropdown" href="#"><span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a target="_blank" href="/perfil?user={{user.nick}}#amigos"><i class="icon-heart"></i> Amistad</a></li>
+							<li><a target="_blank" href="/perfil?user={{u.nick}}#amigos"><i class="icon-heart"></i> Amistad</a></li>
 							<li><a target="_blank" href="/perfil#mensajes"><i class="icon-envelope"></i> Msj. Privado</a></li>
 						</ul>
+					
 					</div> 
+					
                 </div>
             {% endfor %}
 		</div>
