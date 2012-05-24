@@ -63,8 +63,13 @@
 		
 		function ObtenerReceptor(recep)
 		{
-			var x=recep.options[recep.selectedIndex].text;
-			document.getElementById("receptor").value = x;
+			if(recep.options[recep.selectedIndex].text != "Selecciona amigo")
+			{
+				var x=recep.options[recep.selectedIndex].text;
+				document.getElementById("receptor").value = x;
+				document.getElementById("submitmsj").disabled = false;
+			}	
+			else document.getElementById("submitmsj").disabled = true;
 		}
 	</script>
 {% endblock %}
@@ -245,19 +250,16 @@
 									<p><h2>Enviar mensaje</h2></p>
 										<form id="sendMessage" action="/mens/envio" method="post">
 											<select onchange="ObtenerReceptor(this)">
-											
-											{% for p in listaUsers %}
-												{% if p.nick != userProfile.nick %}
-													<option id="opcion" value="{{p.nick}}">{{p.nick}}</option>	
-													
-												{% endif %}
+												<option id="opcion" value="nadie">Selecciona amigo</option>
+											{% for p in listaAmigos %}
+													<option id="opcion" value="{{p.amigo.nick}}">{{p.amigo.nick}}</option>	
 											{%endfor%}
 											</select>
 											<br/>
 											<input type="text" id="receptor" style="display:none" name="receptor"/>
 											<textarea rows="5" cols="1" name="texto"></textarea>
 											<br/>
-											<input type="submit" value="Enviar"/>
+											<input id="submitmsj" type="submit" value="Enviar" disabled="true"/>
 											<input type="reset" value="Borrar"/>
 										</form>
 									
