@@ -53,7 +53,14 @@ class KonamiAchievement(webapp2.RequestHandler):
 			
 			l = LogrosConseguidosDB()
 			l.NuevoLogroConseguido('ag9kZXZ-aXMxMnByb2plY3RyDAsSBkxvZ3JvcxgODA', user)
+			
+			
+class NoReadMessages(webapp2.RequestHandler):
+	def get(self):
+		self.response.out.write("0")
+			
 
 app = webapp2.WSGIApplication([('/ajaxapi/earned_achievements', EarnedAchievements),
-								('/ajaxapi/konami_achievement', KonamiAchievement)],
+								('/ajaxapi/konami_achievement', KonamiAchievement),
+								('/ajaxapi/noread_messages', NoReadMessages)],
                               debug=True)
