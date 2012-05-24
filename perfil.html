@@ -187,18 +187,25 @@
 							<div class="row">
 								<div class="span9">
 									<p><h2>Mensajes recibidos</h2></p>
-										<form class="well">
-												{% for p in listaMensajes %}
-													{% if p.receptor == userProfile.nick %}
-														<div>
-															<h6>Mensaje de: {{p.emisor}}</h6>
-															<br/>
-															<textarea rows="5" cols="1" name="texto" disabled="disabled"> {{p.mensaje}}</textarea>
+											<div class="accordion" id="accordion2">
+											{% for p in listaMensajes %}
+												{% if p.receptor == userProfile.nick %}
+													<div class="accordion-group">
+														<div class="accordion-heading">
+															<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{p.key}}">
+															  Mensaje de: {{p.emisor}}
+															</a>
 														</div>
-														<br/>
-													{% endif %}
-												{%endfor%}								
-										</form>
+														<div id="collapse{{p.key}}" class="accordion-body collapse">
+															<div class="accordion-inner">
+															  <p>{{p.mensaje}}</p>
+															  <p><button class="btn btn-mini btn-success" type="submit"><i class="icon-ok icon-white"></i> Visto </button></p>
+															</div>
+														</div>
+													</div>
+												{% endif %}
+											{%endfor%}
+											</div>
 										<hr></hr>
 								</div>
 									<div class="span3">

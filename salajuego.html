@@ -114,6 +114,51 @@
 	<script type="text/javascript" src='js/chat.js'></script>
 	<script type="text/javascript">
 		
+		var audioElement = document.createElement('audio');
+		audioElement.src='img/in.mp3';
+		
+		var mute = false;
+		
+		
+		var audioState = getCookie("audioState");
+		if (audioState!=null && audioState!="")
+		{
+			if(audioState=="on")
+			{
+				mute = false;
+				$("#soundButton i").removeClass('icon-volume-off');
+				$("#soundButton i").addClass('icon-volume-up');
+			}
+			else
+			{
+				mute=true;
+				$("#soundButton i").removeClass('icon-volume-up');
+				$("#soundButton i").addClass('icon-volume-off');
+			}
+		}
+		setTimeout("getNoReadMessages()",1000);
+		
+		
+		
+		$("#soundButton").on('click', function(e) {
+			if(mute==false){
+				mute=true;
+				$("#soundButton i").removeClass('icon-volume-up');
+				$("#soundButton i").addClass('icon-volume-off');
+				setCookie("audioState","off",30);
+			}
+			else
+			{
+				mute = false;
+				$("#soundButton i").removeClass('icon-volume-off');
+				$("#soundButton i").addClass('icon-volume-up');
+				setCookie("audioState","on",30);
+			}
+			
+			e.preventDefault();
+		});
+		
+		
 		Broadcast.init({
 			state: state,	// Declarado en juego.html
 			onopen: function() {
@@ -142,6 +187,11 @@
                         html: "<img id='avatar' src='/img/layout/default-user.jpg' alt='Imagen de usuario'/><a href='/perfil?user="+dat.content.userNick+"' title='Ir al perfil de "+dat.content.userNick+"' class='playerContainerNick'>"+dat.content.userNick+"</a><div class='btn-group pull-right'><a class='btn btn-mini dropdown-toggle pull-right' data-toggle='dropdown' href='#'><span class='caret'></span></a><ul class='dropdown-menu'><li><a target='_blank' href='/perfil?user="+dat.content.userNick+"#amigos'><i class='icon-heart'></i> Amistad</a></li><li><a target='_blank' href='/perfil#mensajes'><i class='icon-envelope'></i> Msj. Privado</a></li></ul></div>" 
                         }).appendTo("#playersBox");
                     }
+                    if(mute==false)
+                    {
+						audioElement.load();
+						audioElement.play();
+					}
                 }
                 else if(dat.type == "salaExit")
                 {
@@ -167,21 +217,23 @@
 {% block container %}
 	<div class="row">
 		<div class="span9" id="playersBox">
-			{% for user in user_list %}
-                <div class="playerContainer" id="{{user.nick}}">
-					{% if user.avatar %}
-						<img id="avatar" src="/imgs/user?img_id={{user.key}}" alt="Imagen de usuario"/> 
+			{% for u in user_list %}
+                <div class="playerContainer" id="{{u.nick}}">
+					{% if u.avatar %}
+						<img id="avatar" src="/imgs/user?img_id={{u.key}}" alt="Imagen de usuario"/> 
 					{% else %}
 						<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
 					{% endif %}
-					<a href="/perfil?user={{user.nick}}" title="Ir al perfil de {{user.nick}}" class="playerContainerNick">{{user.nick}}</a>
-					<div class="btn-group pull-right">
-						<a class="btn btn-mini dropdown-toggle pull-right" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+					<a href="/perfil?user={{u.nick}}" title="Ir al perfil de {{u.nick}}" target="_blank" class="playerContainerNick">{{u.nick}}</a>
+					<div class="btn-group pull-right">						
+						<a class="btn btn-mini dropdown-toggle pull-right {% if u.key == user.key %}disabled{% endif %}	" data-toggle="dropdown" href="#"><span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a target="_blank" href="/perfil?user={{user.nick}}#amigos"><i class="icon-heart"></i> Amistad</a></li>
+							<li><a target="_blank" href="/perfil?user={{u.nick}}#amigos"><i class="icon-heart"></i> Amistad</a></li>
 							<li><a target="_blank" href="/perfil#mensajes"><i class="icon-envelope"></i> Msj. Privado</a></li>
 						</ul>
+					
 					</div> 
+					
                 </div>
             {% endfor %}
 		</div>
@@ -200,11 +252,13 @@
 	
 	<div class="row">
 		<div class="span9">
+			
 			<form class="form-inline">
 				<div class="control-group pull-ledt">
 					<div class="controls">
+						<button id="soundButton" class="btn btn-mini btn-inverse" type="submit"><i class="icon-volume-up icon-white"></i></button>
 						<div class="input-prepend">
-							<span class="add-on"><i class="icon-gift"></i> Invita a un jugador</span><input class="span7" id="inputUrl" type="text" disabled="disabled">
+							<span class="add-on"><i class="icon-gift"></i> Invita a un jugador</span><input class="span7" id="inputUrl" type="text">
 						</div>
 					</div>
 				</div>
