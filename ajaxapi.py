@@ -17,6 +17,7 @@ from BD.clases import SalasDB
 from BD.clases import Palabras
 from BD.clases import Logros
 from BD.clases import LogrosConseguidos
+from BD.clases import LogrosConseguidosDB
 
 class EarnedAchievements(webapp2.RequestHandler):
 	def get(self):
@@ -24,14 +25,7 @@ class EarnedAchievements(webapp2.RequestHandler):
 		self.sess = session.Session('enginesession')
 		if self.sess.load():
 			user = UserDB().getUserByKey(self.sess.user)
-			
-			
-			l = Logros()
-			l.nombre = "gato"
-			l.descripcion = "gato"
-			l.imagen = "asd"
-			l.put()
-		
+				
 			lController = LogrosConseguidos.all()
 			lController.filter("usuario =", user)
 			lController.filter("mostrado =", False)
@@ -47,7 +41,19 @@ class EarnedAchievements(webapp2.RequestHandler):
 				
 			message = json.dumps(arrayLogros)
 			self.response.out.write(message)
+			
 
+class KonamiAchievement(webapp2.RequestHandler):
+	def get(self):
+		
+		# Extraemos el usuario de la sesion 
+		self.sess = session.Session('enginesession')
+		if self.sess.load():
+			user = UserDB().getUserByKey(self.sess.user)
+			
+			l = LogrosConseguidosDB()
+			l.NuevoLogroConseguido('ag9kZXZ-aXMxMnByb2plY3RyDAsSBkxvZ3JvcxgODA', user)
 
-app = webapp2.WSGIApplication([('/ajaxapi/earned_achievements', EarnedAchievements)],
+app = webapp2.WSGIApplication([('/ajaxapi/earned_achievements', EarnedAchievements),
+								('/ajaxapi/konami_achievement', KonamiAchievement)],
                               debug=True)

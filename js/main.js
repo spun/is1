@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	setTimeout("displayArchievements()",500);
+	$.getScript('js/kode.js');	
 });
 
 function displayArchievements() {
@@ -38,7 +39,7 @@ function displayArchievements() {
 						text: info.desc, 
 					}).appendTo(achievement);	
 					
-					achievement.appendTo("#achievementWrap").fadeIn().delay('15000').fadeOut();
+					achievement.appendTo("#achievementWrap").fadeIn().delay('5000').fadeOut();
 				
 				});
 			}			
