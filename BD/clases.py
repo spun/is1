@@ -92,9 +92,7 @@ class UserDB:
 		nuevoUsuario.password = passwrd;
 		nuevoUsuario.email = correo;
 		nuevoUsuario.idSala = "None"
-		nuevoUsuario.put()
-
-		return 0;
+		return nuevoUsuario.put();
 
 	def getUserByNick(self, nickName):
 		# Modo 1 (Preferido)
