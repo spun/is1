@@ -2,7 +2,7 @@ import os
 import webapp2
 import json
 import cgi
-
+import urllib2
 from google.appengine.ext.webapp import template
 from google.appengine.api import channel
 
@@ -113,7 +113,7 @@ class GameBroadcastChat(webapp2.RequestHandler):
 				results = users_by_game.fetch(30)
 				
 				messageRaw = None
-				if game.palabra.palabra == cgi.escape(self.request.get('d')): 
+				if game.palabra.palabra.lower() == cgi.escape(self.request.get('d')).lower(): 
 					if user.key() != game.dibujante.key():
 						ptosUser = UsersInGameDB().scoreUp(user, 30)
 						ptosDib = UsersInGameDB().scoreUp(game.dibujante, 20)
