@@ -16,7 +16,7 @@ class Administracion(webapp2.RequestHandler):
 		self.sess = session.Session('enginesession')
 		if self.sess.load():
 			user = UserDB().getUserByKey(self.sess.user)
-			if not user.nick == "Admin":
+			if not user.nick == "admin":
 				self.redirect('/')
 			template_values['user'] = user		
 			path = os.path.join(os.path.dirname(__file__), 'administracion.html')

@@ -69,7 +69,6 @@ function getNoReadMessages() {
 	
 	$.getJSON("/ajaxapi/noread_messages" ,
 		function(data) {
-			console.log(data);
 			$("#badgeMessages").html(data);
 			if(data>0)
 			{

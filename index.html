@@ -6,20 +6,27 @@
 
 	<div class="row">
 		<div class="span12">
-			<h2>Últimas Noticias</h2><br/>
+			<h3>Últimas Noticias</h3><br/>
 		</div>
 	</div>
 	<div class="row">
-		<div class="span11 offset1">	
+		<div class="span10 offset1">			
+			<div class="accordion" id="accordion2">
 			{% for n in listaNoticias %}		
-			<div class="row-fluid">			
-				<h4>{{n.titular}}</h4><br/>
-					<div class="span3">
-						<p>{{n.cuerpo}}</p>
-						<p><small>{{n.fechahora}}<small></p>
-					</div><!--/span-->
-			</div><br/>	
-			{% endfor %}			
+				<div class="accordion-group">		
+					<div class="accordion-heading">
+						<a class="accordion-content-noticia accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+						{{n.titular}}<span class="pull-right">{{n.fechahora}}</span>
+						</a>
+					</div>
+					<div id="collapseOne" class="accordion-body collapse" style="height: 0px; ">
+						<div class="accordion-inner">
+							{{n.cuerpo}}
+						</div>
+					</div>
+				</div>
+			{% endfor %}	
+			</div>	
 		</div>
 	</div>			
 	
@@ -28,7 +35,7 @@
 	
 	<div class="row">
 		<div class="span12">
-			<h2>Enlaces</h2><br/>
+			<h3>Enlaces</h3><br/>
 		</div>
 	</div>
 	<div class="row">
@@ -83,74 +90,13 @@
 			</div>			
 		</div>
 	</div>		
+       
+{% endblock %}
+
+
+{% block script %}
+	<script>
+			$('.accordion-body:first').collapse('show')
 			
-<!--
-			<div class="row">	
-				<div class="span3">
-					
-					<br/>
-					<h4>Enlaces</h4>
-					<ul class="nav nav-list">
-					<li>
-						<a href="/">Indice</a>
-					</li>
-					<li class="nav-header">
-						Usuarios
-					</li>
-					<li>
-						<a href="/registro">Registro</a>
-					</li>
-					<li>
-						<a href="#">Login</a>
-					</li>
-					<li>
-						<a href="/perfil">Perfil</a>
-					</li>
-					<li class="nav-header">
-						Juego
-					</li>
-					<li>
-						<a href="/reglas">Reglas</a>
-					</li>
-					<li>
-						<a href="/salas">Salas</a>
-					</li>
-					<li class="nav-header">
-						Administración
-					</li>
-					<li>
-						<a href="/administracion">Administracion</a>
-					</li>
-					
-					</ul>
-				</div>
--->
-<!--
-				<div class="span4">
-					<a href="/registro">
-						<div id="botonNewUser" class="botonIndex">
-						{% if not user %}
-							<img src="/img/layout/regist-large.png" alt="Registro" /><span>Nuevo usuario</span>
-						{% endif %}
-						</div>
-					</a>				
-				</div>
-				<div class="span4">
-					<a href="/salas">
-						<div id="botonListado" class="botonIndex">
-							<img src="/img/layout/salas-large.png" alt="Listado de salas" /><span>Listado de salas</span>
-						</div>
-					</a>
-				</div>
-				<div class="span4">
-					<a href="/administracion">
-						<div id="botonAdmin" class="botonIndex">
-							{% if user.nick == "Admin" %}
-							<img src="/img/layout/admin-large.png" alt="Administracion" /><span>Admin</span>
-							{% endif %}
-						</div>
-					</a>
-				</div>
--->
-        
+	</script>	
 {% endblock %}
