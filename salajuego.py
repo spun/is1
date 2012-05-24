@@ -85,13 +85,24 @@ class SalaJuego(webapp2.RequestHandler):
 							users = UserDB()
 							user_list = users.getUsersBySala(sala.idSala)
 							if not UserDB().userExistsInSala(sala.idSala, user.nick):
-									messageRaw = {
-										"type": "sala", 
-										"content": {
-											"userKey": str(user.key()),
-											"userNick": user.nick							
+									if user.avatar:
+										messageRaw = {
+											"type": "sala", 
+											"content": {
+												"userKey": str(user.key()),
+												"userNick": user.nick,
+												"userAvatar": 1
+												}
 											}
-										}				
+									else:
+										messageRaw = {
+											"type": "sala", 
+											"content": {
+												"userKey": str(user.key()),
+												"userNick": user.nick,
+												"userAvatar": 0
+												}
+											}										
 									message = json.dumps(messageRaw)
 									
 									for r in user_list:	
