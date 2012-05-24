@@ -65,8 +65,20 @@ class Mensaje(db.Model):
 
 class Noticia(db.Model):
 	titular = db.StringProperty()
-	cuerpo = db.StringProperty()
+	cuerpo = db.TextProperty()
 	fechahora= db.DateTimeProperty(default = datetime.datetime.now())
+	
+class Logros(db.Model):
+	nombre = db.StringProperty()
+	descripcion = db.TextProperty()
+	imagen = db.StringProperty() 
+	
+class LogrosConseguidos(db.Model):
+	logro = db.ReferenceProperty(Logros)
+	usuario = db.ReferenceProperty(User)
+	mostrado = db.BooleanProperty(default = False)
+	fechahora= db.DateTimeProperty(default = datetime.datetime.now())
+	
 ########### METODOS ################
 
 class UserDB:

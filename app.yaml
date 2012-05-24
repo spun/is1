@@ -65,6 +65,9 @@ handlers:
 - url: /ayuda
   script: ayuda.app
   
+- url: /ajaxapi/.*
+  script: ajaxapi.app
+  
 - url: /.*
   script: main.app
 
