@@ -114,6 +114,10 @@
 	<script type="text/javascript" src='js/chat.js'></script>
 	<script type="text/javascript">
 		
+		var audioElement = document.createElement('audio');
+		audioElement.src='img/in.mp3';
+		
+		
 		Broadcast.init({
 			state: state,	// Declarado en juego.html
 			onopen: function() {
@@ -142,6 +146,8 @@
                         html: "<img id='avatar' src='/img/layout/default-user.jpg' alt='Imagen de usuario'/><a href='/perfil?user="+dat.content.userNick+"' title='Ir al perfil de "+dat.content.userNick+"' class='playerContainerNick'>"+dat.content.userNick+"</a><div class='btn-group pull-right'><a class='btn btn-mini dropdown-toggle pull-right' data-toggle='dropdown' href='#'><span class='caret'></span></a><ul class='dropdown-menu'><li><a target='_blank' href='/perfil?user="+dat.content.userNick+"#amigos'><i class='icon-heart'></i> Amistad</a></li><li><a target='_blank' href='/perfil#mensajes'><i class='icon-envelope'></i> Msj. Privado</a></li></ul></div>" 
                         }).appendTo("#playersBox");
                     }
+                    audioElement.load();
+                    audioElement.play();
                 }
                 else if(dat.type == "salaExit")
                 {
