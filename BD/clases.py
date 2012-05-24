@@ -466,9 +466,10 @@ class NoticiasDB:
 		noticia = Noticia()
 		noticia.titular = titular
 		noticia.cuerpo = cuerpo
+		noticia.fechahora = datetime.datetime.now()
 		noticia.put()
 	
-	def GetNoticias(self):
-		q = Noticia.all()
+	def getNoticias(self):
+		q = db.GqlQuery("SELECT * FROM Noticia ORDER BY fechahora DESC LIMIT 3")
 		return q
 		

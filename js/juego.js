@@ -202,6 +202,7 @@ BlackBoard.init({
 
 
 //CRONOMETRO  
+
 var CronoID = null  
 var CronoEjecutandose = false  
 var decimas, segundos, minutos  
@@ -220,6 +221,29 @@ function InicializarCrono () {
 	  
 	//pone a cero los marcadores  
 	document.crono.display.value = '01:30:00'  
+setTimeout(function(){
+
+    $('.progress .bar').each(function() {
+        var me = $(this);
+        var perc = me.attr("data-percentage");
+
+        var current_perc = 0;
+
+        var progress = setInterval(function() {
+            if (current_perc>=perc) {
+                clearInterval(progress);
+            } else {
+                current_perc +=0.058;
+                me.css('width', (current_perc)+'%');
+            }
+
+            //me.text((current_perc)+'%');
+
+        }, 50);
+
+    });
+
+},100);		
 }  
   
 function MostrarCrono () {  
@@ -254,6 +278,9 @@ function MostrarCrono () {
   
 	CronoID = setTimeout("MostrarCrono()", 100)  
 	CronoEjecutandose = true  
+	
+	
+
 	return true  
 }  
   

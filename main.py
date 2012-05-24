@@ -7,12 +7,16 @@ from google.appengine.ext.webapp import template
 
 import session
 from BD.clases import UserDB
-
+from BD.clases import NoticiasDB
 
 class MainPage(webapp2.RequestHandler):
 	def get(self):
 		template_values={}
 		self.sess = session.Session('enginesession')
+		
+		listaNoticias = NoticiasDB().getNoticias()
+		
+		template_values['listaNoticias'] = listaNoticias
 		if self.sess.load():
 			user = UserDB().getUserByKey(self.sess.user)
 			template_values['user'] = user

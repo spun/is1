@@ -6,6 +6,28 @@
 
 	<div class="row">
 		<div class="span12">
+			<h2>Últimas Noticias</h2><br/>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span11 offset1">	
+			{% for n in listaNoticias %}		
+			<div class="row-fluid">			
+				<h4>{{n.titular}}</h4><br/>
+					<div class="span3">
+						<p>{{n.cuerpo}}</p>
+						<p><small>{{n.fechahora}}<small></p>
+					</div><!--/span-->
+			</div><br/>	
+			{% endfor %}			
+		</div>
+	</div>			
+	
+	
+	
+	
+	<div class="row">
+		<div class="span12">
 			<h2>Enlaces</h2><br/>
 		</div>
 	</div>
@@ -59,8 +81,8 @@
 					<p><a class="btn btn-inverse btn-mini" href="/administracion">Ir a administación »</a></p>
 				</div><!--/span-->				
 			</div>			
-
-			
+		</div>
+	</div>		
 			
 <!--
 			<div class="row">	
@@ -130,8 +152,5 @@
 					</a>
 				</div>
 -->
-			</div>
-		</div>
-	</div>
         
 {% endblock %}
