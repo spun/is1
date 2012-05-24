@@ -62,7 +62,11 @@ class Mensaje(db.Model):
 	emisor = db.StringProperty()
 	receptor = db.StringProperty()
 	mensaje = db.StringProperty()
-	
+
+class Noticia(db.Model):
+	titular = db.StringProperty()
+	cuerpo = db.StringProperty()
+	fechahora= db.DateTimeProperty(default = datetime.datetime.now())
 ########### METODOS ################
 
 class UserDB:
@@ -456,4 +460,15 @@ class MensajesDB:
 		
 	def Get(self):
 		return Mensaje.all()
+
+class NoticiasDB:
+	def AddNoticia(self, titular, cuerpo):
+		noticia = Noticia()
+		noticia.titular = titular
+		noticia.cuerpo = cuerpo
+		noticia.put()
+	
+	def GetNoticias(self):
+		q = Noticia.all()
+		return q
 		

@@ -50,11 +50,14 @@
 
 {% block container %}
 
+<h1>Página de Administración</h1>
+<hr/><hr/>
 <div class="row">
+		
 		<div class="span12">
 			<form class="form-horizontal" id="insPalabraForm" action="/administracion" method="post">
 				<fieldset>
-				<legend>Página de Administración</legend>
+				<legend>Insertar Palabra</legend>
 					<div class="control-group">
 						<label class="control-label" for="inputPalabra">Palabra</label>
 						<div class="controls">
@@ -73,12 +76,35 @@
 							-->
 						</div>
 					</div>
-					<div class="form-actions">
-						<button type="submit" class="btn btn-primary">Añadir palabra</button>
-					</div>
 				</fieldset>
+				<fieldset>
+				<legend>Insertar Noticia</legend>
+					<div class="control-group">
+						<label class="control-label" for="inputTitular">Titular</label>
+						<div class="controls">
+							<input type="text" name="titular" id="inputTitular">
+							<!--
+							<span class="help-inline">---</span>
+							-->
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputCuerpo">Cuerpo</label>
+						<div class="controls">
+							<textarea rows="5" cols="1" name="cuerpo" id="inputCuerpo"></textarea>
+							
+							<!--
+							<span class="help-inline">---</span>
+							-->
+						</div>
+					</div>
+					<div class="form-actions">
+						<button type="submit" class="btn btn-primary">Añadir</button>
+					</div>
+				</fieldset>				
 			</form>  
 		</div>
 	</div>
+	<hr/><hr/>
 	
 {% endblock %}
