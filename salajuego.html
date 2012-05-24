@@ -126,11 +126,22 @@
                 }
                 else if(dat.type == "sala")
                 {
-                   	var li = $("<div></div>", {
-                    id: dat.content.userNick,
-                    class: "playerContainer",
-                    html: "{% if user.avatar %}<img id='avatar' src='/imgs/user?img_id="+dat.content.userKey+"' alt='Imagen de usuario'/> {% else %} <img id='avatar' src='/img/layout/default-user.jpg' alt='Imagen de usuario'/> {% endif %} <a href='/perfil?user="+dat.content.userNick+"' title='Ir al perfil de "+dat.content.userNick+"' class='playerContainerNick'>"+dat.content.userNick+"</a><div class='btn-group pull-right'><a class='btn btn-mini dropdown-toggle pull-right' data-toggle='dropdown' href='#'><span class='caret'></span></a><ul class='dropdown-menu'><li><a target='_blank' href='/perfil?user="+dat.content.userNick+"#amigos'><i class='icon-heart'></i> Amistad</a></li><li><a target='_blank' href='/perfil#mensajes'><i class='icon-envelope'></i> Msj. Privado</a></li></ul></div>" 
-                    }).appendTo("#playersBox");
+                    if(dat.content.userAvatar==1)
+                    {
+                        var li = $("<div></div>", {
+                        id: dat.content.userNick,
+                        class: "playerContainer",
+                        html: "<img id='avatar' src='/imgs/user?img_id="+dat.content.userKey+"' alt='Imagen de usuario'/><a href='/perfil?user="+dat.content.userNick+"' title='Ir al perfil de "+dat.content.userNick+"' class='playerContainerNick'>"+dat.content.userNick+"</a><div class='btn-group pull-right'><a class='btn btn-mini dropdown-toggle pull-right' data-toggle='dropdown' href='#'><span class='caret'></span></a><ul class='dropdown-menu'><li><a target='_blank' href='/perfil?user="+dat.content.userNick+"#amigos'><i class='icon-heart'></i> Amistad</a></li><li><a target='_blank' href='/perfil#mensajes'><i class='icon-envelope'></i> Msj. Privado</a></li></ul></div>" 
+                        }).appendTo("#playersBox");
+                    }
+                    else
+                    {
+                        var li = $("<div></div>", {
+                        id: dat.content.userNick,
+                        class: "playerContainer",
+                        html: "<img id='avatar' src='/img/layout/default-user.jpg' alt='Imagen de usuario'/><a href='/perfil?user="+dat.content.userNick+"' title='Ir al perfil de "+dat.content.userNick+"' class='playerContainerNick'>"+dat.content.userNick+"</a><div class='btn-group pull-right'><a class='btn btn-mini dropdown-toggle pull-right' data-toggle='dropdown' href='#'><span class='caret'></span></a><ul class='dropdown-menu'><li><a target='_blank' href='/perfil?user="+dat.content.userNick+"#amigos'><i class='icon-heart'></i> Amistad</a></li><li><a target='_blank' href='/perfil#mensajes'><i class='icon-envelope'></i> Msj. Privado</a></li></ul></div>" 
+                        }).appendTo("#playersBox");
+                    }
                 }
                 else if(dat.type == "salaExit")
                 {
