@@ -485,3 +485,18 @@ class NoticiasDB:
 		q = db.GqlQuery("SELECT * FROM Noticia ORDER BY fechahora DESC LIMIT 3")
 		return q
 		
+class LogrosConseguidosDB:
+	def NuevoLogroConseguido(self, keyLogro, usuario):
+		l = Logros.get(keyLogro)
+		
+		if l:
+			q = LogrosConseguidos.all()
+			q.filter("usuario =", usuario)
+			q.filter("logro =", l)		
+			res = q.count()
+			
+			if res == 0:
+				logConseguido = LogrosConseguidos()
+				logConseguido.usuario = usuario
+				logConseguido.logro = l
+				logConseguido.put()
