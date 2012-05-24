@@ -16,7 +16,8 @@ Broadcast.init({
 		}
 		else if(dat.type == "draw")
 		{
-			BlackBoard.drawPoints(dat.content);
+			if(dat.drawer == $(".userBlock.active").attr('id'))
+				BlackBoard.drawPoints(dat.content);
 		}
 		else if(dat.type == "infoGame")
 		{
