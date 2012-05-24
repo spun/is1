@@ -6,9 +6,11 @@ import cgi
 
 from google.appengine.ext.webapp import template
 
+from BD.clases import User
 from BD.clases import UserDB
 from BD.clases import SalasDB
 from BD.clases import UsersInGameDB
+from BD.clases import LogrosConseguidosDB
 from BD.clases import GameDB
 import session
 
@@ -79,7 +81,10 @@ class Registro(webapp2.RequestHandler):
 			self.response.out.write(template.render(path, template_values))
 
 		else:				
-			userCtrl.AddUser(cgi.escape(self.request.get('user')), cgi.escape(self.request.get('contra')), cgi.escape(self.request.get('mail')))									
+			keyUser = userCtrl.AddUser(cgi.escape(self.request.get('user')), cgi.escape(self.request.get('contra')), cgi.escape(self.request.get('mail')))									
+			l = LogrosConseguidosDB()
+			l.NuevoLogroConseguido('ag9kZXZ-aXMxMnByb2plY3RyDAsSBkxvZ3JvcxgPDA', User.get(keyUser))
+			
 			self.redirect('/?a=0')							
 								
 			
