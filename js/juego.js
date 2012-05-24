@@ -62,7 +62,15 @@ Broadcast.init({
 		else if (dat.type == "finPartida")
 		{
 				$('#modalFin').modal('show')
-				$("span#winner").text(dat.content.Winner)
+				if(dat.content.Winner == 'Empate')
+				{
+					$("#titleGanador").text("");
+					$("span#winner").text('Empate')
+				}
+				else
+				{
+					$("span#winner").text(dat.content.Winner)
+				}
 		}
 	}
 });
