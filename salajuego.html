@@ -224,7 +224,7 @@
 					{% else %}
 						<img id="avatar" src="/img/layout/default-user.jpg" alt="Imagen de usuario"/> 
 					{% endif %}
-					<a href="/perfil?user={{u.nick}}" title="Ir al perfil de {{u.nick}}" class="playerContainerNick">{{u.nick}}</a>
+					<a href="/perfil?user={{u.nick}}" title="Ir al perfil de {{u.nick}}" target="_blank" class="playerContainerNick">{{u.nick}}</a>
 					<div class="btn-group pull-right">						
 						<a class="btn btn-mini dropdown-toggle pull-right {% if u.key == user.key %}disabled{% endif %}	" data-toggle="dropdown" href="#"><span class="caret"></span></a>
 						<ul class="dropdown-menu">
