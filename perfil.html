@@ -2,8 +2,35 @@
 
 {% block title %}Perfil{% endblock %}
 
+{% block head %}
+
+
+	<style>
+	.accordion-heading.visto {
+		background-color: #E6FFDB;
+	}
+	
+	</style>
+{% endblock %}
+
 {% block script %}
 	<script>
+		var a;
+		$('.btnVisto').on('click', function () {
+			var idMsg= $(this).parents(".accordion-group").attr('id');
+			var cabecera = $(this).parents(".accordion-group").find(".accordion-heading");		
+			var boton = $(this);	
+			$.get('/ajaxapi/set_readed', { keymsg: idMsg}, function (data) {
+				console.log(data);
+				if(data=="ok")
+				{					
+					cabecera.removeClass("visto");
+					boton.remove();
+					getNoReadMessages();
+				}
+			});
+		});
+		
 		var param = location.hash;
 
 		$("#myTabs a").each(function() {
@@ -185,8 +212,8 @@
 											<div class="accordion" id="accordion2">
 											{% for p in listaMensajes %}
 												{% if p.receptor == userProfile.nick %}
-													<div class="accordion-group">
-														<div class="accordion-heading">
+													<div class="accordion-group" id="{{p.key}}">
+														<div class="accordion-heading {% if not p.visto %}visto{% endif %}">
 															<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{p.key}}">
 															  Mensaje de: {{p.emisor}}
 															</a>
@@ -194,7 +221,9 @@
 														<div id="collapse{{p.key}}" class="accordion-body collapse">
 															<div class="accordion-inner">
 															  <p>{{p.mensaje}}</p>
-															  <p><button class="btn btn-mini btn-success" type="submit"><i class="icon-ok icon-white"></i> Visto </button></p>
+															  {% if not p.visto %}
+															  <p><button class="btn btn-mini btn-success pull-right btnVisto"><i class="icon-ok icon-white"></i> Visto </button></p><br/>
+															  {% endif %}
 															</div>
 														</div>
 													</div>

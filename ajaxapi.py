@@ -18,6 +18,8 @@ from BD.clases import Palabras
 from BD.clases import Logros
 from BD.clases import LogrosConseguidos
 from BD.clases import LogrosConseguidosDB
+from BD.clases import Mensaje
+
 
 class EarnedAchievements(webapp2.RequestHandler):
 	def get(self):
@@ -29,8 +31,7 @@ class EarnedAchievements(webapp2.RequestHandler):
 			lController = LogrosConseguidos.all()
 			lController.filter("usuario =", user)
 			lController.filter("mostrado =", False)
-			res = lController.fetch(100)
-			
+			res = lController.fetch(100)			
 			
 			arrayLogros = []
 			for r in res:
@@ -57,10 +58,35 @@ class KonamiAchievement(webapp2.RequestHandler):
 			
 class NoReadMessages(webapp2.RequestHandler):
 	def get(self):
-		self.response.out.write("0")
+		# Extraemos el usuario de la sesion 
+		self.sess = session.Session('enginesession')
+		if self.sess.load():
+			user = UserDB().getUserByKey(self.sess.user)
+			m = Mensaje.all();
+			m.filter("receptor =", user.nick)
+			m.filter("visto =", False)
+			res = m.count()
+			self.response.out.write(res)
 			
-
+class SetReaded(webapp2.RequestHandler):
+	def get(self):
+		# Extraemos el usuario de la sesion 
+		self.sess = session.Session('enginesession')
+		if self.sess.load():
+			user = UserDB().getUserByKey(self.sess.user)
+			
+			keyMsg = self.request.get('keymsg')
+	
+			m = Mensaje.get(keyMsg);
+			if m.receptor == user.nick and m.visto == False:				
+				m.visto = True
+				m.put()
+				self.response.out.write("ok")
+		
+		
+		
 app = webapp2.WSGIApplication([('/ajaxapi/earned_achievements', EarnedAchievements),
 								('/ajaxapi/konami_achievement', KonamiAchievement),
-								('/ajaxapi/noread_messages', NoReadMessages)],
+								('/ajaxapi/noread_messages', NoReadMessages),
+								('/ajaxapi/set_readed', SetReaded)],
                               debug=True)

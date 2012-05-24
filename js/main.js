@@ -67,16 +67,19 @@ function showMessages() {
 
 function getNoReadMessages() {
 	
-	$.getJSON("/ajaxapi/noread_messages" ,
+	$.get("/ajaxapi/noread_messages" ,
 		function(data) {
 			$("#badgeMessages").html(data);
-			if(data>0)
+			console.log(data)
+			if(data > 0)
 			{
+				console.log("a")
 				$("#badgeMessages").addClass("badge-info");
 				setCookie("numMessages",data,30);
 			}
 			else
 			{
+				console.log("b")
 				$("#badgeMessages").removeClass("badge-info");
 				setCookie("numMessages","0",30);
 			}

@@ -62,6 +62,7 @@ class Mensaje(db.Model):
 	emisor = db.StringProperty()
 	receptor = db.StringProperty()
 	mensaje = db.StringProperty()
+	visto = db.BooleanProperty(default = False)
 
 class Noticia(db.Model):
 	titular = db.StringProperty()
