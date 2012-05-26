@@ -16,7 +16,6 @@ class Ayuda(webapp2.RequestHandler):
 			user = UserDB().getUserByKey(self.sess.user)
 			template_values['user'] = user
 
-		template_values = {}
 		path = os.path.join(os.path.dirname(__file__), 'ayuda.html')
 		self.response.out.write(template.render(path, template_values))
 

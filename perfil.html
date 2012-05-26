@@ -21,7 +21,6 @@
 			var cabecera = $(this).parents(".accordion-group").find(".accordion-heading");		
 			var boton = $(this);	
 			$.get('/ajaxapi/set_readed', { keymsg: idMsg}, function (data) {
-				console.log(data);
 				if(data=="ok")
 				{					
 					cabecera.removeClass("visto");

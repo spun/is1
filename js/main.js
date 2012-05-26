@@ -40,7 +40,7 @@ function displayArchievements() {
 						text: info.desc, 
 					}).appendTo(achievement);	
 					
-					achievement.appendTo("#achievementWrap").fadeIn().delay('5000').fadeOut();
+					achievement.appendTo("#achievementWrap").fadeIn().delay('8000').fadeOut();
 				
 				});
 			}			
@@ -70,16 +70,13 @@ function getNoReadMessages() {
 	$.get("/ajaxapi/noread_messages" ,
 		function(data) {
 			$("#badgeMessages").html(data);
-			console.log(data)
 			if(data > 0)
 			{
-				console.log("a")
 				$("#badgeMessages").addClass("badge-info");
 				setCookie("numMessages",data,30);
 			}
 			else
 			{
-				console.log("b")
 				$("#badgeMessages").removeClass("badge-info");
 				setCookie("numMessages","0",30);
 			}

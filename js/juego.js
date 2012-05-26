@@ -22,6 +22,7 @@ Broadcast.init({
 		else if(dat.type == "infoGame")
 		{
 			BlackBoard.context.clearRect(0, 0, 600, 500);
+			BlackBoard.renderContext.clearRect(0, 0, 600, 500);
 			if(dat.content.drawing == true)
 			{
 				$("#wordZone").text(dat.content.word);

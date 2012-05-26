@@ -1,0 +1,6 @@
+Ejecutar con fichero BD
+python2 google_appengine/dev_appserver.py --datastore_path=ruta/storebackup isi12-pi/
+
+----
+python2 google_appengine/dev_appserver.py -a 172.20.42.9 --datastore_path=ruta/storebackup isi12-pi/
+
